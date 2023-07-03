@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Quaint Start Page</title>
+    <link href="start.css" rel="stylesheet" type="text/css" media="all">
+    
+    <script>
+      window.onload = function() {
+          
+        var words = [
+          "You have been doing well today! Keep going a little more.",
+          "Pomodoro? More like BOREmodoro!",
+          "You can check your pets for a second, it's no biggie.",
+          "Just add that one sentence. Drink some water too!",
+          "Stretch stretch stretch stretch!",
+          "You literally are really good at this. Stop the mimimi!",
+          "Quick! Post something stupid!"
+          ]
+        word = words[words.length * Math.random() | 0]
+        document.getElementById("words").innerHTML = word;
+        max = 50;
+        document.getElementById("words").style.transform = "translateY(" + Math.floor(Math.random() * max) + "px)";
+        document.getElementById("fun").style.transform = "translateY(" + Math.floor(Math.random() * max) + "px)";
+        document.getElementById("labor").style.transform = "translateY(" + Math.floor(Math.random() * max) + "px)";
+        document.getElementById("comfort").style.transform = "translateY(" + Math.floor(Math.random() * max) + "px)";
+        }
+    </script>
+  </head>
+  <body>
+  <header>
+  A Quaint Start Page
+  </header>
+  <main class="bookmark-category-list">
+    <section class="bookmark-category" id="labor">
+      <h1>Labor</h1>
+      <a href="https://mail.proton.me">Proton</a>
+      <a href="https://www.overleaf.com">Overleaf</a>
+      <a href="https://github.com/">GitHub</a>
+      <a href="https://glitch.com/">Glitch</a>
+    </section>
+    
+    <section class="bookmark-category" id="comfort">
+      <h1>Comfort</h1>
+      <a href="https://neocities.org/">NeoCities</a>
+      <a href="https://forum.melonland.net">MelonLand</a>
+      <a href="https://blasius.club">BlasiusClub</a>
+      <a href="https://cohost.org">cohost</a>
+    </section>
+    
+    
+    <section class="bookmark-category message" id="words">
+      <noscript>
+        To hell with scripts!
+      </noscript>
+    </section>
+    
+    <section class="bookmark-category" id="fun">
+      <h1>Fun</h1>
+      <a href="https://poppyseedpets.com">Poppyseed Pets</a>
+      <a href="https://www.moderneopets.com/">Moderneopets</a>
+      <a href="https://www1.flightrising.com/">FlightRising</a>
+      <a href="https://finaloutpost.net">The Final Outpost</a>
+      <a href="https://dragcave.net">DragonCave</a>
+    </section>
+  </main>
+  <aside>
+    <form method="get" id="search" action="http://duckduckgo.com/">
+      <input type="text" name="q" maxlength="255" placeholder="Search" autofocus/>
+      <input type="submit" value="DuckDuckGo Search" style="visibility: hidden;" />
+    </form>
+</aside>
+  </body>
+</html>

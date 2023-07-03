@@ -1,0 +1,304 @@
+<style type="text/css">
+    /*
+        GARM template by Lyonid. This template can be used freely on the site while I am credited. 
+        Any commercial use is not prohibited. Please don't be like this.
+        Any code lines reponsible for gradients are marked as such. 
+        Feel free to modify the code to your liking.
+    */
+    
+    @import url('https://bug.bz/subeta/css/reset/pet.css');
+    /* HIDING HEADINGS AND BATTLE STATS 
+        TODO Implement stats beautifully*/
+    
+    #column_3,
+    h2 {
+        display: none;
+    }
+    
+    body {
+        background-image: linear-gradient(124deg, #513386, #eb3b1b);
+        /* GRADIENT BACKGROUND */
+    }
+    /* PET STATS AND INFO */
+    
+    #column_2 {
+        position: fixed;
+        top: 5vh;
+        bottom: 30vh;
+        left: 5vw;
+        background-color: white;
+        box-shadow: 0 0 10px 10px rgba(20, 20, 20, .1);
+        width: 20vw;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        padding: 4vh 2vw;
+        font-size: 2vh;
+        scrollbar-width: none;
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    
+    #column_2 p,
+    #column_2 span {
+        display: inline-block;
+        padding: .3vh 0;
+    }
+    
+    #column_2 h1 {
+        position: absolute;
+        display: inline-block;
+        font-size: 10vh !important;
+        left: 25vw;
+        top: 5vh;
+        color: white;
+        font-family: 'Do Hyeon', sans-serif;
+    }
+    
+    #column_2 .pet_color_info {
+        position: absolute;
+        display: inline-block;
+        font-size: 4vh !important;
+        left: 25vw;
+        top: 15vh;
+        color: white;
+        width: 50vw;
+    }
+    
+    #pet_image {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: auto 100%;
+        background-color: white;
+        width: 16vw;
+        height: 50%;
+        max-height: 200px;
+        flex-shrink: 0;
+    }
+    /* MAIN COLUMN */
+    
+    #pet_info {
+        position: absolute;
+        top: 27.5vh;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #f2f2f2;
+        box-shadow: 0 0 5vh 5vh rgba(0, 0, 0, .2);
+        overflow-y: scroll;
+        font-size: 2vh;
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+    /* PET TREASURE */
+    
+    #pet_treasure {
+        display: grid;
+        grid-template-columns: auto auto auto auto auto auto;
+        row-gap: 5vh;
+        position: relative;
+        margin-left: 40vw;
+        right: 10vw;
+        height: 30vh;
+        overflow-y: scroll;
+        background-color: white;
+        box-shadow: 0 0 10px 10px rgba(20, 20, 20, .1);
+        padding: 3.5vh 2.5vw;
+        scroll-padding: 3.5vh 2.5vw;
+        scrollbar-width: thin;
+        scroll-snap-type: y mandatory;
+        margin-top: 5vh;
+    }
+    
+    .treasure_item {
+        border-radius: 100%;
+        padding: 2vh 1vw;
+        width: 6vw;
+        height: 6vw;
+        box-shadow: 0 0 5px 5px rgba(20, 20, 20, .1), inset 0 0 50px 50px white;
+        background-image: linear-gradient(124deg, #513386, #eb3b1b);
+        /* GRADIENT BACKGROUND */
+        transition: .2s;
+    }
+    
+    .treasure_item span {
+        opacity: 0;
+        display: inline-block;
+        position: absolute;
+        margin-left: -3vw;
+        width: 6vw;
+        background: white;
+        box-shadow: 0 0 5px 5px rgba(20, 20, 20, .1);
+        padding: .5vh .25vw;
+        font-size: 2vh;
+        transition: .3s;
+    }
+    
+    .treasure_item:nth-child(1n+7) {
+        scroll-snap-align: start;
+    }
+    
+    .treasure_item img {
+        transition: .3s;
+        mix-blend-mode: multiply;
+    }
+    
+    .treasure_item:hover {
+        box-shadow: 0 0 5px 5px rgba(20, 20, 20, .1), inset 0 0 50px 50px rgba(255, 255, 255, .5);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    
+    .treasure_item:hover span {
+        opacity: 1;
+    }
+    /* PET FRIENDS */
+    
+    #pet_friends {
+        margin-top: 5vh;
+        position: relative;
+        margin-left: 30vw;
+        margin-right: 10vw;
+    }
+    
+    .friend_div {
+        margin: 0 auto;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .friend_div a {
+        float: left;
+        margin-right: 5vw;
+    }
+    
+    .friend_div img {
+        border-radius: 100%;
+    }
+    /* PET DESCRIPTION */
+    
+    #pet_desc {
+        display: block;
+        position: relative;
+        margin-left: 40vw;
+        right: 10vw;
+        background-color: white;
+        box-shadow: 0 0 10px 10px rgba(20, 20, 20, .1);
+        padding: 5vh 2.5vw;
+        font-size: 3vh;
+    }
+    /* PET MINION */
+    
+    #pet_minion {
+        bottom: 30vh;
+        left: 5vw;
+        position: fixed;
+        background-color: white;
+        padding: 5vh 2.5vw;
+        height: 25vh;
+        width: 20vw;
+        transition: .2s;
+    }
+    
+    #pet_minion:after {
+        content: 'Minion';
+        font-size: 2vh;
+        color: white;
+        position: absolute;
+        bottom: -3vh;
+        left: 0;
+        background-color: black;
+        height: 3vh;
+        width: 100%;
+        box-shadow: 0 0 10px 10px rgba(20, 20, 20, .1);
+        background-image: linear-gradient(124deg, #513386, #eb3b1b);
+        /* GRADIENT BACKGROUND */
+        border-bottom-right-radius: 20%;
+        border-bottom-left-radius: 20%;
+    }
+    
+    #pet_minion img {
+        height: 9vh;
+    }
+    
+    #pet_minion:hover {
+        bottom: 5vh;
+        box-shadow: 0 10px 10px 10px rgba(20, 20, 20, .1);
+    }
+    /* <3 */
+    
+    .pet_like {
+        position: fixed;
+        left: 26vw;
+        top: 15vh;
+    }
+    
+    .pet_like a {
+        font-size: 5vh;
+        color: white;
+    }
+    /* CREDITS SECTION */
+    
+    #credits {
+        display: inline-block;
+        text-align: center;
+        font-weight: 800;
+        font-size: 2vh;
+    }
+    /* Media Query for size changes.
+        TODO More size ranges */
+    
+    @media (max-width: 1200px) {
+        #pet_treasure,
+        #pet_friends,
+        #pet_desc {
+            position: relative;
+            margin-left: 40vw;
+            width: auto;
+            font-size: 2.5vh;
+        }
+        #pet_treasure {
+            grid-template-columns: auto auto auto;
+            scroll-snap-type: none;
+        }
+        .treasure_item {
+            padding: 2vh 1vw;
+            width: 12vw;
+            height: auto;
+        }
+        .treasure_item span {
+            width: 12vw;
+            margin-left: -6vw;
+        }
+        #pet_info {
+            top: 10vw;
+        }
+        #column_2 {
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 20vw;
+            position: fixed;
+            z-index: 100;
+        }
+        #column_2 h1 {
+            top: 0;
+            font-size: 1.2vh;
+        }
+        #column_2 .pet_color_info {
+            top: 0;
+            left: 50vw;
+            font-size: 1vh;
+            position: fixed;
+        }
+        #pet_minion {
+            bottom: 0vh;
+            left: 0vw;
+            z-index: 101;
+        }
+        #pet_minion:hover {
+            bottom: 0;
+        }
+    }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+<span id="credits">Profile template by <a target="__blank" href="https://subeta.net/users/Lyonid">Lyonid</a>.</span>

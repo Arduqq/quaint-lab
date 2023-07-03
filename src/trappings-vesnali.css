@@ -1,0 +1,370 @@
+/* TRAPPINGS CustomCSS
+    ~ by Lyonid
+    ~ Free to use and modify 
+    I wanted to play around with the base code, so here's my progress to make things simple and usable! Import this file for direct updates and little gimmicks for events! */
+
+body {
+    overflow-x: hidden;
+}
+
+a {
+    transition: .2s;
+    color: #082617!important;
+}
+
+#header,
+#postcards,
+#menu-right,
+#menu-left {
+    display: none;
+}
+
+#menu-ul * {
+    background-image: none;
+}
+
+#menu-ul {
+    margin: 0;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 3px solid #111;
+}
+
+#menu {
+    background-image: none;
+    color: #FFF;
+    background-color: #222222;
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    margin: 0;
+    flex-flow: row-reverse nowrap;
+}
+
+#page:before {
+    content: '';
+    display: block;
+    height: 200px;
+    width: 100%;
+    background-size: cover;
+    background-image: url(https://static.wikia.nocookie.net/subeta/images/8/80/Esther_greenhouse.png);
+    image-rendering: pixelated;
+    background-position: center;
+}
+
+#menu>* {
+    background-image: none;
+    flex: 1 1 auto;
+}
+
+.menu-logo-txt {
+    margin-top: 10px;
+    margin-left: 0;
+    font-size: 24px;
+    text-shadow: none;
+}
+
+#main-content {
+    float: none;
+    width: 60%;
+    min-width: 600px;
+    margin: 0 25% 0 clamp(250px, 20%, 500px);
+}
+
+#content {
+    background-color: #FFF;
+    margin-left: 0 !important;
+}
+
+.menu-btn ul {
+    background-color: #333;
+}
+
+.menu-btn ul li {
+    border-bottom: 1px solid #111;
+}
+
+.menu-btn ul li a {
+    color: #ddd !important;
+}
+
+#menu a:hover {
+    background-color: transparent;
+}
+
+#bookmarks .bookmark {
+    border: 0;
+    border-radius: 0;
+    padding: 5px;
+    background-color: transparent;
+}
+
+#bookmarks .bookmark a {
+    color: #ddd!important;
+}
+
+#bookmarks .first {
+    margin-top: 255px;
+}
+
+#bookmarks {
+    position: fixed;
+    max-width: 200px;
+    top: 0;
+    right: 20px;
+    background-color: transparent;
+    z-index: 11;
+    text-align: right;
+    display: flex;
+    flex-flow: column nowrap;
+    width: auto;
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+#menu-time {
+    background-color: transparent;
+    color: white;
+    margin-left: 0;
+    font-weight: 400;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: -100px;
+    border: 0;
+}
+
+#menu-logo {
+    position: absolute;
+    float: none;
+    height: 180px;
+    left: 0;
+    top: -150px;
+    width: 100%;
+}
+
+.menu-logo-txt {
+    font-size: 4rem!important;
+    width: 100%;
+    display: block;
+    text-align: center;
+    filter: drop-shadow(rgb(74, 242, 161) 0.6rem 0.6em 1rem) drop-shadow(rgb(0, 0, 0) 0.2rem 0.2rem 1rem);
+}
+
+#sidebar-toggle-button {
+    margin-left: 50%;
+    width: 90px;
+    background-color: #222;
+    position: absolute;
+    margin: 0;
+    top: -200px;
+    left: calc(50% - 70px);
+    width: 140px;
+    display: block;
+    height: 40px;
+    border: 0;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    font-size: 1.5rem;
+    z-index: 10;
+    transition: .2s;
+    user-select: none;
+}
+
+#sidebar-inner {
+    height: calc(100vh - 40px);
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+#sidebar-toggle-button:hover {
+    background-color: #555;
+    box-shadow: none;
+}
+
+#page {
+    width: 100%;
+    margin: 0 auto!important;
+    background-color: #0E0E0F;
+}
+
+#events-counter-wrapper {
+    background-color: #ffde84;
+    color: #111;
+    user-select: none;
+}
+
+#events-counter {
+    font-size: 12px;
+    color: #111;
+}
+
+#main-content,
+#sidebar {
+    background-image: none;
+}
+
+#sidebar-top {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+#sidebar {
+    float: none;
+    width: 200px;
+    background-repeat: repeat-y !important;
+    z-index: 10;
+    padding-bottom: 0px;
+    position: fixed;
+    top: 20px;
+    left: 0;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+}
+
+#sidebar * {
+    background-image: none;
+    border: 0;
+}
+
+.sidebar-widget {
+    border: 0;
+    margin: 10px auto;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, .2);
+}
+
+.sidebar-widget .sidebar-widget-header {
+    border: none;
+    background-color: #222;
+    color: #ddd;
+    padding: 7.5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.sidebar-widget .sidebar-widget-sep {
+    background-color: #111;
+}
+
+.sidebar-widget-sep {
+    height: 3px;
+}
+
+.sidebar-widget .sidebar-widget-contents {
+    border: none;
+    background: #fff;
+    background-image: none;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 5px;
+}
+
+#sidebar-btn-events,
+#sidebar-btn-dash {
+    background-color: transparent;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    flex: 1 1 auto;
+    display: block;
+    width: 50px;
+    transition: .3s;
+    filter: grayscale(1);
+    user-select: none;
+}
+
+#sidebar-btn-events:hover,
+#sidebar-btn-dash:hover,
+.sidebar-btn-active {
+    filter: grayscale(0)!important;
+}
+
+#sidebar-btn-events:before {
+    content: '';
+    width: 25px;
+    height: 25px;
+    background-image: url(https://i.imgur.com/HG4zces.png);
+    background-size: contain;
+    position: absolute;
+    margin: 3px 5px;
+}
+
+#sidebar-btn-dash:before {
+    content: '';
+    width: 25px;
+    height: 25px;
+    background-image: url(https://i.imgur.com/vV9rOxh.png);
+    background-size: contain;
+    position: absolute;
+    margin: 3px 5px;
+}
+
+.hustler {
+    background-color: rgba(23, 23, 23, 0.9);
+    border-bottom: none;
+    top: 50px;
+    color: #ddd;
+}
+
+.hustler img,
+.hustler .wl_item {
+    border-radius: 25px;
+}
+
+#random_events {
+  background: #222;
+  color: white;
+  padding: 10px;
+  transition: .2s;
+  border-bottom: 5px solid #111;
+  z-index: 9;
+}
+
+#random_events a {
+  color: white!important;
+  text-decoration: underline wavy #03fc6b; 
+}
+
+#random_events able.ui > tbody:nth-child(1) > tr:nth-child(2) {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+#random_events table.ui > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(1) {
+  flex: 0 1 auto;
+  width: 84px;
+  height: 84px;
+  background: white;
+  text-align: center;
+  padding-top: 10px;
+  border-radius: 100%;
+  overflow: hidden;
+}
+
+.sp-sub {
+  background-color: transparent;
+  border: 0;
+}
+
+.floating_item img {
+  box-shadow: none!important;
+}
+
+.floating_item {
+  position: fixed!important;
+  left: calc(50% - 32px)!important;
+  top: 120px!important;
+  box-shadow: 0 0 10px 10px white;
+}

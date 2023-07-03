@@ -1,0 +1,161 @@
+@import url(https://fonts.googleapis.com/css2?family=Tajawal&display=swap);
+#container {
+    grid-template-rows: 44px 200px min-content min-content minmax(0, 1fr);
+    margin: 0 auto;
+    width: 100%;
+    min-width: unset;
+    grid-template-columns: 0 minmax(0, 1fr) 0
+    }
+#container > * {
+    margin: 0 auto;
+    font-family: "Tajawal", sans-serif
+    }
+#userLookupText > * {
+    text-align: center;
+    display: block;
+    padding: 5px;
+    background: rgba(43, 136, 88, 0.2);
+    margin: 2px auto
+    }
+.ul--linkimg {
+    width: 30px
+    }
+body {
+    background: radial-gradient(circle, rgba(21, 149, 85, 1) 0%, rgba(21, 64, 43, 0.7) 63%, rgba(21, 21, 43, 0.5) 100%), url(https://external-media.spacehey.net/media/sP3Iigz1svHUMEKP3-g2cfa9vMQsGtlXmMn88NLRIQS0=/https://unartur.neocities.org/storage/lunar-tentacle.png);
+    background-attachment: fixed;
+    scrollbar-width: thin
+    }
+#userLookupContent {
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    border: 15px solid black
+    }
+#userLookupShield {
+    background: url(https://i.imgur.com/y9zOYMO.png);
+    background-repeat: repeat;
+    background-size: auto;
+    background-repeat: repeat;
+    background-size: auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: 0.2s;
+    overflow: hidden
+    }
+#userLookupShield img {
+    animation: flicker 4s cubic-bezier(0.06, 0.92, 0.35, 0.97) infinite
+    }
+#sb_top, #sb_side, #aio_sidebar {
+    display: none
+    }
+#banner_img {
+    display: none
+    }
+.ul--header {
+    background: url(https://i3.lensdump.com/i/E02OMP.gif);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50px;
+    margin-left: 10px
+    }
+.ul--petsheader {
+    background: url(https://i.lensdump.com/i/E02Szo.gif);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50px;
+    font-size: 0;
+    margin-left: 10px
+    }
+.ul--sitetrophiesheader {
+    background: url(https://i.lensdump.com/i/E02v12.gif);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50px;
+    font-size: 0;
+    margin-left: 10px
+    }
+.ul--header span, .ul--petsheader > *, .ul--sitetrophiesheader > *, #aio_sidebar_placeholder {
+    display: none
+    }
+#page_banner {
+    width: 100%;
+    background-image: url(https://i.lensdump.com/i/Ej5cNT.png);
+    height: 200px;
+    image-rendering: pixelated;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: float 4s cubic-bezier(1, 0.05, 0.58, 0.74) infinite
+    }
+#page_content {
+    width: auto
+    }
+#page_footer {
+    background: black;
+    box-shadow: 0 -20px 20px 20px black;
+    width: 100%;
+    margin-top: 100px
+    }
+#page_footer * {
+    color: #f1f1f1 !important
+    }
+@keyframes float {
+    0% {
+        transform: translateY(-5px)
+        } 50% {
+        transform: translateY(0px);
+        } 100% {
+        transform: translateY(-5px)
+        }
+    }
+@keyframes flicker {
+    0% {
+        opacity: 0;
+        } 50% {
+        opacity: 1;
+        } 100% {
+        opacity: 0;
+        }
+    }
+.intro {
+    background: rgba(10, 10, 10, 0.9);
+    border-radius: 5px;
+    padding: 10px;
+    width: 490px;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 20px;
+    font-size: 1.2rem;
+    color: white
+    }
+.intro a {
+    flex: 0 0 250px
+    }
+.intro a img {
+    width: 100%;
+    border-radius: 25px
+    }
+.ul__neofriend form {
+    height: 30px
+    }
+.links {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 5px;
+    padding: 10px
+    }
+.links a {
+    display: block;
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    color: white;
+    flex-grow: 1
+    }
+.links a:hover {
+    background: rgba(128, 255, 178, 0.8);
+    color: #333
+    }

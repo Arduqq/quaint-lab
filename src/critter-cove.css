@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Rokkitt&display=swap');
+:root {
+    --main-theme-color: #ff906b;
+    --main-font-color: #1c1c1b;
+    --main-font: 'Rokkitt', serif!important;
+    --background-media: url("https://imgur.com/Ip82qCw.png") no-repeat center center / cover;
+    --main-background-color: rgba(255, 200, 156, .8);
+}
+
+body {
+    background: var(--background-media);
+    background-attachment: fixed;
+}
+
+body * {
+    font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans serif;
+    line-height: 100%;
+}
+
+.wrapper {
+    padding: 25px;
+    max-width: 700px;
+    width: 90%;
+    background: var(--main-background-color);
+    box-shadow: 0 0 20px 20px var(--main-background-color);
+    gap: 15px;
+    color: var(--main-font-color);
+    margin: 50px auto;
+    border-radius: 25px;
+}
+
+.wrapper>* {
+    object-fit: contain;
+    padding: 0 5px;
+    flex-basis: 100%;
+}
+
+a,
+a:active,
+a:visited {
+    font-weight: 800;
+    color: #422116;
+    transition: .3s;
+    padding: 0 5px;
+    border-bottom: #422116 1px dashed;
+}
+
+a:hover {
+    color: white;
+    background: #422116;
+}
+
+ul {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+}
+
+ul li {
+    flex-basis: 100%;
+}
+
+.theme {
+    margin: 0 auto;
+    width: 40%;
+    text-align: center;
+    padding: 20px;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    background: var(--background-media);
+    background-attachment: fixed;
+    border: 5px solid rgb(124, 214, 255);
+    color: rgb(124, 214, 255);
+    text-shadow: 0 0 2px #000;
+}
+
+.shopkeeper img {
+    max-width: 30%;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+    margin-bottom: -100px;
+}
+
+.artists {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.artists a {
+    display: inline-block;
+    padding: 10px;
+    background: var(--main-theme-color);
+    border-radius: 5px;
+    transition: .3s;
+    border-bottom: #422116 1px solid;
+}
+
+.artists a:hover {
+    background: #422116;
+    color: white;
+}
+
+.header {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--main-font);
+    width: 100%;
+    margin: 0 auto;
+    text-align: right;
+    border-radius: 10px;
+    border: 5px solid var(--main-theme-color);
+    color: var(--main-theme-color);
+    padding: 15px !important;
+    background: var(--background-media);
+    background-attachment: fixed;
+    text-shadow: 0 0 2px #000;
+}
+
+.header h1 {
+    flex-basis: 100%;
+    font-size: calc(100% + 2.5vw);
+    display: inline-block;
+    text-align: center;
+    background: none;
+    border: 0;
+    color: var(--main-font-color);
+}
+
+.header h2 {
+    flex-basis: 100%;
+    font-size: calc(50% + 1vw);
+    text-align: center;
+    background: none;
+    border: 0;
+    color: var(--main-font-color);
+}
+
+#up {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    width: 120px;
+    bottom: 10px;
+    right: 10px;
+}
