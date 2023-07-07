@@ -1,27 +1,54 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Quaint Laboratorium: Radio Station</title>
-    <link href="/style.css" rel="stylesheet" type="text/css" media="all">
-    <script src="/components/main.js"></script> 
-  </head>
-  <body>
-    <div class="wrapper">
-      <h1>A Quaint <a href="about.html">Laboratory</a></h1>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Quaint Laboratorium: Radio Station</title>
+  <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+  <script src="/components/main.js"></script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <header>A Quaint Laboratorium</header>
+    <aside>
+
       
-      <main-nav></main-nav>
-      <span class="breadcrumb">| <a href="/">lab</a> ~ radio </span>
+      <nav class="main">
+        <a class="entrance route" href="/home"><span>Entrance [Home]</span></a>
+        <a class="about route" href="/about"><span>Office [Me]</span></a>
+        <a class="atelier route" href="/atelier"><span>Atelier [Art]</span></a>
+        <a class="reads route" href="/reads"><span>Reads [Blog]</span></a>
+        <a class="radio route" href="/radio"><span>Radio [Guestbook]</span></a>
+        <a class="pets route" href="/pets"><span>Fauna [Pets]</span></a>
+        <a class="storage route" href="/storage"><span>Storage [Resources]</span></a>
+        <a class="contact route" href="/contacts"><span>Cafeteria [Contacts]</span></a>
+      </nav>
+      <div id="statuscafe"><div id="statuscafe-username"></div><div id="statuscafe-content"></div></div><script src="https://status.cafe/current-status.js?name=lyonid" defer></script>
+      
       <div class="intro-box radio">
-        <p class="intro">A dusty room of rusty equipment and furniture very close to falling to dust is carefully arranged in a circular room. Boxes of ancient wires and audio devices catch your attention until you hear a soft noise coming from the one headphone that still seems to function. You sit yourself on a box, since the chairs obviously will not do, and begin to listen in. </p>
+        <p class="intro">A dusty room of rusty equipment and furniture very close to falling to dust is carefully
+          arranged
+          in a circular room. Boxes of ancient wires and audio devices catch your attention until you hear a soft noise
+          coming from the one headphone that still seems to function. You sit yourself on a box, since the chairs
+          obviously will not do, and begin to listen in. </p>
       </div>
-     <div id="HCB_comment_box"><a href="http://www.htmlcommentbox.com">Radio Station</a> awaits response signal...</div>
-     <link rel="stylesheet" type="text/css" href="https://www.htmlcommentbox.com/static/skins/bootstrap/twitter-bootstrap.css?v=0" />
-     <script type="text/javascript" id="hcb">
-      if(!window.hcb_user){hcb_user={};} (function(){var s=document.createElement("script"), l=hcb_user.PAGE || (""+window.location).replace(/'/g,"%27"), h="https://www.htmlcommentbox.com";s.setAttribute("type","text/javascript");s.setAttribute("src", h+"/jread?page="+encodeURIComponent(l).replace("+","%2B")+"&mod=%241%24wq1rdBcg%24%2FKRdCyCxo1x9HGEmUvlvs%2F"+"&opts=16798&num=10&ts=1683730538622");if (typeof s!="undefined") document.getElementsByTagName("head")[0].appendChild(s);})(); 
+    </aside>
+    <main>
+      <div id="HCB_comment_box"><a href="http://www.htmlcommentbox.com">Radio Station</a> awaits response signal...
+      </div>
+      <link rel="stylesheet" type="text/css"
+        href="https://www.htmlcommentbox.com/static/skins/bootstrap/twitter-bootstrap.css?v=0" />
+      <script type="text/javascript" id="hcb">
+        if (!window.hcb_user) { hcb_user = {}; } (function () { var s = document.createElement("script"), l = hcb_user.PAGE || ("" + window.location).replace(/'/g, "%27"), h = "https://www.htmlcommentbox.com"; s.setAttribute("type", "text/javascript"); s.setAttribute("src", h + "/jread?page=" + encodeURIComponent(l).replace("+", "%2B") + "&mod=%241%24wq1rdBcg%24%2FKRdCyCxo1x9HGEmUvlvs%2F" + "&opts=16798&num=10&ts=1683730538622"); if (typeof s != "undefined") document.getElementsByTagName("head")[0].appendChild(s); })(); 
       </script>
-    </div>
-    
-  </body>
+    </main>
+    <footer><span>© un.artur, 2023 and beyond!</span>
+      <span><a target="__blank" href="https://blasius.club/@maus">Mastodon [ger]</a> ~ <a target="__blank" href="https://neocities.org/site/unartur">Neocities</a> ~ <a target="__blank" href="https://artur.glitch.me/">Portfolio</a> ~ <a target="__blank" href="https://ko-fi.com/arduqq">ko-fi</a> ~ <a target="__blank" href="https://github.com/arduqq">GitHub</a></span>
+    </footer>
+  </div>
+
+</body>
+
 </html>

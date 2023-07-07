@@ -9,8 +9,10 @@ class Navigation extends HTMLElement {
         <a class="radio route" href="/radio"><span>Radio [Guestbook]</span></a>
         <a class="pets route" href="/pets"><span>Fauna [Pets]</span></a>
         <a class="storage route" href="/storage"><span>Storage [Resources]</span></a>
-        <a class="contact route" href="/contacts"><span>Cafeteria [Contacts] <img src="/button-1.gif"></span></a>
+        <a class="contact route" href="/contacts"><span>Cafeteria [Contacts]</span></a>
       </nav>
+      <div id="statuscafe"><div id="statuscafe-username"></div><div id="statuscafe-content"></div></div><script src="https://status.cafe/current-status.js?name=lyonid" defer></script>
+      
         `
   }
 }
