@@ -1,0 +1,205 @@
+---
+title: "Home"
+intro: After a long hike across those mountains that your village deemed forsaken, you arrive at quite the unusual sight. Traces of a long-forgotten facility would leave you questioning whether things could have been different - intact. Working yourself through the piles of reagents, burnt paper and storage mediums, you end up in a chamber that seems passable. You might take a rest and fuel up on those gas canisters that were lying around next door, you think, as you play with the idea of turning this into a new home. A place to leave piece of you behind and to be the actor filling this scene with life and inspiration.
+layout: base.njk
+permalink: "home/"
+---
+
+<p class="summary">
+  Inspired by the creativity of people online, this laboratory tries to honour
+  and play with what the internet can be. It's my personal playground to shape,
+  and destroy. In an effort to find anyone like-minded, I stray away from
+  conventional virtual life on corporate social media to invite everyone into an
+  endless space that deserves to be treated respectfully. My thoughts on such a
+  future are under construction, and so is this page. Step by, and rest. For
+  now, you can check out the different explorable rooms and see for yourself
+  what kind of person I am online!
+</p>
+
+<section class="me">
+  <div class="portrait">
+  </div>
+  <div class="about">
+    <h2>Heeee-llo.</h2>
+    <p>
+      I am Artur and I go by they/them and er/ihn. I believe that everyone needs digital real estate, and this is mine. It's a laboratory because I keep tinkering with it when I am here, and it's where lots of my thoughts are cultivated. I am an artist and researcher by day and ... by night lol.
+    </p>
+  </div>
+  <div class="status">
+    <h2 title="" Status>Status</h2>
+    <div id="statuscafe">
+      <div id="statuscafe-username"></div>
+      <div id="statuscafe-content"></div>
+    </div>
+    <script
+      src="https://status.cafe/current-status.js?name=lyonid"
+      defer
+    ></script>
+  </div>
+  <div class="buttons">
+    <h2>My buttons</h2>
+    <div>
+      <img alt="Button with a zombie standing in front of a cobblestone wall" src="/images/pages/contacts/ql-button-1.gif" />
+      <img alt="Button saying Quaint Lab" src="/images/pages/contacts/ql-button-2.gif" />
+      <img alt="Button saying Quaint Laboratorium" src="/images/pages/contacts/ql-button-3.png" />
+    </div>
+  </div>
+  <div class="contact">
+    <h2>Contact</h2>
+    <p><b>Discord:</b> un.artur</p>
+    <p>
+      <b>Mail:</b>
+      <a href="mailto:lyonid@protonmail.com"
+        >lyonid [at] protonmail [dot] com</a
+      >
+    </p>
+    <p>
+      <b>Mastodon:</b>
+      <a rel="me" href="https://blasius.club/@maus"
+        >@maus@blasius.club (German)</a
+      >
+    </p>
+  </div>
+</section>
+
+
+<section id="profile">
+  <h2>Gifting Guide</h2>
+  <div class="likes-dislikes">
+    <div class="loves"> 
+      <h3>Loves</h3>
+      <ul>
+        <li>Video games</li>
+        <li>Digital drawing</li>
+        <li>Watercolor</li>
+        <li>Mate tea</li>
+        <li>Coffee</li>
+        <li>Lasagna</li>
+      </ul>
+    </div>
+
+    <div class="likes"> 
+      <h3>Likes</h3>
+      <ul>
+        <li>All foods</li>
+        <li>Kindness</li>
+        <li>Hacking</li>
+        <li>Film Photography</li>
+      </ul></div>
+
+    <div class="dislikes">   
+      <h3>Dislikes</h3>
+      <ul>
+        <li>Noisiness</li>
+        <li>Fireworks</li>
+        <li>Blabla</li>
+        <li>Board games</li>
+        <li>Fediverse ultras</li>
+        <li>Hacking culture</li>
+      </ul></div>
+    <div class="hates"> 
+      <h3>Hates</h3>
+      <ul>
+        <li>German Steam reviews</li>
+        <li>Subreddits that are not special interests</li>
+        <li>Discord</li>
+        <li>AI positivism</li>
+        <li>Predatory game design</li>
+      </ul>
+    </div>
+  </div>
+  </section>
+
+<section id="hoard">
+  <h2>Hoard</h2>
+  <h3>Game Exploration Kit</h3>
+  <div class="game-shelf">
+    {% for game in games %}
+    <div class="game" onclick="showDescription('desc{{ loop.index }}')">
+      <img src="{{ game.image }}" alt="{{ game.title }}" />
+    </div>
+    {% endfor %}
+  </div>
+  {% for game in games %}
+  <div id="desc{{ loop.index }}" class="game-description">
+    <strong>{{ game.title }}:</strong> {{ game.description }}
+    {% if game.review %}
+    <a href="{{ game.review }}" target="_blank">Read Review</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+  <script>
+    function showDescription(id) {
+      document
+        .querySelectorAll(".game-description")
+        .forEach((desc) => (desc.style.display = "none"));
+      document.getElementById(id).style.display = "block";
+    }
+  </script>
+  <h3>Blinkies</h3>
+  <div id="blinkies">
+    {% for blinkie in collections.blinkies %}
+    <img src="/{{ blinkie.url }}" alt="{{ blinkie.fileSlug }}" />
+    {% endfor %}
+  </div>
+  <h3>Fanlistings</h3>
+  <div id="fanlistings">
+    <a target="_blank" href="http://nosastra.com/rats/"
+      ><img alt="Fanlisting for rats" src="/images/pages/about/fanlistings/rats.gif" /></a
+    ><a target="_blank" href="http://fanlisting.altervista.org/dogs/"
+      ><img alt="Fanlisting for dogs" src="/images/pages/about/fanlistings/dogs.png" /></a
+    ><a target="_blank" href="https://cameras.thoughtdreams.org/"
+      ><img alt="Fanlisting for cameras" src="/images/pages/about/fanlistings/cameras.gif" /></a
+    ><a target="_blank" href="in-blue-rain.org/lasagna"
+      ><img alt="Fanlisting for lasagna" src="/images/pages/about/fanlistings/lasagna.png" /></a
+    ><a target="_blank" href="http://rhythm-emotion.net/bananas/"
+      ><img alt="Fanlisting for bananas" src="/images/pages/about/fanlistings/bananas.png" /></a
+    ><a target="_blank" href="https://herotovillain.com/slasher"
+      ><img alt="Fanlisting for slashers" src="/images/pages/about/fanlistings/slasher.png" /></a
+    ><a target="_blank" href="https://fan.kirai.org/paramore/"
+      ><img alt="Fanlisting for Paramore" src="/images/pages/about/fanlistings/paramore.png" /></a
+    ><a target="_blank" href="http://php.aking-mahal.net/"
+      ><img alt="Fanlisting for PHP" src="/images/pages/about/fanlistings/php.gif" /></a
+    ><a target="_blank" href="http://fan.winterlantern.net/bloodborne/"
+      ><img alt="Fanlisting for BBCode" src="/images/pages/about/fanlistings/bb.png" /></a
+    ><a target="_blank" href="https://eku53ru.net/fl/ac"
+      ><img alt="Fanlisting for Animal Crossing" src="/images/pages/about/fanlistings/ac.gif" /></a
+    ><a target="_blank" href="http://firaga.org/nier"
+      ><img alt="Fanlisting for NieR" src="/images/pages/about/fanlistings/nier.png" /></a
+    ><a target="_blank" href="https://fanlistings.nickifaulk.com/gw2/"
+      ><img alt="Fanlisting for Guild Wars" src="/images/pages/about/fanlistings/gw.jpg" /></a
+    ><a target="_blank" href="http://fire.nevarra.org/fan/"
+      ><img alt="Fanlisting for Fire Emblem" src="/images/pages/about/fanlistings/fe.png"
+    /></a>
+  </div>
+</section>
+
+<section class="feed">
+  <h2>Latest Post</h2>
+  {% set latest_post = collections.post | first %} {% if latest_post %}
+  <a class="post" href="{{ latest_post.url }}">
+    <div class="post-info">
+      <h3>{{ latest_post.data.posttitle }}</h3>
+      <p>{{ latest_post.data.excerpt }}</p>
+      <p>
+        {% for category in latest_post.data.categories %}<span
+          class="category"
+          >{{ category }}</span
+        >{% endfor %}
+      </p>
+    </div>
+  </a>
+  {% endif %}
+</section>
+
+
+<section>
+  <h2>Colophon</h2>
+  I built this website with
+  <a href="https://www.11ty.dev" target="_blank">Eleventy</a> hosting on
+  <a href="https://neocities.org" target="_blank">Neocities</a>. The code was
+  created in <a href="https://code.visualstudio.com">VSCode</a>, and is
+  accessible on
+  <a href="https://github.com/Arduqq/quaint-lab" target="_blank">GitHub</a>.
+</section>

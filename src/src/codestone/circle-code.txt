@@ -1,0 +1,39 @@
+BBCode:
+[div class="mncircle"]
+  [div class="mncircle-banner"]
+    [url="https://www.moderneopets.com/~5912"]  
+      [img]https://i.imgur.com/0EPgPA5.png[/img]
+    [/url]
+    [h2]The Codestone ModerneoCircle[/h2]
+  [/div]
+  [div class="mncircle-links"]
+    [url="https://unartur.neocities.org/codestone?ref=Ren&action=previous"]Previous[/url][url="https://unartur.neocities.org/codestone?action=random"]Random[/url][url="https://unartur.neocities.org/codestone?ref=Ren&action=next"]Next[/url]
+  [/div]
+[/div]
+
+
+CSS:
+.mncircle {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: 100%;
+}
+
+.mncircle-banner, .mncircle-links {
+  flex-basis: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.mncircle-links a {
+  flex: 1 1 33.3%;
+  display: inline-block;
+  padding: 5px;
+  height: 40px;
+  text-align: center;
+}

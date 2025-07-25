@@ -1,0 +1,55 @@
+{
+    "sections": [
+      {
+        "id": "patterns",
+        "title": "Patterns 200x200",
+        "description": "",
+        "images": [
+          "lunar-tentacle.png",
+          "blue-on-white.png",
+          "mushrooms.png",
+          "metal.png"
+        ]
+      },
+      {
+        "id": "rats",
+        "title": "Proud Rat Emotes",
+        "description": "Have these proud little vermin. I use them on a Discord, but do with them as you please. No credits needed, more flags to come. Write me if you would love to have a specific flag!",
+        "images": [
+          "acerat.png",
+          "arorat.png",
+          "birat.png",
+          "lesbianrat.png",
+          "nbrat.png",
+          "panrat.png",
+          "transrat.png"
+        ]
+      },
+      {
+        "id": "fruit",
+        "title": "Fruit!",
+        "description": "In honor of the participants of my study for the Master's Thesis, I drew some fruit! Take it with you, and eat up.",
+        "images": [
+          "apple.png",
+          "peach.png",
+          "lemon.png",
+          "jackfruit.png",
+          "pineapple.png",
+          "grape.png"
+        ]
+      },
+      {
+        "id": "critters",
+        "title": "Critters Font",
+        "description": "A simple pixel font that is supposed to resemble little monsters. I made it to have my own personal font for this site and wanted to share it. No credits needed.",
+        "link": {
+          "text": "Critters Pixel Font [download critters.woff]",
+          "url": "/src/critters.woff"
+        },
+        "images": [
+          "critters-thumb.png"
+        ]
+      }
+    ]
+  }
+  

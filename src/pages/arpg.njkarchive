@@ -1,0 +1,89 @@
+---
+title: 'ARPG'
+intro: There's a Nintendo DS sitting there attached to some server, flickering and singing a familiar tune. You see some Pokémon doing their funny little idle animation assembled in a rectangular hall filled with berries and traps. Nearby you see a booklet with notes and stories about characters from all universes this person could imagine.
+layout: base.njk
+permalink: "atelier/arpg/"
+---
+<section class="bio-gallery" style="background-image: url(/images/pages/atelier/arpg/bg-pokemon.gif)">
+  <h2>Team Soup</h2>
+  <p class="summary">I hate the Pokémon Company. I think the Mystery Dungeon games are phenomenal, though. The visuals,
+    the mechanics and even the story all showcase how wonderful the Pokémon IP actually can be! That is why I draw some
+    fun little friends to practice drawing scenes with the simplicity and genius of the games' designs. Smiles go for
+    Miles! This is a collection of members of Team Soup, my acclaimed team of explorers from the Pokémon Mystery dungeon
+    series. I can't describe this sudden fixation, but it was sparked by the <a
+      href="https://www.paperdemon.com/app/g/mysterious-bloom" target="__blank">Mysterious Bloom ARPG on PaperDemon</a>!
+    (RIP T_T) Please support the project and the PD team in general as I think that they are doing a wonderful job to
+    make people draw anything they love.
+    <b>Credit</b> Wallpaper, type and sprite images from <a href="https://bulbapedia.bulbagarden.net/wiki/Wallpaper"
+      target="__blank">Bulbapedia</a>. Background of PMD from <a
+      href="https://projectpokemon.org/home/gallery/image/81078-t00p02gif/" target="__blank">Project Pokémon by
+      Parakoopa</a>.
+  </p>
+
+  <article class="character-bio" style="background-image: url(/images/pages/atelier/arpg/box-rowenacht.png)">
+    <h3>Rowenacht</h3>
+    <img class="portrait" src="/images/pages/atelier/arpg/rowenacht.png">
+    <h4>Laurel</h4>
+    <span>he/him</span>
+    <span>Species: <b>Rowlet</b></span>
+    <div class="type-list"><img src="/images/pages/atelier/arpg/type_grass.png"></div>
+    <a href="https://pfq.link/?3zLZT"><img src="https://pfq.link/?3zLZT=platform.png" /></a>
+    <a href="https://www.paperdemon.com/app/g/mysterious-bloom/character/19567">Profile</a>
+  </article>
+
+  <article class="character-bio" style="background-image: url(/images/pages/atelier/arpg/box-willo.png)">
+    <h3>Willo</h3>
+    <img class="portrait" src="/images/pages/atelier/arpg/willo.png">
+    <h4>Sorrel</h4>
+    <span>they/them</span>
+    <span>Species: <b>Turtwig</b></span>
+    <div class="type-list"><img src="/images/pages/atelier/arpg/type_grass.png"></div>
+    <a href="https://www.paperdemon.com/app/g/mysterious-bloom/character/19568">Profile</a>
+  </article>
+
+  <article class="character-bio" style="background-image: url(/images/pages/atelier/arpg/box-dwinlil.png)">
+    <h3>Dwinlil</h3>
+    <img class="portrait" src="/images/pages/atelier/arpg/dwinlil.png">
+    <h4>Ginger</h4>
+    <span>she/her</span>
+    <span>Species: <b>Petilil</b></span>
+    <div class="type-list"><img src="/images/pages/atelier/arpg/type_grass.png"></div>
+    <a href="https://www.paperdemon.com/app/g/mysterious-bloom/character/19774">Profile</a>
+  </article>
+
+  <article class="character-bio" style="background-image: url(/images/pages/atelier/arpg/box-snegbo.png)">
+    <h3>Snegbo</h3>
+    <img class="portrait" src="/images/pages/atelier/arpg/snegbo.png">
+    <h4>Freezer</h4>
+    <span>it/its</span>
+    <span>Species: <b>Snom</b></span>
+    <div class="type-list"><img src="/images/pages/atelier/arpg/type_ice.png"><img src="/images/pages/atelier/arpg/type_bug.png"></div>
+    <a href="https://www.paperdemon.com/app/g/mysterious-bloom/character/19926">Profile</a>
+  </article>
+</section>
+<section class="bio-gallery">
+  <h2>Svetlym Village</h2>
+  <p class="summary">I took a liking in <a href="https://strudel-cafe.com/">Strudel Café (RIP)</a> over the past years
+    and wanted to find
+    a nice place to showcase my creations. It is a closed species - a dreadful thing - yet its gamification
+    and simplicity made me fall in love with it. Definitely give it a shot. <br><br>
+    I focus my characters to resemble the cast of the DrakeNieR series which has been very inspiring to me and I
+    stopped counting the times it made me cry. You might find some similarities, yet I do try to give it a personal
+    touch to tie it together with the fun concepts the site is offering. Hit me up if you find out which character
+    is inspired by whom and we might get along just well!
+  </p>
+  <p class="summary">In a scorched mountain view, a simple town of the name Svetlym gives shelter to a little
+    community of peaceful critters. Far away from harm, and next to a thicket of unending mystery, Arborlings travel
+    through here to get their final preperations done for their pilgrimage. No one would notice that here reside
+    individuals that are unsure of their path beyond the standards this world has to offer. If Svetlym really was a
+    town of peace and calm before the actual adventure, how would the townsfolk remain sane when nothing ever
+    changes?
+  </p>
+</section>
+<section class="bio-gallery">
+  <h2>Ichorcomb Fleet</h2>
+  <p class="summary">The water's always fine when Ikra sails the sea with her crew. Who would have thought that a stern
+    paw and a pair of kind and caring eyes could keep a ruffian bunch of pirates at bay? This quirky bunch of the
+    Ichorcomb Fleet swarms the seas to provide home to the misfit sailors of the Viridian Sea.
+  </p>
+</section>

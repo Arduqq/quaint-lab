@@ -1,0 +1,26 @@
+<aside>
+  <h2 title="Navigation">Navigation</h2>
+  {% include 'navigation.njk' %}
+  <h2 title=""Webrings>Webrings</h2>
+
+</iframe><object title="Melonland Surf Club Webring Integration" id="melonland-surf-club" data="https://melonland.net/surf-badge.svg?fill=#129e8d" type="image/svg+xml" style="width: 100px; height: 100px;"></object>
+  <h2 title="Some Artwork">Some Artwork</h2>
+  {% set randomArt = collections.artwork | random %}
+  {% set recentArt = collections.artwork | first %}
+  <section class="art-preview">
+    <a href="{{ recentArt.url }}">
+      <img src="/images/artwork/thumbnails/{{ recentArt.data.image }}">
+      <b>{{ recentArt.data.posttitle }}</b>
+    </a>
+    <a href="{{ randomArt.url }}">
+      <img src="/images/artwork/thumbnails/{{ randomArt.data.image }}"> 
+      <b>{{ randomArt.data.posttitle }}</b>
+    </a>
+    <br>
+    <a class="art-preview-more" href="/atelier">See more ></a>
+
+  </section>
+
+  <div id="c_widget"></div>
+  <script src="/js/comment-widget.js"></script>
+</aside>

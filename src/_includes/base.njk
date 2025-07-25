@@ -1,0 +1,26 @@
+---
+title: "aql"
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="description" content="After a long hike across those mountains that your village deemed forsaken, you arrive at quite the unusual sight. Traces of a long-forgotten facility would leave you questioning whether things could have been different - intact.">
+  <meta name="keywords" content="Laboratory, Neocities, Web Revival, Personal Homepage">
+  <meta name="author" content="Lyonid">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>aql: {{ title }}</title>
+  <link href="/css/style.css" rel="stylesheet" type="text/css" media="all">
+  <link href="/css/comment-widget.css" rel="stylesheet" type="text/css" media="all">
+</head>
+<body>
+  <div class="wrapper">
+    {% include 'header.njk' %}
+    {% include 'sidebar.njk' %}
+    <main>
+      {{ content | safe }}
+    </main>
+    {% include 'footer.njk' %}
+  </div>
+</body>
+</html>

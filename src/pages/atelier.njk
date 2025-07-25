@@ -1,0 +1,28 @@
+---
+title: "Atelier"
+intro: "You find a log of scattered places from all around the universe. Curiously you click your way through the database which happens to include a multitude of images and texts."
+layout: base.njk
+permalink: "atelier/"
+---
+<section class="feed">
+  <h2>Recent Exhibition Inventory</h2>
+{% for post in collections.artwork %}
+<a class="post" href="{{ post.url }}">
+  <img src="/images/artwork/thumbnails/{{ post.data.image }}" alt="{{ post.data.posttitle }}"> 
+  <div class="post-info">
+    <h3>{{ post.data.posttitle }}</h3>
+    <p>
+      {% for category in post.data.categories %}<span class="category">{{ category }}</span>{% endfor %}
+    </p>
+  </div>
+</a>
+{% endfor %}
+</section>
+<section>
+  <h2><img src="/images/pages/atelier/helix-logo.gif">Helix Vacui</h2>
+  <p>Imagine a world where your one true purpose is hidden yet vital for you to uncover. Your very body aching to
+    unravel this secret as you pursue the many careers this society has to offer. An unending spiral manifested in a
+    snail house that feeds on you, creating an inner void when you fail to contribute to the greater good. Here I
+    collect all the characters I design for this little art project.</p>
+  ((Currently under construction. I am going to add a cute little wiki here!))
+</section>

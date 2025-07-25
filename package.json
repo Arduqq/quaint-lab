@@ -1,0 +1,20 @@
+{
+  "name": "quaint-lab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "comment-widget.js",
+  "scripts": {
+    "generate-thumbnails": "node generate-thumbnails.js",
+    "build": "npm run generate-thumbnails && npx @11ty/eleventy",
+    "start": "npx @11ty/eleventy --serve",
+    "debug": "DEBUG=* npx @11ty/eleventy",
+    "push": "npm run generate-thumbnails && npx @11ty/eleventy && export NEOCITIES_API_KEY='7ac7ed86a6da3051897b146b6b303a4b' && neocities push dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "sharp": "^0.33.4"
+  }
+}

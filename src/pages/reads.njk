@@ -1,0 +1,20 @@
+---
+title: "Archive"
+intro: "Scattered piles of yellowed paper cover the tables of a room that seems to have been the foyer. Of all the computers, you find a peculiar laptop that is as chunky as can be. Its frame is rusty yet the glue of the stickers on it seems to be holding that poor thing together. Without a password, you are immediately prompted to a directory of thoughts that person must have been dying to express."
+layout: base.njk
+permalink: "archive/"
+---
+<section class="feed">
+  <h2>Writing Archive</h2>
+  {% for post in collections.post %}
+  <a class="post" href="{{post.url}}">
+    <div class="post-info">
+      <h3>{{ post.data.posttitle }}</h3>
+      <p>{{ post.data.excerpt }}</p>
+      <p>
+        {% for category in post.data.categories %}<span class="category">{{ category }}</span>{% endfor %}
+      </p>
+    </div>
+  </a>
+  {% endfor %}
+</section>

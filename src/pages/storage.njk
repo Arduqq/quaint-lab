@@ -1,0 +1,23 @@
+---
+title: 'Storage'
+intro: It feels unsafe to just spy around those corners that remain unvisited for ages. It is time for you to pack your bags with some supplies and leave. You consider leaving some apricots preserve on one of the shelves, so the next adventurer might get a bit of a treat as they would follow your lead. 
+layout: base.njk
+permalink: "storage/"
+---
+
+{% for section in resources.sections %}
+<section class="resources">
+  <h2 id="{{ section.id }}">{{ section.title }}</h2>
+  {% if section.description %}
+    <p>{{ section.description }}</p>
+  {% endif %}
+  {% if section.link %}
+    <p><a href="/images/pages/storage/{{ section.link.url }}">{{ section.link.text }}</a></p>
+  {% endif %}
+  <div class="media-images">
+    {% for image in section.images %}
+      <img src="/images/pages/storage/{{ image }}" alt="{{ section.title }} image">
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
