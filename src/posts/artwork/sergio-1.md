@@ -1,6 +1,6 @@
 ---
 title: "Artwork"
-posttitle: "Artwork Title"
+posttitle: "Meeting the well"
 image: "sergio-1.png"
 comment: "..."
 categories: [paperdemon, character]

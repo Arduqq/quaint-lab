@@ -17,10 +17,10 @@ fs.readdirSync(inputDir).forEach(file => {
   const inputPath = path.join(inputDir, file);
   const outputPath = path.join(outputDir, file);
 
-  sharp(inputPath)
+    sharp(inputPath)
     .resize(thumbnailWidth, thumbnailHeight, {
       fit: sharp.fit.cover,
-      position: sharp.strategy.entropy
+      position: 'northwest'  // <-- Crop from the top
     })
     .toFile(outputPath)
     .then(() => {
@@ -29,4 +29,5 @@ fs.readdirSync(inputDir).forEach(file => {
     .catch(err => {
       console.error(`Error processing ${inputPath}:`, err);
     });
+
 });

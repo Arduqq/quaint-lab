@@ -738,7 +738,7 @@ img.portrait {
 .feed > .post > img {
   border-radius: 5%;
   transition: .2s;
-  flex: 0 1 300px;
+  flex: 0 1 250px;
   border: 2px solid white;
 }
 
