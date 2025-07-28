@@ -2,6 +2,36 @@
   <h1>A Quaint Lab</h1>
   <h2>Navigation</h2>
   {% include 'navigation.njk' %}
+  <fieldset id="theme-switcher">
+    <legend><h3>Themes</h3></legend>
+    <label><input type="radio" name="theme" value="contrast"> Contrast</label>
+    <label><input type="radio" name="theme" value="cute"> Cute</label>
+    <label><input type="radio" name="theme" value="bluemaro"> Bluemaro</label>
+  </fieldset>
+  
+  <script>
+    const root = document.documentElement;
+    const radios = document.querySelectorAll('input[name="theme"]');
+    const savedTheme = localStorage.getItem('theme') || 'contrast';
+  
+    root.setAttribute('data-theme', savedTheme);
+  
+    // Set the correct radio as checked
+    radios.forEach(radio => {
+      if (radio.value === savedTheme) {
+        radio.checked = true;
+      }
+  
+      radio.addEventListener('change', (e) => {
+        const selectedTheme = e.target.value;
+        root.setAttribute('data-theme', selectedTheme);
+        localStorage.setItem('theme', selectedTheme);
+      });
+    });
+  </script>
+  
+  
+
   <h2 title=""Webrings>Webrings</h2>
 
 </iframe><object title="Melonland Surf Club Webring Integration" id="melonland-surf-club" data="https://melonland.net/surf-badge.svg?fill=#129e8d" type="image/svg+xml" style="width: 100px; height: 100px;"></object>

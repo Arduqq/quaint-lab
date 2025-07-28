@@ -1,47 +1,55 @@
+/*==============================
+  FONTS
+==============================*/
 @font-face {
   font-family: 'Critters';
-  src        : url(../fonts/critters.woff);
+  src: url(../fonts/critters.woff);
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src        : url(../fonts/Atkinson-Hyperlegible-Regular-102.woff);
+  src: url(../fonts/Atkinson-Hyperlegible-Regular-102.woff);
   font-weight: normal;
-  font-style : normal;
+  font-style: normal;
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src        : url(../fonts/Atkinson-Hyperlegible-Bold-102.woff);
+  src: url(../fonts/Atkinson-Hyperlegible-Bold-102.woff);
   font-weight: bold;
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src        : url(../fonts/Atkinson-Hyperlegible-Italic-102.woff);
-  font-style : italic;
+  src: url(../fonts/Atkinson-Hyperlegible-Italic-102.woff);
+  font-style: italic;
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src        : url(../fonts/Atkinson-Hyperlegible-BoldItalic-102.woff);
-  font-style : italic;
+  src: url(../fonts/Atkinson-Hyperlegible-BoldItalic-102.woff);
   font-weight: bold;
+  font-style: italic;
 }
 
+/*==============================
+  ROOT VARIABLES
+==============================*/
 :root {
   --main-font       : 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
   --custom-font     : 'Critters', monospace;
   --background-color: white;
+  --section-background-color: white;
   --text-color      : #121212;
-  --highlight-color : #3bb153;
+  --link-color: #375C58;
+  --highlight-color : #5db962;
   --border-color    : black;
   --bg-gradient     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0);
   --default-cursor  : auto;
   --hover-cursor    : crosshair;
   --nav-cursor      : crosshair;
-  --box-shadow-color: rgba(0, 0, 0, .5);
-  --background-image: url(../images/header.gif);
+  --background-image: none;
+  --heading-background-image: url(/images/sparkle-bg.jpg);
   --pixelated       : pixelated;
   --flex-center     : center;
   --flex-align      : center;
@@ -49,8 +57,72 @@
   --margin-unit     : calc(8px + 1.5625vw);
   --padding-unit    : calc(8px + 1.5625vw);
   --default-margin  : 5px;
+  --nav-filter      : none;
+
 }
 
+/*==============================
+  THEME OVERRIDES
+==============================*/
+
+[data-theme="cute"] {
+  --main-font       : 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
+  --custom-font     : 'Comic Sans MS', cursive;
+  --background-color:  #f4b6c2;
+  --section-background-color: #eee3e7 ;
+  --background-image:  #ead5dc  ;
+  --heading-background-image:  #ead5dc  ;
+  --link-color: #006a8a;
+  --highlight-color : #009dcd;
+  --text-color      : #1c1c1c;
+  --border-color    : #f88697;
+  --bg-gradient     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0);
+  --default-cursor  : auto;
+  --hover-cursor    : crosshair;
+  --nav-cursor      : crosshair;
+  --nav-filter      : grayscale(.1) saturate(.5);
+}
+
+/* Contrast Theme */
+[data-theme="contrast"] {
+  --main-font       : 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
+  --custom-font     : 'Critters', monospace;
+  --background-color: white;
+  --section-background-color: white;
+  --background-image: none;
+  --heading-background-image:  url(/images/sparkle-bg.jpg) ;
+  --text-color      : #121212;
+  --link-color: #375C58;
+  --highlight-color : #5db962;
+  --border-color    : black;
+  --bg-gradient     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0);
+  --default-cursor  : auto;
+  --hover-cursor    : crosshair;
+  --nav-cursor      : crosshair;
+  --nav-filter      : none;
+}
+
+[data-theme="bluemaro"] {
+  --main-font       : 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
+  --custom-font     : 'Critters', monospace;
+  --background-color: rgb(51, 51, 51);
+  --section-background-color: rgb(34, 34, 34);
+  --background-image: url(/images/pages/storage/lunar-tentacle.png);
+  --heading-background-image: rgb(29, 29, 29);
+  --text-color      : #ffffff;
+  --link-color: #72ecff;
+  --highlight-color : #bfefff;
+  --border-color    : #72ecff;
+  --bg-gradient     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0);
+  --default-cursor  : auto;
+  --hover-cursor    : crosshair;
+  --nav-cursor      : crosshair;
+  --nav-filter      : none;
+}
+
+/*==============================
+  GLOBAL STYLES
+==============================*/
 * {
   cursor: var(--hover-cursor);
 }
@@ -66,9 +138,11 @@ html {
 
 body {
   font-family: var(--main-font);
+  color: var(--text-color);
   margin     : 0;
-  background : white;
-  ;
+  background-color : var(--background-color);
+  background-image: var(--background-image);
+  background-attachment: fixed;
   font-size: calc(15px + 0.390625vw);
 }
 
@@ -77,14 +151,12 @@ h1, h2, h3, h4 {
   display: block;
   align-items: center;
   margin: 0;
-  color: black;
+  color: var(--text-color);
   border-radius: 5px;
-  border: 2px solid rgb(0, 0, 0);
-  background: url(/images/sparkle-bg.jpg);
+  border: 2px solid var(--border-color);
+  background: var(--heading-background-image);
   background-attachment: fixed;
 }
-
-
 
 h1 {
   font-size  : 3rem;
@@ -111,7 +183,7 @@ a {
 }
 
 a:hover {
-  color: #3bb153;
+  color: var(--highlight-color);
 }
 
 a:active,
@@ -224,12 +296,12 @@ span.junk {
 }
 
 span.highlight {
-  background: white;
+  background-color: var(--background-color);
 
 }
 
 #statuscafe {
-  border         : 1px solid black;
+  border         : 1px solid var(--border-color);
   padding        : var(--padding-unit);
 }
 
@@ -242,26 +314,6 @@ span.highlight {
 
 }
 
-header {
-  flex: 0 1 100%;
-  color          : white;
-  background     : url(../images/base.gif) center / cover no-repeat;
-  font-family    : var(--custom-font);
-  font-size      : 2rem;
-  image-rendering: pixelated;
-  padding              : var(--padding-unit);
-  margin: calc(0.5 * var(--margin-unit))
-}
-
-header .intro-box {
-  background: black;
-  color: white;
-  flex: 1 1 300px;
-  padding: calc(var(--padding-unit) * .5);
-  font-family: var(--main-font);
-  width: 100%;
-  font-size: calc(15px + 0.390625vw);
-}
 main,
 aside {
   display    : flex;
@@ -273,11 +325,10 @@ aside {
   flex      : 1 1 360px;
   gap       : 15px;
   padding: calc(0.5 * var(--padding-unit));
-  background: white;
 }
 
 aside p {
-  background: var(--background-color);
+  background-color: var(--background-color);
   margin: 0;
   border: 2px solid var(--border-color);
 padding: var(--padding-unit);
@@ -291,9 +342,9 @@ aside .art-preview {
   grid-template-rows: repeat(2, 0fr);
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;
-  background: var(--background-color);
+  background: var(--section-background-color);
   padding: var(--padding-unit);
-  border          : 2px solid black;
+  border          : 2px solid var(--border-color);
   background-size : cover;
   border-radius   : 5px;
 }
@@ -303,17 +354,17 @@ aside .art-preview a {
 }
 
 aside .art-preview a:hover b {
-  background: white;
-  color: black;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 aside .art-preview a b {
-  background: black;
+  background: var(--text-color);
   color: white; 
   display: block;
   padding: .2rem;
   text-align: center;;
-  border: 2px solid black;
+  border: 2px solid var(--border-color);
 }
 
 .art-preview img {
@@ -356,7 +407,7 @@ aside .art-preview a b {
   position: relative;
   cursor: pointer;
   padding: .5rem;
-background-color: rgb(74, 62, 77);
+  background-color: rgb(74, 62, 77);
 }
 
 .game:hover img {
@@ -375,7 +426,6 @@ background-color: rgb(74, 62, 77);
 
 main {
   flex      : 1 1 60%;
-  background: white;
   width     : 100%;
   gap       : 2em;
 }
@@ -386,15 +436,15 @@ main>* {
 }
 
 main .summary {
-  background: rgb(251, 252, 253);
+  background: var(--section-background-color);
   display: block;
   width: auto;
-  border: 2px solid black;
+  border: 2px solid var(--border-color);
 }
 
 main section {
-  background-color: white;
-  border          : 2px solid black;
+  background-color: var(--section-background-color);
+  border          : 2px solid var(--border-color);
   background-size : cover;
   border-radius   : 5px;
 }
@@ -430,13 +480,13 @@ main article.card {
   padding        : 0;
   align-items    : center;
   justify-content: center;
-  background     : white;
+  background-color     : var(--background-color);
 }
 
 main article.card h2,
 main article.card>a {
   flex            : 0 0 100%;
-  background-color: rgba(0, 0, 0, .7);
+  background-color: var(--text-color);
   color           : white;
   padding         : var(--padding-unit) 0;
   text-align      : center;
@@ -453,7 +503,7 @@ main article.card>a:hover {
 
 main article.card img {
   flex       : 0 0 100px;
-  border     : 1px solid rgba(0, 0, 0, .7);
+  border     : 1px solid var(--border-color);
   margin-left: 5px;
   width      : 100px;
   height     : 100px;
@@ -494,18 +544,16 @@ nav {
     "office  .    reads .    "
     ".     .    fauna journey"
     "cafeteria .    . storage";
-  background     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0) 1.85rem 1.85rem/1.85rem 1.85rem, url(../images/grass.gif) center / 150px repeat;
+  background     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, var(--border-color) 0) 1.85rem 1.85rem/1.85rem 1.85rem, url(../images/grass.gif) center / 150px repeat;
   cursor         : var(--nav-cursor);
   flex           : 0 1 auto;
   border-radius  : 20px;
-  box-shadow     : inset 0 0 20px 20px #00000073;
-  border         : 2px solid black;
+  border         : 2px solid var(--border-color);
   image-rendering: pixelated;
+  padding: calc(.3 * var(--padding-unit));
+  filter: var(--nav-filter);
 }
 
-nav br {
-  display: none;
-}
 
 nav a.route {
   flex: 0 0 40%;
@@ -525,7 +573,8 @@ nav a.route {
 
 nav a.route>span {
   padding: .2rem;
-  background: rgba(13, 10, 14, .9);
+  background-color: var(--text-color);
+  color: var(--background-color);
   transition: .2s;
   cursor    : var(--nav-cursor);
   width: 100%;
@@ -626,7 +675,7 @@ a.route.active span {
 
 .links-grid>*>* {
   padding   : var(--padding-unit);
-  background: rgba(0, 0, 0, .6);
+  background: var(--text-color);
   color     : white;
 }
 
@@ -667,7 +716,7 @@ a.route.active span {
 }
 
 a {
-  color      : #375C58;
+  color      : var(--link-color);
   font-weight: bold;
 }
 
@@ -729,7 +778,7 @@ img.portrait {
 }
 
 .feed > .post:hover img {
-   border: 2px solid black;
+   border: 2px solid var(--border-color);
 }
 
 .feed > .post:hover .post-info {
@@ -741,7 +790,7 @@ img.portrait {
   border-radius: 5%;
   transition: .2s;
   flex: 0 1 250px;
-  border: 2px solid white;
+  border: 2px solid var(--border-color);
 }
 
 .feed > .post > .post-info {
@@ -752,7 +801,7 @@ img.portrait {
   padding: var(--padding-unit);
   border-radius: 25px;
   transition: .2s;
-  background: var(--background-color)
+  background-color: var(--background-color)
 }
 
 .feed > .post > .post-info > * {
@@ -760,9 +809,9 @@ img.portrait {
 }
 
 .category {
-  background: var(--border-color);
+  background-color: var(--text-color);
   border-radius: 25px;
-  color: white;
+  color: var(--background-color);
   padding: calc(var(--padding-unit) * .2);
   margin-right:  calc(var(--margin-unit) * .2);
 }
@@ -771,10 +820,9 @@ img.portrait {
 
 .site-card {
   background   : #f0eada;
-  color        : #1e1e1e;
+  color        : var(--text-color);
   padding      : var(--padding-unit);
   border-radius: 5px;
-  box-shadow   : 15px 15px 0 black;
   display      : flex;
   flex-flow    : row wrap;
   gap          : var(--padding-unit);
@@ -783,17 +831,17 @@ img.portrait {
 
 .site-card>a,
 .site-notes article>a {
-  background   : #1e1e1e;
+  background   : var(--text-color);
   padding      : var(--padding-unit);
   border-radius: 5px;
-  color        : white;
+  color        : var(--text-color);
   flex         : 0 0 auto;
 }
 
 .site-card>a:hover,
 .site-notes article>a:hover {
-  background: white;
-  color     : black;
+  background-color: var(--background-color);
+  color     : var(--text-color);
 }
 
 .site-card .review {
@@ -820,7 +868,7 @@ img.portrait {
   width        : 100%;
   height       : 50px;
   background   : linear-gradient(90deg, #990f50, #370acc, #00ffee);
-  border       : 2px solid #1e1e1e;
+  border       : 2px solid var(--border-color);
   border-radius: 10px;
 
 }
@@ -836,9 +884,8 @@ section.site-notes {
 section.site-notes>article {
   flex         : 1 0 40%;
   background   : #e0e0e0;
-  color        : #1e1e1e;
+  color        : var(--text-color);
   padding      : var(--padding-unit);
-  box-shadow   : 15px 15px 0 black;
   display      : flex;
   flex-flow    : column nowrap;
   gap          : 1rem;
@@ -881,9 +928,9 @@ section.site-notes>article {
 }
 
 .changelog {
-  background: #f0eada;
+  background: var(--section-background-color);
   padding   : var(--padding-unit);
-  color     : black;
+  color     : var(--text-color);
 }
 
 .changelog p {
@@ -916,7 +963,6 @@ section.site-notes>article {
   width           : 250px;
   height          : 250px;
   border          : 0 !important;
-  box-shadow      : 0 0 10px 10px rgba(0, 0, 0, .4);
   background-color: rgba(240, 255, 240);
 }
 
@@ -948,7 +994,7 @@ section.site-notes>article {
   flex            : 0 0 100px;
   background-size : contain;
   height          : 100px;
-  background-color: white;
+  background-color: var(--background-color);
   border-radius   : 25px;
   cursor          : crosshair;
   transition      : .1s;
