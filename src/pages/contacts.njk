@@ -1,11 +1,9 @@
 ---
 title: 'Contacts'
-intro: There lie some abandoned namecards right next to the card reader of a blocked door to the cafeteria. The floor behind seems to have collapsed, but the tags seem shiny and new. All arranged in a slightly chaotic, yet thoughtful way, you might want to make yourself one as well. On a nearby table where some wilted flowers decorate the oddly comforting room, you find empty slates of cards and colorful markers that, hopefully, haven't dried out yet.
 layout: base.njk
 permalink: "contacts/"
 ---
-      <p class="summary">Here a list of awesome people and places. Check them all out! Hit <a href="/about">me</a> up, and let's trade buttons! \o/</p>
-      <section class="buttons">
+  <section class="buttons">
         <h2>Buttons from places I love</h2>
         {% for neighbor in neighbors %}
         <a target="_blank" href="{{ neighbor.url }}"><img src="/images/pages/contacts/{{ neighbor.button }}"></a>
