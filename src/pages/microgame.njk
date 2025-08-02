@@ -1,0 +1,194 @@
+---
+title: "Microgame"
+layout: base.njk
+permalink: "microgame/"
+---
+
+<section>
+  <h1>Microgame Decorator</h1>
+
+  <div class="form-section">
+    <label>Base:
+      <select id="baseSelect">
+        <option value="base-1.png">Base 1</option>
+        <option value="base-2.png">Base 2</option>
+        <option value="base-3.png">Base 3</option>
+        <option value="base-4.png">Base 4</option>
+        <option value="base-5.png">Base 5</option>
+        <option value="base-6.png">Base 6</option>
+        <option value="base-7.png">Base 7</option>
+        <option value="base-8.png">Base 8</option>
+      </select>
+    </label>
+    <input type="color" id="baseColor" value="#ffffff" />
+  </div>
+
+  <div class="form-section">
+    <label>Cover:
+      <select id="coverSelect">
+        <option value="cover-1.png">Cover 1</option>
+        <option value="cover-2.png">Cover 2</option>
+        <option value="cover-3.png">Cover 3</option>
+        <option value="cover-4.png">Cover 4</option>
+        <option value="cover-5.png">Cover 5</option>
+        <option value="cover-6.png">Cover 6</option>
+        <option value="cover-7.png">Cover 7</option>
+        <option value="cover-8.png">Cover 8</option>
+        <option value="cover-9.png">Cover 9</option>
+        <option value="cover-10.png">Cover 10</option>
+        <option value="cover-11.png">Cover 11</option>
+        <option value="cover-12.png">Cover 12</option>
+        <option value="cover-13.png">Cover 13</option>
+        <option value="cover-14.png">Cover 14</option>
+        <option value="cover-15.png">Cover 15</option>
+        <option value="cover-16.png">Cover 16</option>
+      </select>
+    </label>
+    <input type="color" id="coverColorWhite" value="#000000" />
+    <input type="color" id="coverColorBlack" value="#ff00ff" />
+  </div>
+
+  <div class="image-preview">
+    <img id="basePreview" alt="Base preview" />
+    <img id="coverPreview" alt="Cover preview" />
+  </div>
+
+  <canvas id="preview" width="112" height="104"></canvas>
+</section>
+
+<style>
+  .form-section {
+    margin-bottom: 1rem;
+  }
+
+  canvas {
+    border: 1px solid #999;
+    image-rendering: pixelated;
+    width: calc(28px * 4);
+    height: calc(26px * 4);
+  }
+
+  .image-preview img {
+    width: 56px;
+    height: 52px;
+    image-rendering: pixelated;
+    margin-right: 8px;
+    border: 1px dashed #aaa;
+    background: #eee;
+  }
+
+  label {
+    margin-right: 1em;
+  }
+</style>
+
+<script type="module">
+  const baseSelect = document.getElementById("baseSelect");
+  const coverSelect = document.getElementById("coverSelect");
+  const baseColor = document.getElementById("baseColor");
+  const coverColorWhite = document.getElementById("coverColorWhite");
+  const coverColorBlack = document.getElementById("coverColorBlack");
+  const basePreview = document.getElementById("basePreview");
+  const coverPreview = document.getElementById("coverPreview");
+
+  const canvas = document.getElementById("preview");
+  const ctx = canvas.getContext("2d");
+
+  const IMAGE_SIZEX = 28;
+  const IMAGE_SIZEY = 26;
+
+  function loadImage(path) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.src = path;
+      img.onload = () => resolve(img);
+    });
+  }
+
+  function hexToRgb(hex) {
+    const bigint = parseInt(hex.slice(1), 16);
+    return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+  }
+
+  function colorizeImage(img, color) {
+    const offscreen = document.createElement("canvas");
+    offscreen.width = IMAGE_SIZEX;
+    offscreen.height = IMAGE_SIZEY;
+    const offCtx = offscreen.getContext("2d");
+
+    offCtx.drawImage(img, 0, 0, IMAGE_SIZEX, IMAGE_SIZEY);
+    const imageData = offCtx.getImageData(0, 0, IMAGE_SIZEX, IMAGE_SIZEY);
+    const data = imageData.data;
+    const [r, g, b] = hexToRgb(color);
+
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] > 0) {
+        data[i] = r;
+        data[i + 1] = g;
+        data[i + 2] = b;
+      }
+    }
+
+    offCtx.putImageData(imageData, 0, 0);
+    return offscreen;
+  }
+
+  function colorizeImageTwoTone(img, whiteHex, blackHex) {
+    const offscreen = document.createElement("canvas");
+    offscreen.width = IMAGE_SIZEX;
+    offscreen.height = IMAGE_SIZEY;
+    const ctx = offscreen.getContext("2d");
+
+    ctx.drawImage(img, 0, 0, IMAGE_SIZEX, IMAGE_SIZEY);
+    const imageData = ctx.getImageData(0, 0, IMAGE_SIZEX, IMAGE_SIZEY);
+    const data = imageData.data;
+
+    const [wr, wg, wb] = hexToRgb(whiteHex);
+    const [br, bg, bb] = hexToRgb(blackHex);
+
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+
+      if (a === 0) continue;
+
+      if (r === 255 && g === 255 && b === 255) {
+        data[i] = wr; data[i + 1] = wg; data[i + 2] = wb;
+      } else if (r === 0 && g === 0 && b === 0) {
+        data[i] = br; data[i + 1] = bg; data[i + 2] = bb;
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    return offscreen;
+  }
+
+  async function draw() {
+    const basePath = `/images/microgame/base/${baseSelect.value}`;
+    const coverPath = `/images/microgame/cover/${coverSelect.value}`;
+
+    basePreview.src = basePath;
+    coverPreview.src = coverPath;
+
+    const [baseImg, coverImg] = await Promise.all([
+      loadImage(basePath),
+      loadImage(coverPath)
+    ]);
+
+    const coloredBase = colorizeImage(baseImg, baseColor.value);
+    const coloredCover = colorizeImageTwoTone(
+      coverImg,
+      coverColorWhite.value,
+      coverColorBlack.value
+    );
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(coloredBase, 0, 0);
+    ctx.drawImage(coloredCover, 0, 0);
+  }
+
+  [baseSelect, coverSelect, baseColor, coverColorWhite, coverColorBlack].forEach(el =>
+    el.addEventListener("change", draw)
+  );
+
+  draw();
+</script>
