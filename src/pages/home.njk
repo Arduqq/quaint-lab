@@ -50,6 +50,23 @@ permalink: "home/"
   </div>
 </section>
 
+<section class="feed">
+  <h2>Latest Post</h2>
+  {% set latest_post = collections.post | first %} {% if latest_post %}
+  <a class="post" href="{{ latest_post.url }}">
+    <div class="post-info">
+      <h3>{{ latest_post.data.posttitle }}</h3>
+      <p>{{ latest_post.data.excerpt }}</p>
+      <p>
+        {% for category in latest_post.data.categories %}<span
+          class="category"
+          >{{ category }}</span
+        >{% endfor %}
+      </p>
+    </div>
+  </a>
+  {% endif %}
+</section>
 
 <section id="profile">
   <h2>Gifting Guide</h2>
@@ -163,23 +180,6 @@ permalink: "home/"
   </div>
 </section>
 
-<section class="feed">
-  <h2>Latest Post</h2>
-  {% set latest_post = collections.post | first %} {% if latest_post %}
-  <a class="post" href="{{ latest_post.url }}">
-    <div class="post-info">
-      <h3>{{ latest_post.data.posttitle }}</h3>
-      <p>{{ latest_post.data.excerpt }}</p>
-      <p>
-        {% for category in latest_post.data.categories %}<span
-          class="category"
-          >{{ category }}</span
-        >{% endfor %}
-      </p>
-    </div>
-  </a>
-  {% endif %}
-</section>
 
 
 <section>

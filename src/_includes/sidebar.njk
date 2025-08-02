@@ -1,5 +1,6 @@
 <aside>
   <h1>A Quaint Lab</h1>
+  <section id="about"><p>This is a laboratory. Please behave, and solely touch what is to be touched.</p></section>
   <h2>Navigation</h2>
   {% include 'navigation.njk' %}
   <fieldset id="theme-switcher">
@@ -47,11 +48,11 @@
       <img src="/images/artwork/thumbnails/{{ randomArt.data.image }}"> 
       <b>{{ randomArt.data.posttitle }}</b>
     </a>
-    <br>
     <a class="art-preview-more" href="/atelier">See more ></a>
 
   </section>
-
-  <div id="c_widget"></div>
+  <section id="comments">
+    <div id="c_widget"></div>
+  </section>
   <script src="/js/comment-widget.js"></script>
 </aside>

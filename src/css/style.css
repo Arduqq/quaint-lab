@@ -327,12 +327,10 @@ aside {
   padding: calc(0.5 * var(--padding-unit));
 }
 
-aside p {
-  background-color: var(--background-color);
-  margin: 0;
+aside section {
+  background-color: var(--section-background-color);
   border: 2px solid var(--border-color);
-padding: var(--padding-unit);
-border-radius: 25px;
+padding: calc(0.5 * var(--padding-unit));
 }
 
 
@@ -442,14 +440,14 @@ main .summary {
   border: 2px solid var(--border-color);
 }
 
-main section {
+section, fieldset {
   background-color: var(--section-background-color);
   border          : 2px solid var(--border-color);
   background-size : cover;
   border-radius   : 5px;
 }
 
-main section > * {
+section > * {
   margin: 1rem 0;
 }
 
@@ -762,7 +760,6 @@ img.portrait {
 .feed {
   display: flex;
   flex-flow: row wrap;
-  gap: 1rem;
 }
 
 .feed > .post {
@@ -909,6 +906,18 @@ section.site-notes>article {
 .rating .scale .pointer.uncertain {
   background: url(../images/pages/pets/dog.gif) no-repeat center/contain;
   animation : uncertain 2s infinite ease-in-out alternate;
+}
+
+#blinkies {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  gap: calc(.2 * var(--padding-unit));
+}
+
+#blinkies > img {
+  flex: 0 1 300px;
 }
 
 @keyframes uncertain {

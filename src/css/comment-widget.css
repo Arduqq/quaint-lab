@@ -56,7 +56,6 @@
 /* Main */
 #c_widget {
     overflow: auto;
-    padding: 20px;
     font-family: 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
     position: sticky;
     top: 0;
