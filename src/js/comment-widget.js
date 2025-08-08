@@ -15,7 +15,7 @@
     Have fun! Bug reports are encouraged if you happen to run into any issues.
     - Ayano (https://virtualobserver.moe/)
 */
-https://docs.google.com/forms/d/e/1FAIpQLSejMV9RuOPZWihOYixts0CooIib2AqUovBOYGMMSkc5OkpW5A/viewform?usp=pp_url&entry.1023073776=Name&entry.521414871=Website&entry.523353041=Text&entry.1514013127=Page&entry.397735607=Reply
+
 // The values in this section are REQUIRED for the widget to work! Keep them in quotes!
 const s_stylePath = '/css/comment-widget.css';
 const s_formId = '1FAIpQLSejMV9RuOPZWihOYixts0CooIib2AqUovBOYGMMSkc5OkpW5A';
