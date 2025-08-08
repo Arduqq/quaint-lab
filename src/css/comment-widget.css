@@ -9,13 +9,13 @@
 */
 /*
     Containers:
-        #c_widget - The container <div> for the entire widget
+        #comments - The container <div> for the entire widget
         #c_inputArea - The wrapper <div> around the form
         #c_container - The wrapper <div> around all the comments
 
     The input form:
         #c_form - The whole input <form>
-        #c_widgetTitle - The <h2> title at the top of the form
+        #commentsTitle - The <h2> title at the top of the form
 
         .c-inputWrapper- All <div> wrappers for each label/input pair
         .c-label - All <label>s
@@ -54,14 +54,14 @@
 */
 
 /* Main */
-#c_widget {
+#comments {
     overflow: auto;
     font-family: 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
     position: sticky;
-    top: 0;
+    top: 1rem;
 }
 
-#c_widget button, #c_widget input[type=submit] {
+#comments button, #comments input[type=submit] {
     padding: 4px;
     font-family: 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
     text-decoration: none;
@@ -71,11 +71,11 @@
     color: white;
     border: 1px solid white;
 }
-#c_widget button:hover, #c_widget input[type=submit]:hover {
+#comments button:hover, #comments input[type=submit]:hover {
     border: 1px solid #B766FF;
 }
-#c_widget button:disabled, #c_widget input[type=submit]:disabled {opacity: 60%;}
-#c_widget button:disabled:hover, #c_widget input[type=submit]:disabled:hover {
+#comments button:disabled, #comments input[type=submit]:disabled {opacity: 60%;}
+#comments button:disabled:hover, #comments input[type=submit]:disabled:hover {
     color: #B766FF;
     border: 1px solid white;
 }
