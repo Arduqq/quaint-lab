@@ -19,16 +19,16 @@ permalink: "microgame/"
     <div class="option-group">
       <h2>Choose Cover</h2>
       <div id="coverOptions" class="option-grid"></div>
-      <label>Cover Accent Color:
+      <label>Cover Color 1:
         <input type="color" id="coverColorAccent" value="#ff00ff" />
       </label>
-      <label>Cover Outline Color:
+      <label>Cover Color 2:
         <input type="color" id="coverColorBorder" value="#000000" />
       </label>
     </div>
   </div>
 
-  <canvas id="preview" width="112" height="104" style="image-rendering: pixelated;"></canvas>
+  <canvas id="preview" width="112" height="104"></canvas>
 </section>
 
 <style>
@@ -195,14 +195,16 @@ function colorizeImageTwoTone(img, accentHex, borderHex) {
     const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
     if (a === 0) continue;
 
-    // Skip white pixels (255,255,255)
-    if (r === 255 && g === 255 && b === 255) continue;
-
-    // Make black pixels (0,0,0) transparent
-    if (r === 0 && g === 0 && b === 0) {
+    if (r === 255 && g === 255 && b === 255) {
+      // White pixel: use border color
+      data[i] = br;
+      data[i + 1] = bg;
+      data[i + 2] = bb;
+    } else if (r === 0 && g === 0 && b === 0) {
+      // Black pixel: make transparent
       data[i + 3] = 0;
     } else {
-      // Everything else becomes accent color
+      // All others: use accent color
       data[i] = ar;
       data[i + 1] = ag;
       data[i + 2] = ab;

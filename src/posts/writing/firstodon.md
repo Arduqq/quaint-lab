@@ -1,5 +1,5 @@
 ---
-posttitle: "Social Re-Network: Getting Comfortable with Mastodon" title="Social Re-Network: Getting Comfortable with Mastodon"
+posttitle: "Social Re-Network: Getting Comfortable with Mastodon"
 excerpt: "Since establishing my own Mastodon instance for my friends, I've often discussed ways to welcome new users. While they can understand the medium on their own, discovering content for their timeline can be challenging. Moving away from automatically curated content designed to keep you glued to your screen is tough, so I've collected some suggestions to help everyone get accustomed to the Fediverse. At the end of this post, you'll find all the links I found useful for refining my content feed."
 vibe: "informing"
 layout: post.njk

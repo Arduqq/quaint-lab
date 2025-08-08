@@ -1149,3 +1149,9 @@ caption {
 .illustration-gallery .illustration:hover {
   transform: scale(1.1);
 }
+
+.pet {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+}

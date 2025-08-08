@@ -15,16 +15,16 @@
     Have fun! Bug reports are encouraged if you happen to run into any issues.
     - Ayano (https://virtualobserver.moe/)
 */
-
+https://docs.google.com/forms/d/e/1FAIpQLSejMV9RuOPZWihOYixts0CooIib2AqUovBOYGMMSkc5OkpW5A/viewform?usp=pp_url&entry.1023073776=Name&entry.521414871=Website&entry.523353041=Text&entry.1514013127=Page&entry.397735607=Reply
 // The values in this section are REQUIRED for the widget to work! Keep them in quotes!
 const s_stylePath = '/css/comment-widget.css';
-const s_formId = '1FAIpQLScDnbBPBt5jyprUVmDuqHc60mfOYwxllmq8Y4W6Dx-uqynZxw';
-const s_nameId = '1671589705';
-const s_websiteId = '516852466';
-const s_textId = '1455645851';
-const s_pageId = '1534574901';
-const s_replyId = '361822763';
-const s_sheetId = '1HZucZEN21MnPKxLTQKHUBjdIUr_0gXH48fHpBJJUrAw';
+const s_formId = '1FAIpQLSejMV9RuOPZWihOYixts0CooIib2AqUovBOYGMMSkc5OkpW5A';
+const s_nameId = '1023073776';
+const s_websiteId = '521414871';
+const s_textId = '523353041';
+const s_pageId = '1514013127';
+const s_replyId = '397735607';
+const s_sheetId = '1xa5k8WVhXrGmQsPdJtF3klVJgtP3rRwrt3NRuUwqkHQ';
 
 // The values below are necessary for accurate timestamps, I've filled it in with EST as an example
 const s_timezone = +1; // Your personal timezone (Example: UTC-5:00 is -5 here, UTC+10:30 would be 10.5)

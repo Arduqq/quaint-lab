@@ -3,6 +3,25 @@ title: "Pets"
 layout: base.njk
 permalink: "pets/"
 ---
+<section class="pets-container" style="position: relative; height: 800px;">
+  {% for pet in collections.pets %}
+    <div 
+      class="pet {{ pet.data.personality }} {{ pet.data.spirit }}-hover" 
+      style="--x: {{ pet.data.x }}%; --y: {{ pet.data.y }}%;">
+      
+      <a href="{{ pet.url }}">
+        <img 
+          src="/images/artwork/{{ pet.data.image }}" 
+          alt="{{ pet.data.title | escape }}" 
+          width="100"
+          height="auto">
+      </a>
+    </div>
+  {% endfor %}
+</section>
+
+
+
 <section>
   <h2>Delta Incubator <a target="__blank" href="https://pokefarm.com/user/Lyonid">{
                   Pokéfarm Q }</a></h2>
