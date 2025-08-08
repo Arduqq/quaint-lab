@@ -1,10 +1,11 @@
 ---
-title: 'Contacts'
+title: 'Buttons from places I love'
 layout: base.njk
 permalink: "contacts/"
 ---
   <section class="buttons">
         <h2>Buttons from places I love</h2>
+        <p>I really enjoy spending time on these personal sites. I am always happy to trade buttons with others, so just feel free to reach out!</p>
         {% for neighbor in neighbors %}
         <a target="_blank" href="{{ neighbor.url }}"><img src="/images/pages/contacts/{{ neighbor.button }}"></a>
         {% endfor %}

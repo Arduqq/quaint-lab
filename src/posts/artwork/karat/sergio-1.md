@@ -1,10 +1,10 @@
 ---
 title: "Artwork"
-posttitle: "Meeting the well"
+posttitle: "Meeting the Godspawn"
 image: "sergio-1.png"
 comment: "..."
-categories: [paperdemon, character]
-tags: artwork
+categories: [paperdemon]
+tags: [artwork, exhibition-karat]
 layout: artwork.njk
 ---
 test

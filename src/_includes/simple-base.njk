@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="contrast">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="{{ excerpt | default('') }}">
+  <meta name="keywords" content="Laboratory, Neocities, Web Revival, Personal Homepage" />
+  <meta name="author" content="Lyonid" />
+  <title>aql: {{ title }}{% if posttitle %} ~ {{ posttitle }}{% endif %}</title>
+  <link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="/css/comment-widget.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+  <div class="wrapper">
+    <main class="post">
+      <section>
+        {% block nav %}{% endblock %}
+        <h1 title="{{ posttitle }}">{{ posttitle }}</h1>
+        {% block main_content %}
+          {{ content | safe }}
+        {% endblock %}
+      </section>
+    </main>
+
+    <aside>
+      <div id="c_widget"></div>
+      <script src="/js/comment-widget.js"></script>
+    </aside>
+
+    {% include "footer.njk" %}
+  </div>
+</body>
+</html>

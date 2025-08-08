@@ -23,6 +23,14 @@ module.exports = function(eleventyConfig) {
         });
     });
 
+    eleventyConfig.addCollection("exhibition-winter", function(collectionApi) {
+        return collectionApi.getFilteredByTags("artwork", "exhibition-winter");
+      });
+    
+    eleventyConfig.addCollection("exhibitions", function(collectionApi) {
+        return collectionApi.getFilteredByGlob("./src/posts/exhibitions/*.md");
+      });
+
     // Directory configuration
     return {
         markdownTemplateEngine: 'njk',

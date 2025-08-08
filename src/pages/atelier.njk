@@ -3,6 +3,18 @@ title: "Atelier"
 layout: base.njk
 permalink: "atelier/"
 ---
+<section>
+  <h2>{{ title }}</h2>
+  <p>This is the place where I collect all the artwork I have been putting out there. Instead of throwing everything at you, we are doing exhibitions over here at the atelier. That helps me organize my work, but also give it more context, so you aren't just looking at stuff.</p>
+</section>
+
+<section class="exhibitions">
+  <h2>Current Exhibitions</h2>
+    {% for exhibition in collections.exhibitions %}
+      <a href="{{ exhibition.url }}"><img src="/images/{{ exhibition.data.poster }}" alt="{{ exhibition.data.posttitle }}"> </a>
+    {% endfor %}
+</section>
+
 <section class="feed">
   <h2>Recent Exhibition Inventory</h2>
   <div class="illustration-gallery">
@@ -15,11 +27,13 @@ permalink: "atelier/"
   {% endfor %}
   </div>
 </section>
-<section>
-  <h2><img src="/images/pages/atelier/helix-logo.gif">Helix Vacui</h2>
-  <p>Imagine a world where your one true purpose is hidden yet vital for you to uncover. Your very body aching to
-      unravel this secret as you pursue the many careers this society has to offer. An unending spiral manifested in a
-      snail house that feeds on you, creating an inner void when you fail to contribute to the greater good. Here I
-      collect all the characters I design for this little art project.</p>
-    ((Currently under construction. I am going to add a cute little wiki here!))
-</section>
+<style>
+  .exhibitions img {
+    transform-origin: top center;
+    transition: .2s;
+    display: block;
+  }
+  .exhibitions a:hover img{
+    transform: rotate(-5deg);
+  }
+</style>

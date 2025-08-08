@@ -180,6 +180,7 @@ h4 {
 
 a {
   cursor: var(--hover-cursor);
+  display: inline-block;
 }
 
 a:hover {
@@ -1105,32 +1106,23 @@ ul.tag-list>li {
 
 table {
   border-collapse: collapse;
-  border: 2px solid rgb(200,200,200);
-  letter-spacing: 1px;
-  font-size: 0.8rem;
+  border: 2px solid var(--border-color);
 }
 
 td, th {
-  border: 1px solid rgb(190,190,190);
-  padding: 10px 20px;
+  border: 1px solid var(--border-color);
+  padding: calc(.25 * var(--padding-unit)) calc(.5 * var(--padding-unit));
 }
 
 th {
-  background: rgb(30, 30, 30);
-  color: white;
+  background: var(--text-color);
+  color: var(--background-color);
 }
 
-tr:nth-child(even) td {
-  background: #fffaec;
+tr td {
+  background: var(--section-background-color);
 }
 
-tr:nth-child(odd) td {
-  background: #f0eada;
-}
-
-caption {
-  padding: 10px;
-}
 
 .illustration-gallery {
   display: flex;

@@ -1,9 +1,11 @@
 ---
-title: "Pets"
+title: "Pet Reservoir"
 layout: base.njk
 permalink: "pets/"
 ---
 <section class="pets-container" style="position: relative; height: 800px;">
+  <h2>{{ title }}</h2>
+  <p>Here is a selection of pets I drew for various pet sites. I figured they were spread across a whole bunch of places, and I wanted to keep in touch with them.</p>
   {% for pet in collections.pets %}
     <div 
       class="pet {{ pet.data.personality }} {{ pet.data.spirit }}-hover" 

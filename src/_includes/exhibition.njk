@@ -1,0 +1,23 @@
+---
+posttitle: "{{ title }}"
+layout: simple-base.njk
+---
+{% block nav %}
+  <a href="/atelier"><span>Back to Entrance</span></a>
+{% endblock %}
+
+  {% if description %}
+    <p>{{ description }}</p>
+  {% endif %}
+    <h2>Exhibition Inventory</h2>
+  <div class="illustration-gallery {{ themeClass }}">
+    {% set exhibitionArtworks = collections[artworkTag] %}
+    {% for artwork in exhibitionArtworks %}
+      <a class="illustration" href="{{ artwork.url }}">
+        <img src="/images/artwork/thumbnails/{{ artwork.data.image }}" 
+             alt="{{ artwork.data.posttitle }}">
+      </a>
+    {% endfor %}
+  </div>
+
+  <a href="/atelier"><span>Back to Entrance</span></a>

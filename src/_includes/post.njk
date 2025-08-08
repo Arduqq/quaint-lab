@@ -1,40 +1,13 @@
 ---
-title: "Reads"
-posttitle: ""
-excerpt: "After a long hike across those mountains that your village deemed forsaken, you arrive at quite the unusual sight. Traces of a long-forgotten facility would leave you questioning whether things could have been different - intact."
-vibe: ""
-tags: post
+layout: simple-base.njk
 ---
-<!DOCTYPE html>
 
-<html lang="en" data-theme="contrast">
-<head>
-  <meta name="description" content="{{ excerpt }}>
-  <meta name="keywords" content="Laboratory, Neocities, Web Revival, Personal Homepage">
-  <meta name="author" content="Lyonid">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>aql: {{ title }} ~ {{ posttitle }}</title>
-  <link href="/css/style.css" rel="stylesheet" type="text/css" media="all">
-  <link href="/css/comment-widget.css" rel="stylesheet" type="text/css" media="all">
-</head>
-<body>
-  <div class="wrapper">
-    <main class="post">
-      <section>
-        <a href="/archive/"><span>Back to the Archive</span></a>
-      <h1>{{ posttitle }}
-      </h1>
-      {{ content | safe }}
-    </section>
-    </main>
+{% block nav %}
+  <a href="/archive/"><span>Back to the Archive</span></a>
+{% endblock %}
 
-    <aside>
-      <div id="c_widget"></div>
-      <script src="/js/comment-widget.js"></script>
-    </aside>
-    
-    {% include 'footer.njk' %}
-  </div>
-</body>
-</html>
+{% block main_content %}
+  {{ content | safe }}
+
+  <a href="/archive/"><span>Back to the Archive</span></a>
+{% endblock %}

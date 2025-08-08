@@ -1,18 +1,21 @@
 ---
-title: "Archive"
+title: "Writing Archive"
 layout: base.njk
 permalink: "archive/"
 ---
+<section>
+  <h2>{{ title }}</h2>
+  <p>I write about online culture, games and maybe research.</p>
+</section>
 <section class="feed">
-  <h2>Writing Archive</h2>
+  <h2>Latest Archivals</h2>
   {% for post in collections.post %}
   <a class="post" href="{{post.url}}">
     <div class="post-info">
       <h3>{{ post.data.posttitle }}</h3>
-      <p>{{ post.data.excerpt }}</p>
-      <p>
-        {% for category in post.data.categories %}<span class="category">{{ category }}</span>{% endfor %}
-      </p>
+      <p>{{ post.data.excerpt }}
+        {% for category in post.data.categories %}
+        {% endfor %}</p>
     </div>
   </a>
   {% endfor %}
