@@ -5,8 +5,8 @@ comment: ...
 home: Moderneopets
 personality: trashy
 spirit: kind
-x: 26
-y: 80
+x: 45
+y: 30
 image: pandoria.png
 tags: pets
 layout: artwork.njk

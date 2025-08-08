@@ -5,8 +5,8 @@ comment: ...
 home: Moderneopets
 personality: trashy
 spirit: kind
-x: 26
-y: 80
+x: 0
+y: 50
 image: piave.png
 tags: pets
 layout: artwork.njk

@@ -5,8 +5,8 @@ comment: ...
 home: Moderneopets
 personality: trashy
 spirit: kind
-x: 26
-y: 80
+x: 85
+y: 40
 image: rennala.png
 tags: pets
 layout: artwork.njk

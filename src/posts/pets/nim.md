@@ -1,13 +1,13 @@
 ---
 title: "Pet"
-posttitle: "Nin"
+posttitle: "Nim"
 comment: ...
 home: Moderneopets
 personality: trashy
 spirit: kind
-x: 26
-y: 80
-image: Nin.png
+x: 45
+y: 20
+image: nim.png
 tags: pets
 layout: artwork.njk
 ---

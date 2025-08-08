@@ -5,8 +5,8 @@ comment: A new character for PaperDemon! He's a cocky guy who loves to revel in 
 home: Moderneopets
 personality: trashy
 spirit: kind
-x: 26
-y: 80
+x: 10
+y: 20
 image: muellg.png
 tags: pets
 layout: artwork.njk

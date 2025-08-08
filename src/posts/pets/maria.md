@@ -5,8 +5,8 @@ comment: ...
 home: Moderneopets
 personality: trashy
 spirit: kind
-x: 26
-y: 80
+x: 75
+y: 40
 image: maria.png
 tags: pets
 layout: artwork.njk

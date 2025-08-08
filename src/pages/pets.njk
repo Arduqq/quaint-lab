@@ -3,26 +3,29 @@ title: "Pet Reservoir"
 layout: base.njk
 permalink: "pets/"
 ---
-<section class="pets-container" style="position: relative; height: 800px;">
+
+<section>
   <h2>{{ title }}</h2>
   <p>Here is a selection of pets I drew for various pet sites. I figured they were spread across a whole bunch of places, and I wanted to keep in touch with them.</p>
-  {% for pet in collections.pets %}
-    <div 
-      class="pet {{ pet.data.personality }} {{ pet.data.spirit }}-hover" 
-      style="--x: {{ pet.data.x }}%; --y: {{ pet.data.y }}%;">
-      
-      <a href="{{ pet.url }}">
-        <img 
-          src="/images/artwork/{{ pet.data.image }}" 
-          alt="{{ pet.data.title | escape }}" 
-          width="100"
-          height="auto">
-      </a>
-    </div>
-  {% endfor %}
+  
+  <button id="pet-layout-toggle">Line Up / Go Wild</button>
+  <div class="pets-container" style="position: relative; height: 800px;">
+    {% for pet in collections.pets %}
+      <div 
+        class="pet {{ pet.data.personality }} {{ pet.data.spirit }}-hover" 
+        style="--x: {{ pet.data.x }}%; --y: {{ pet.data.y }}%;">
+        
+        <a href="{{ pet.url }}">
+          <img 
+            src="/images/artwork/{{ pet.data.image }}" 
+            alt="{{ pet.data.title | escape }}" 
+            width="100"
+            height="auto">
+        </a>
+      </div>
+    {% endfor %}
+  </div>
 </section>
-
-
 
 <section>
   <h2>Delta Incubator <a target="__blank" href="https://pokefarm.com/user/Lyonid">{
@@ -140,3 +143,71 @@ permalink: "pets/"
                   frameborder="0"></iframe>
   </p>
 </section>
+<script>
+  
+</script>
+<style>
+  .pets-container {
+    background: url(../images/grass.png);
+    background-size: 400px;
+    height: 800px;
+  }
+
+  /* Coordinate layout — uses your variables for absolute positioning */
+.coordinate-layout {
+  position: relative;
+}
+.coordinate-layout .pet {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+}
+
+/* Grid layout — uniform arrangement */
+.grid-layout {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items:flex-start;
+  height: unset!important;
+  padding: var(--padding-unit);
+}
+.grid-layout .pet {
+  position: static;
+}
+
+.pet {
+  transition: .2s;
+}
+
+.pet:hover {
+  transform: scale(1.5);
+  z-index: 100;
+}
+
+</style>
+{% block scripts %}
+<script defer>
+  document.addEventListener("DOMContentLoaded", function () {
+  const toggleBtn = document.getElementById("pet-layout-toggle");
+  const container = document.querySelector(".pets-container");
+
+
+  if (!toggleBtn || !container) return;
+
+  // Restore saved layout
+  const saved = localStorage.getItem("petLayout");
+  if (saved) {
+    container.className = saved;
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    container.classList.toggle("coordinate-layout");
+    container.classList.toggle("grid-layout");
+    localStorage.setItem("petLayout", container.className);
+  });
+});
+
+</script>
+
+{% endblock %}
