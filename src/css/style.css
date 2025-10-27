@@ -1,139 +1,154 @@
-/*==============================
+/* ==============================
   FONTS
-==============================*/
+============================== */
 @font-face {
-  font-family: 'Critters';
-  src: url(../fonts/critters.woff);
+  font-family: Critters;
+  src: url("../fonts/critters.woff");
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src: url(../fonts/Atkinson-Hyperlegible-Regular-102.woff);
+  src: url("../fonts/Atkinson-Hyperlegible-Regular-102.woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src: url(../fonts/Atkinson-Hyperlegible-Bold-102.woff);
+  src: url("../fonts/Atkinson-Hyperlegible-Bold-102.woff");
   font-weight: bold;
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src: url(../fonts/Atkinson-Hyperlegible-Italic-102.woff);
+  src: url("../fonts/Atkinson-Hyperlegible-Italic-102.woff");
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Atkinson Hyperlegible';
-  src: url(../fonts/Atkinson-Hyperlegible-BoldItalic-102.woff);
+  src: url("../fonts/Atkinson-Hyperlegible-BoldItalic-102.woff");
   font-weight: bold;
   font-style: italic;
 }
 
-/*==============================
+/* ==============================
   ROOT VARIABLES
-==============================*/
+============================== */
 :root {
-  --main-font       : 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
+  --main-font       : 'Atkinson Hyperlegible', helvetica, arial, sans-serif;
   --custom-font     : 'Critters', monospace;
   --background-color: white;
+  --background-size: auto;
   --section-background-color: white;
   --text-color      : #121212;
   --link-color: #375C58;
   --highlight-color : #5db962;
   --border-color    : black;
   --bg-gradient     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0);
-  --default-cursor  : auto;
-  --hover-cursor    : crosshair;
-  --nav-cursor      : crosshair;
+  /* System cursor variables for accessibility and consistency */
+  --default-cursor  : default;  /* Standard cursor for non-interactive elements */
+  --hover-cursor    : pointer;  /* Hand pointer for interactive elements */
+  --nav-cursor     : pointer;   /* Consistent pointer for navigation */
+  --border-image   :  url("../images/border-1.png");
   --background-image: none;
-  --heading-background-image: url(/images/sparkle-bg.jpg);
+  --heading-background-image: url("/images/sparkle-bg.jpg");
   --pixelated       : pixelated;
   --flex-center     : center;
   --flex-align      : center;
   --border-radius   : 15px;
-  --margin-unit     : calc(8px + 1.5625vw);
-  --padding-unit    : calc(8px + 1.5625vw);
-  --default-margin  : 5px;
+
+  /* tightened base spacing for a more compact layout */
+  --margin-unit     : calc(6px + 1.25vw);
+  --padding-unit    : calc(6px + 1.25vw);
   --nav-filter      : none;
 
 }
 
-/*==============================
+/* ==============================
   THEME OVERRIDES
-==============================*/
+============================== */
 
 [data-theme="cute"] {
-  --main-font       : 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
+  --main-font       : 'Atkinson Hyperlegible', helvetica, arial, sans-serif;
   --custom-font     : 'Comic Sans MS', cursive;
   --background-color:  #f4b6c2;
   --section-background-color: #eee3e7 ;
-  --background-image:  #ead5dc  ;
+  --background-image:  url("/images/cute-bg.png");
   --heading-background-image:  #ead5dc  ;
+  --border-image   :  none;
   --link-color: #006a8a;
   --highlight-color : #009dcd;
   --text-color      : #1c1c1c;
   --border-color    : #f88697;
   --bg-gradient     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0);
-  --default-cursor  : auto;
-  --hover-cursor    : crosshair;
-  --nav-cursor      : crosshair;
   --nav-filter      : grayscale(.1) saturate(.5);
 }
 
 /* Contrast Theme */
 [data-theme="contrast"] {
-  --main-font       : 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
+  --main-font       : 'Atkinson Hyperlegible', helvetica, arial, sans-serif;
   --custom-font     : 'Critters', monospace;
   --background-color: white;
   --section-background-color: white;
-  --background-image: none;
-  --heading-background-image:  url(/images/sparkle-bg.jpg) ;
+  --heading-background-image:  url("/images/sparkle-bg.jpg") ;
   --text-color      : #121212;
   --link-color: #375C58;
   --highlight-color : #5db962;
   --border-color    : black;
   --bg-gradient     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0);
-  --default-cursor  : auto;
-  --hover-cursor    : crosshair;
-  --nav-cursor      : crosshair;
   --nav-filter      : none;
 }
 
 [data-theme="bluemaro"] {
-  --main-font       : 'Atkinson Hyperlegible', Helvetica, Arial, Sans-Serif;
+  --main-font       : 'Atkinson Hyperlegible', helvetica, arial, sans-serif;
   --custom-font     : 'Critters', monospace;
-  --background-color: rgb(51, 51, 51);
-  --section-background-color: rgb(34, 34, 34);
-  --background-image: url(/images/pages/storage/lunar-tentacle.png);
-  --heading-background-image: rgb(29, 29, 29);
-  --text-color      : #ffffff;
+  --background-color: rgb(51 51 51);
+  --section-background-color: rgb(34 34 34);
+  --background-image: url("/images/pages/storage/lunar-tentacle.png");
+  --heading-background-image: rgb(29 29 29);
+  --border-image   :  none;
+  --text-color      : #fff;
   --link-color: #72ecff;
   --highlight-color : #bfefff;
   --border-color    : #72ecff;
   --bg-gradient     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, black 0);
-  --default-cursor  : auto;
-  --hover-cursor    : crosshair;
-  --nav-cursor      : crosshair;
   --nav-filter      : none;
 }
 
-/*==============================
+/* Forest / green-ish theme */
+[data-theme="forest"] {
+  --main-font: 'Atkinson Hyperlegible', helvetica, arial, sans-serif;
+  --custom-font: 'Critters', monospace;
+  --background-color: #f2f6f1; /* very light green */
+  --section-background-color: #e6efe6; /* subtle panel green */
+  --background-image: url("/images/forest.png");
+  --heading-background-image: linear-gradient(180deg, rgb(9 46 29 / 6%), rgb(9 46 29 / 2%));
+  --border-image: none;
+  --text-color: #07321f; /* dark, readable green */
+  --link-color: #145c3b; /* medium green */
+  --highlight-color: #7bd389; /* brighter accent for hover */
+  --border-color: #0b3b27; /* deep green border */
+  --bg-gradient: conic-gradient(from 90deg at 1px 1px, #0000 90deg, rgb(11 59 39 / 15%) 0);
+  --nav-filter: none;
+}
+
+/* ==============================
   GLOBAL STYLES
-==============================*/
-* {
-  cursor: var(--hover-cursor);
+============================== */
+body {
+  /* Set default cursor on body for consistency */
+  cursor: var(--default-cursor);
+}
+
+/* Use pixelated rendering site-wide for pixel art; keep a sensible default image reset */
+html, img {
+  image-rendering: pixelated;
 }
 
 img {
   max-width: 100%;
-  image-rendering: pixelated;
-}
-
-html {
-  image-rendering: pixelated;
+  height: auto;
 }
 
 body {
@@ -142,6 +157,7 @@ body {
   margin     : 0;
   background-color : var(--background-color);
   background-image: var(--background-image);
+  background-size: var(--background-size);
   background-attachment: fixed;
   font-size: calc(15px + 0.390625vw);
 }
@@ -154,33 +170,41 @@ h1, h2, h3, h4 {
   color: var(--text-color);
   border-radius: 5px;
   border: 2px solid var(--border-color);
-  background: var(--heading-background-image);
+  background-image: var(--heading-background-image);
+  background-color: var(--background-color);
   background-attachment: fixed;
 }
 
 h1 {
-  font-size  : 3rem;
-  padding: calc(0.5 * var(--padding-unit));
+  /* slightly smaller headings for a compact, denser layout */
+  font-size  : 2.6rem;
+  padding: calc(0.45 * var(--padding-unit));
 }
 
 h2 {
-  font-size: 2rem;
-  padding: calc(0.4 * var(--padding-unit));
+  font-size: 1.8rem;
+  padding: calc(0.35 * var(--padding-unit));
 }
 
 h3 {
-  font-size  : 1.5rem;
-  padding: calc(0.3 * var(--padding-unit));
+  font-size  : 1.25rem;
+  padding: calc(0.28 * var(--padding-unit));
 }
 
 h4 {
-  font-size  : 1rem;  
-  padding: calc(0.2 * var(--padding-unit));
+  font-size  : 0.95rem;  
+  padding: calc(0.18 * var(--padding-unit));
 }
 
+
+/* Links: consolidated styling so behavior is predictable site-wide */
 a {
-  cursor: var(--hover-cursor);
+  color: var(--link-color);
+  font-weight: bold;
+  cursor: pointer;
   display: inline-block;
+  text-decoration: none;
+  transition: color .15s ease-in-out;
 }
 
 a:hover {
@@ -192,18 +216,84 @@ a:focus {
   border: 2px dashed red;
 }
 
+/* Accessibility helpers */
+
+/* Visible skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.skip-link:focus,
+.skip-link:active {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: .5rem 1rem;
+  background: var(--text-color);
+  color: var(--background-color);
+  z-index: 9999;
+}
+
+/* Restore clear focus outlines for keyboard users without changing visual design */
+:where(a, button, input, select, textarea) :focus-visible {
+  outline: 3px solid var(--highlight-color);
+  outline-offset: 3px;
+}
+
+/* Make sure interactive controls are identifiable when 'all: unset' is used */
+button:focus-visible {
+  outline: 3px solid var(--highlight-color);
+  outline-offset: 3px;
+}
+
+/* Respect users' reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen-reader helper */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 button {
   all: unset;
 }
 
+/* Cursor utility classes for explicit control in templates */
+.cursor-default { cursor: default !important; }
+.cursor-interactive { cursor: pointer !important; }
+.cursor-nav { cursor: pointer !important; }
+
+/* Fallback to system cursors for maximum accessibility and consistency */
+
 .splash {
-  background           : url(../images/splash/desktop-bg.png);
+  background           : url("../images/splash/desktop-bg.png");
   background-attachment: fixed;
   background-size      : cover;
 }
 
 .splash-header {
-  background         : url(../images/splash/header.gif);
+  background         : url("../images/splash/header.gif");
   background-size    : contain;
   height             : 93px;
   background-repeat  : no-repeat;
@@ -214,7 +304,7 @@ button {
 
 
 .splash-header.feed {
-  background-image: url(../images/splash/vaguesignals.gif);
+  background-image: url("../images/splash/vaguesignals.gif");
 }
 
 .splash-subheader {
@@ -233,7 +323,7 @@ button {
   justify-content: center;
   border-radius: 15px;
   font-size: 0;
-  background: url(../images/sona.png) no-repeat 1rem/auto 90%;
+  background: url("../images/sona.png") no-repeat 1rem/auto 90%;
   height: 250px;
   }
 
@@ -281,7 +371,7 @@ header {
 span.pet {
   display          : inline-block;
   padding-left     : var(--padding-unit);
-  background       : url(../images/emotes/pet.png);
+  background       : url("../images/emotes/pet.png");
   background-size  : auto 100%;
   background-repeat: no-repeat;
   image-rendering  : pixelated;
@@ -290,7 +380,7 @@ span.pet {
 span.junk {
   display          : inline-block;
   padding-left     : var(--padding-unit);
-  background       : url(../images/emotes/rat.png);
+  background       : url("../images/emotes/rat.png");
   background-size  : auto 100%;
   background-repeat: no-repeat;
   image-rendering  : pixelated;
@@ -339,8 +429,7 @@ aside .art-preview {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 0fr);
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
+  grid-gap: 1rem;
   background: var(--section-background-color);
   padding: var(--padding-unit);
   border          : 2px solid var(--border-color);
@@ -375,8 +464,7 @@ aside .art-preview a b {
   display: grid;
   grid-template-columns: repeat(auto-fill, 1fr);
   grid-template-rows: repeat(2, auto);
-  grid-column-gap: 1rem;
-  grid-row-gap: 0px;
+  grid-gap: 0 1rem;
   }
 
   .loves { grid-area: 1 / 1 / 2 / 2; }
@@ -391,9 +479,9 @@ aside .art-preview a b {
   gap: 10px;
   max-width: 600px;
   margin: 0 auto;
-  border: 1rem solid rgb(74, 62, 77);
+  border: 1rem solid rgb(74 62 77);
   padding: 1rem;
-  background-color: rgb(94, 73, 108);
+  background-color: rgb(94 73 108);
 }
 
 .game-description {
@@ -407,7 +495,7 @@ aside .art-preview a b {
   position: relative;
   cursor: pointer;
   padding: .5rem;
-  background-color: rgb(74, 62, 77);
+  background-color: rgb(74 62 77);
 }
 
 .game:hover img {
@@ -447,7 +535,9 @@ section, fieldset {
   border          : 2px solid var(--border-color);
   background-size : cover;
   border-radius   : 5px;
+ border-image: var(--border-image) 46 53 71 69 20px 20px 20px 20px 0 0 0 0 stretch stretch;
 }
+
 
 section > * {
   margin: 1rem 0;
@@ -498,7 +588,7 @@ main article.card>a {
 }
 
 main article.card>a:hover {
-  background: rgba(0, 75, 88, 0.7);
+  background: rgb(0 75 88 / 70%);
 }
 
 main article.card img {
@@ -535,17 +625,311 @@ footer {
 }
 
 
+/* Navigation: responsive sonar-style 3x3 grid on wide screens, stacked list on small screens */
 nav {
+  /* default to stacked for narrow viewports (mobile-first) */
   display: flex;
   flex-flow: column nowrap;
-  background     : conic-gradient(from 90deg at 1px 1px, #0000 90deg, var(--border-color) 0) 1.85rem 1.85rem/1.85rem 1.85rem, url(../images/grass.gif) center / 150px repeat;
-  cursor         : var(--nav-cursor);
-  flex           : 0 1 auto;
-  border-radius  : 20px;
-  border         : 2px solid var(--border-color);
+  gap: calc(.2 * var(--padding-unit));
+  background: conic-gradient(from 90deg at 1px 1px, rgb(0 0 0 / 12%) 90deg, rgb(11 59 39 / 6%) 0) 1.85rem 1.85rem/1.85rem 1.85rem, url("../images/grass.gif") center / 150px repeat;
+  cursor: var(--nav-cursor);
+  flex: 0 1 auto;
+  border-radius: 20px;
+  border: 2px solid var(--border-color);
   padding: calc(.3 * var(--padding-unit));
   filter: var(--nav-filter);
-  gap: calc(.2 * var(--padding-unit));
+}
+
+/* Wide screens: lay out the nine links in a 3x3 grid that resembles a sonar panel.
+   Grid areas match the route class grid-area names defined below so no HTML change is required. */
+@media (min-width: 720px) {
+  /* Breathing-room adaptive grid:
+     - Grid auto-fits as many equal tiles as possible.
+     - Each anchor keeps an aspect-ratio: 1/1 so tiles remain square.
+     - Decorative 'building' is a pseudo-element so transforms don't affect layout.
+     - Per-tile appearance can be tuned with CSS variables (see comments below).
+  */
+  nav {
+    display: grid;
+    width: min(900px, 96%);
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 1rem;
+    padding: calc(.45 * var(--padding-unit));
+    align-items: stretch;
+    justify-items: center;
+    background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.00) 40%, rgba(0,0,0,0.06) 100%), url("../images/grass.gif");
+    background-size: cover;
+  }
+
+  /* Tile: fills its grid cell and keeps square proportions */
+  nav a.route {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    padding: .6rem;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--text-color) 92%, black 8%), rgba(0,0,0,0.18));
+    color: var(--background-color);
+    border-radius: 14px;
+    overflow: hidden; /* prevents long labels from expanding layout */
+    text-align: center;
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    text-decoration: none;
+    line-height: 1.05;
+    gap: .25rem;
+  }
+
+  /* Decorative building shape inside tile; transformable via per-tile vars (--b-tx/--b-ty/--b-rot) */
+  nav a.route::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    width: var(--b-w, 64%);
+    height: var(--b-h, 56%);
+    left: 50%;
+    top: 28%;
+    transform-origin: center;
+    transform: translate(var(--b-tx, -50%), var(--b-ty, -50%)) rotate(var(--b-rot, 0deg));
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
+    border-radius: 8px;
+    box-shadow: inset 0 -8px 18px rgba(0,0,0,0.25), 0 6px 12px rgba(0,0,0,0.18);
+    opacity: .9;
+    transition: transform .22s ease, opacity .18s ease;
+  }
+
+  /* Keep content readable above the decorative layer */
+  nav a.route > * {
+    position: relative;
+    z-index: 2;
+    max-width: 92%;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  /* Force stack of the bracket-span and the label (avoids awkward inline wrapping) */
+  nav a.route { justify-content: center; }
+  nav a.route span { display: block; font-weight: 900; }
+
+  /* Hover and focus: gentle lift */
+  nav a.route:hover,
+  nav a.route:focus-visible {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.22);
+  }
+
+  nav a.route:focus-visible {
+    outline: 3px solid var(--highlight-color);
+    outline-offset: 4px;
+  }
+
+  /* Example per-tile adjustments (visual only). You can set these per-class in your CSS
+     or inline in a small stylesheet block: e.g.
+
+     a.route.entrance { --b-tx: -46%; --b-ty: -48%; --b-rot: -6deg; }
+
+     This keeps the tile geometry stable while the decorative building is offset/rotated.
+  */
+
+  /* If you want automatic placement for future links: use CSS grid auto-flow and the anchors
+     will wrap into new rows. For more advanced automatic map-like placement, we can add a
+     tiny JS helper later. */
+}
+
+/* Map mode: RPG-style freeform placement for very wide screens */
+@media (min-width: 1000px) {
+  nav {
+    /* make nav a map container */
+    position: relative;
+    width: min(1100px, 96%);
+    height: 700px;
+    display: block;
+    padding: 1rem;
+    background-image: url("../images/grass.gif");
+    background-size: cover;
+    border-radius: 18px;
+  }
+
+  /* Make anchors absolute within the map; coordinates come from CSS vars --x and --y (percent) */
+  nav a.route {
+    position: absolute;
+    left: calc(var(--x, 50%) );
+    top: calc(var(--y, 50%) );
+    transform: translate(-50%, -50%); /* center on the point */
+    width: var(--b-size, 120px);
+    height: var(--b-size, 120px);
+    display: block;
+    padding: 0;
+    background: transparent;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--background-color);
+  }
+
+  /* The visible building card inside the anchor */
+  nav a.route .building {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    transform-origin: center;
+    transform: translate(-50%, -50%) rotate(var(--b-rot, 0deg)) scale(var(--b-scale,1));
+    background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.18));
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.35);
+    z-index: 1;
+  }
+
+  /* small lighter inset to mimic a tile */
+  nav a.route .building::after {
+    content: '';
+    position: absolute;
+    inset: 10% 10% 18% 10%;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    z-index: 2;
+  }
+
+  /* Label placed separately (created by JS) */
+  .nav-label {
+    position: absolute;
+    z-index: 3;
+    padding: .2rem .45rem;
+    background: rgba(18,18,18,0.85);
+    color: var(--background-color);
+    border-radius: 6px;
+    font-weight: 700;
+    pointer-events: none; /* let clicks pass through to anchors */
+    transform-origin: left center;
+    white-space: nowrap;
+  }
+
+  /* small bracket/icon inside anchor; keep but hide visually since label is external */
+  nav a.route span {
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    z-index: 4;
+    display: inline-block;
+    font-weight: 900;
+    font-size: .92rem;
+    color: var(--background-color);
+  }
+
+  /* focus outline for keyboard users: also highlight label */
+  nav a.route:focus .building {
+    box-shadow: 0 18px 30px rgba(0,0,0,0.4), 0 0 0 3px var(--highlight-color);
+  }
+  nav a.route:focus { outline: none; }
+
+  /* Default placements for existing links — tune as needed */
+  a.route.entrance { --x: 12%; --y: 12%; --b-size: 150px; --b-rot: -6deg; }
+  a.route.atelier  { --x: 42%; --y: 10%; --b-size: 160px; --b-rot: 4deg; }
+  a.route.reads    { --x: 75%; --y: 14%; --b-size: 140px; --b-rot: -4deg; }
+  a.route.journey  { --x: 15%; --y: 40%; --b-size: 120px; --b-rot: 6deg; }
+  a.route.pets     { --x: 44%; --y: 42%; --b-size: 180px; --b-rot: -3deg; }
+  a.route.storage  { --x: 76%; --y: 46%; --b-size: 130px; --b-rot: 5deg; }
+  a.route.contact  { --x: 12%; --y: 74%; --b-size: 140px; --b-rot: -5deg; }
+  a.route.qeycard  { --x: 46%; --y: 74%; --b-size: 160px; --b-rot: 2deg; }
+  a.route.microgames{--x: 78%; --y: 74%; --b-size: 150px; --b-rot: -2deg; }
+
+  /* Responsive: if map container is narrow, revert anchors to flow grid (safety) */
+  @media (max-width: 1100px) {
+    nav { height: auto; }
+    nav a.route { position: static; transform: none; width: 100%; height: auto; }
+    .nav-label { position: static; display: inline-block; margin-top: .35rem; }
+    nav a.route .building { position: relative; transform: none; width: 100%; height: 140px; }
+  }
+}
+
+/* Breadcrumbs (distinct from the primary nav element) */
+.breadcrumbs {
+  font-size: 0.95rem;
+  color: rgb(0 0 0 / 70%);
+  margin-bottom: .5rem;
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.breadcrumbs a.breadcrumbs-back {
+  text-decoration: none;
+  background: transparent;
+  padding: 0 .25rem;
+  border-radius: 4px;
+  color: var(--link-color);
+  font-weight: 700;
+}
+
+.breadcrumbs a.breadcrumbs-back:hover {
+  color: var(--highlight-color);
+}
+
+.breadcrumbs .breadcrumbs-sep {
+  color: rgb(0 0 0 / 45%);
+}
+
+.breadcrumbs .breadcrumbs-current {
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+/* Atelier: slightly staggered, hand-placed feeling for tiles (eye-catching, not corporate) */
+.category-grid .category-tile {
+  transition: transform .25s ease, box-shadow .2s ease;
+  transform-origin: center;
+  display: block;
+  position: relative;
+}
+
+/* gentle stagger using nth-child - creates a playful layout */
+.category-grid .category-tile:nth-child(3n+1) { transform: translateY(-8px) rotate(-1.2deg);} 
+.category-grid .category-tile:nth-child(3n+2) { transform: translateY(0) rotate(.6deg);} 
+.category-grid .category-tile:nth-child(3n+3) { transform: translateY(6px) rotate(-.6deg);} 
+.category-grid .category-tile:hover { transform: translateY(-4px) scale(1.03) rotate(0deg); box-shadow: 0 10px 20px rgb(0 0 0 / 12%);} 
+.category-grid .category-tile img { border-radius: 8px; display:block; }
+
+/* Make archive pills react like tiles (hover + focus for accessibility) */
+.category-pills .pill {
+  transition: transform .25s ease, box-shadow .2s ease;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.category-pills .pill:hover,
+.category-pills .pill:focus-visible {
+  transform: translateY(-4px) scale(1.03) rotate(0deg);
+  box-shadow: 0 8px 18px rgb(0 0 0 / 12%);
+}
+
+.category-pills .pill:focus-visible {
+  outline: 3px solid var(--highlight-color);
+  outline-offset: 3px;
+}
+
+/* Illustration gallery items receive the same accessible hover/focus treatment */
+.illustration-gallery .illustration {
+  transition: transform .25s ease, box-shadow .2s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.illustration-gallery .illustration:hover,
+.illustration-gallery .illustration:focus-visible {
+  transform: translateY(-6px) scale(1.06) rotate(0deg);
+  box-shadow: 0 12px 24px rgb(0 0 0 / 14%);
+}
+
+.illustration-gallery .illustration:focus-visible {
+  outline: 3px solid var(--highlight-color);
+  outline-offset: 4px;
 }
 
 
@@ -553,7 +937,7 @@ nav a.route {
   color: var(--background-color);
   font-size: calc(15px + 0.390625vw);
   transition: .2s;
-  cursor: var(--nav-cursor);
+  cursor: pointer;
   background-color: var(--text-color);
   padding: calc(.2 * var(--padding-unit));
   display: flex;
@@ -634,7 +1018,6 @@ a.route:hover{
 
 .links-grid>* {
   display            : block;
-  background-size    : 100% auto;
   background-position: center;
   background-repeat  : no-repeat;
   background-size    : cover;
@@ -645,6 +1028,169 @@ a.route:hover{
   padding   : var(--padding-unit);
   background: var(--text-color);
   color     : white;
+}
+
+/* Category pill thumbnails and layout for archive */
+.category-rows {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.category-entry {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: calc(.4 * var(--padding-unit));
+  text-decoration: none;
+  color: var(--text-color);
+  background: var(--section-background-color);
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+}
+
+.category-entry .post-info h3 {
+  margin: 0;
+}
+
+.pill-thumb {
+  width: 120px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid rgb(0 0 0 / 8%);
+}
+
+/* Compact inline pills (used on the archive/reads page) */
+.category-pills {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-flow: row wrap;
+  gap: .5rem;
+  list-style: none;
+}
+
+.category-pills > li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.category-pills .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .18rem .5rem; /* tightened */
+  background: var(--section-background-color);
+  border: 2px solid var(--border-color);
+  border-radius: 999px;
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.category-pills .pill img.pill-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgb(0 0 0 / 6%);
+}
+
+.category-pills .pill .pill-label {
+  display: inline-block;
+  line-height: 1;
+  font-size: 0.95rem;
+}
+
+.category-pills .pill .pill-count {
+  display: inline-block;
+  background: var(--text-color);
+  color: var(--background-color);
+  padding: .1rem .4rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  margin-left: .3rem;
+  border: 1px solid var(--border-color);
+}
+
+/* Responsive: tighter pills on small screens */
+@media (width <= 520px) {
+  .category-pills {
+    gap: .25rem;
+  }
+
+  .category-pills .pill {
+    padding: .15rem .4rem;
+    font-size: 0.95rem;
+  }
+
+  .category-pills .pill img.pill-thumb {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Article feed typographic hierarchy */
+.feed .post .post-meta {
+  font-size: 0.85rem;
+  color: rgb(0 0 0 / 60%);
+  margin-bottom: .25rem;
+}
+
+.feed .post .post-title {
+  margin: 0 0 .25rem;
+  font-size: 1.1rem; /* slightly tighter */
+  font-weight: 800;
+}
+
+.feed .post .post-excerpt {
+  margin: 0;
+  color: var(--text-color);
+  opacity: .9;
+}
+
+/* Atelier category grid tweaks */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: .85rem;
+}
+
+.category-tile img {
+  width: 100%;
+  height: 88px; /* slightly reduced for compactness */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Badge for artwork counts on atelier gallery tiles */
+.category-tile {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.category-tile .category-name {
+  display: block;
+  margin: .4rem 0;
+  font-weight: 700;
+  text-align: center;
+}
+
+.category-tile .category-count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--text-color);
+  color: var(--background-color);
+  padding: .15rem .45rem;
+  border-radius: 999px;
+  font-size: .85rem;
+  border: 2px solid var(--border-color);
 }
 
 .links-grid:hover>* {
@@ -659,34 +1205,29 @@ a.route:hover{
   display              : grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows   : repeat(2, 1fr);
-  grid-column-gap      : 0px;
-  grid-row-gap         : 0px;
+  grid-gap      : 0;
 }
 
 .pet-grid>*:first-child {
   grid-area       : 1 / 1 / 2 / 3;
-  background-image: url(https://dragcave.net/image/7ewNh.gif);
+  background-image: url("https://dragcave.net/image/7ewNh.gif");
 }
 
 .pet-grid>*:nth-child(2) {
   grid-area       : 1 / 3 / 2 / 4;
-  background-image: url(../images/tigerwasch.gif);
+  background-image: url("../images/tigerwasch.gif");
 }
 
 .pet-grid>*:nth-child(3) {
   grid-area       : 2 / 1 / 3 / 2;
-  background-image: url(https://www.moderneopets.com/images/pets/close/elephante_faerie.gif);
+  background-image: url("https://www.moderneopets.com/images/pets/close/elephante_faerie.gif");
 }
 
 .pet-grid>*:last-child {
   grid-area       : 2 / 2 / 3 / 4;
-  background-image: url(../atelier/general/junkyard-pride.jpg);
+  background-image: url("../atelier/general/junkyard-pride.jpg");
 }
 
-a {
-  color      : var(--link-color);
-  font-weight: bold;
-}
 
 /* Resource List */
 
@@ -699,9 +1240,119 @@ a {
 }
 
 
+h1.mutant {
+  font-family: var(--custom-font);
+  font-weight: 900;
+  text-transform: uppercase;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  animation: mutate 8s infinite cubic-bezier(0.47, 0, 0.745, 0.715) alternate;
+  text-align: center;
+}
+
+
+/* Letter mutation */
+@keyframes mutate {
+  0% {
+    font-variation-settings: "wght" 300;
+    letter-spacing: 0.05em;
+    transform: skewY(0deg) scale(1);
+  }
+
+  20% {
+    font-variation-settings: "wght" 700;
+    transform: skewY(1deg) scale(1.01);
+  }
+
+  40% {
+    font-variation-settings: "wght" 900;
+    letter-spacing: 0;
+    transform: skewY(-2deg) scale(1.02);
+  }
+
+  60% {
+    font-variation-settings: "wght" 400;
+    transform: skewY(0deg) scale(1.03);
+  }
+
+  80% {
+    font-variation-settings: "wght" 800;
+    letter-spacing: 0.05em;
+    transform: skewY(1deg);
+  }
+
+  100% {
+    font-variation-settings: "wght" 300;
+    letter-spacing: 0.1em;
+    transform: skewY(0deg) scale(1);
+  }
+}
+
+.alive {
+  animation: breathe 8s infinite, jitter 1.5s infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@keyframes breathe {
+  0%   { transform: scale(1) skewX(0deg) skewY(0deg); }
+  10%  { transform: scale(1.02) skewX(0.5deg) skewY(-0.3deg); }
+  25%  { transform: scale(1.05) skewX(-0.8deg) skewY(0.6deg); }
+  50%  { transform: scale(0.94) skewX(0.6deg) skewY(-0.6deg); }
+  75%  { transform: scale(1.04) skewX(-0.4deg) skewY(0.3deg); }
+  100% { transform: scale(1) skewX(0deg) skewY(0deg); }
+}
+
+
+@keyframes jitter {
+  0%, 100% { transform: translate(0,0) rotate(0deg) skewX(0deg) skewY(0deg); }
+  10% { transform: translate(0.6px, -0.8px) rotate(0.3deg) skewX(0.3deg); }
+  20% { transform: translate(-0.7px, 0.6px) rotate(-0.4deg) skewY(-0.2deg); }
+  30% { transform: translate(0.5px, 0.8px) rotate(0.2deg) skewX(-0.3deg); }
+  40% { transform: translate(-0.5px, -0.3px) rotate(-0.25deg) skewY(0.3deg); }
+  50% { transform: translate(0.4px, 0.2px) rotate(0.35deg) skewX(0.25deg); }
+  60% { transform: translate(-0.5px, 0.5px) rotate(-0.3deg) skewY(-0.25deg); }
+  70% { transform: translate(0.7px, -0.3px) rotate(0.25deg) skewX(-0.35deg); }
+  80% { transform: translate(-0.4px, 0.4px) rotate(-0.2deg) skewY(0.2deg); }
+  90% { transform: translate(0.4px, -0.5px) rotate(0.2deg) skewX(0.3deg); }
+}
+
+
+/* Calm, floating organism — graceful lung motion */
+.alive.calm {
+  animation: breathe 10s cubic-bezier(0.42, 0, 0.58, 1) infinite alternate,
+             jitter 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* Nervous twitcher — fidgety micro jumps */
+.alive.nervous {
+  animation: breathe 6s cubic-bezier(0.33, 1, 0.68, 1) infinite,
+             jitter 1s cubic-bezier(0.7, -0.5, 0.3, 1.6) infinite;
+}
+
+/* Eerie, slow pulse — uncanny sense of watching */
+.alive.eerie {
+  animation: breathe 9s cubic-bezier(0.77, 0, 0.175, 1) infinite alternate,
+             jitter 3s cubic-bezier(0.6, -0.2, 0.4, 1.3) infinite;
+}
+
+/* Ecstatic — fast, joyous vibration */
+.alive.ecstatic {
+  animation: breathe 4s cubic-bezier(0.17, 0.67, 0.83, 0.67) infinite alternate,
+             jitter 0.8s cubic-bezier(0.5, -0.5, 0.5, 1.5) infinite;
+}
+
+/* Alien — unpredictable, viscous movements */
+.alive.alien {
+  animation: breathe 12s cubic-bezier(0.45, -0.5, 0.55, 1.6) infinite alternate,
+             jitter 1.8s cubic-bezier(0.15, 0.85, 0.85, 0.15) infinite;
+}
+
+
 .resources .media a {
   display    : flex;
-  flex-flow  : col wrap;
+  flex-flow  : column wrap;
   flex-basis : 100%;
   gap        : 20px;
   align-items: center;
@@ -749,7 +1400,7 @@ img.portrait {
 }
 
 .feed > .post:hover .post-info {
-  border-radius: 0px;
+  border-radius: 0;
   filter: invert(1);
 }
 
@@ -834,7 +1485,7 @@ img.portrait {
 .rating .scale {
   width        : 100%;
   height       : 50px;
-  background   : linear-gradient(90deg, #990f50, #370acc, #00ffee);
+  background   : linear-gradient(90deg, #990f50, #370acc, #0fe);
   border       : 2px solid var(--border-color);
   border-radius: 10px;
 
@@ -859,7 +1510,7 @@ section.site-notes>article {
 }
 
 .rating .scale .pointer {
-  background: url(../images/pages/pets/bird.gif) no-repeat center/contain;
+  background: url("../images/pages/pets/bird.gif") no-repeat center/contain;
   width     : 30px;
   height    : 100%;
 }
@@ -874,7 +1525,7 @@ section.site-notes>article {
 }
 
 .rating .scale .pointer.uncertain {
-  background: url(../images/pages/pets/dog.gif) no-repeat center/contain;
+  background: url("../images/pages/pets/dog.gif") no-repeat center/contain;
   animation : uncertain 2s infinite ease-in-out alternate;
 }
 
@@ -892,7 +1543,7 @@ section.site-notes>article {
 
 @keyframes uncertain {
   0% {
-    transform: translateX(0px)
+    transform: translateX(0)
   }
 
   100% {
@@ -942,7 +1593,7 @@ section.site-notes>article {
   width           : 250px;
   height          : 250px;
   border          : 0 !important;
-  background-color: rgba(240, 255, 240);
+  background-color: rgb(240 255 240);
 }
 
 .maker .editor {
@@ -1000,7 +1651,7 @@ button {
   border       : solid 2px #f0eada;
   border-radius: 10px;
   padding      : .2rem;
-  cursor       : var(--hover-cursor);
+  cursor       : pointer;
   background   : #fdf6ff;
 }
 
@@ -1018,7 +1669,7 @@ button {
 }
 
 .incubation-cell>* {
-  filter    : drop-shadow(0 0 5px rgba(0, 0, 0, .4));
+  filter    : drop-shadow(0 0 5px rgb(0 0 0 / 40%));
   transition: .2s;
 }
 
@@ -1027,27 +1678,27 @@ button {
 }
 
 .incubation-cell.fto {
-  background: url(../images/external/swifty-bricks.png);
+  background: url("../images/external/swifty-bricks.png");
 }
 
 .incubation-cell.pfq {
-  background: url(../images/external/pmd-grass.png);
+  background: url("../images/external/pmd-grass.png");
 }
 
 .incubation-cell.flowergame {
-  background: url(../images/external/swifty-grass.png);
+  background: url("../images/external/swifty-grass.png");
 }
 
 .incubation-cell.dragcave {
-  background: url(../images/external/swifty-ivy.png);
+  background: url("../images/external/swifty-ivy.png");
 }
 
 .incubation-cell.apple {
-  background: url(../images/external/swifty-wavesmall.gif);
+  background: url("../images/external/swifty-wavesmall.gif");
 }
 
 ul {
-  list-style: circle inside url(../images/emotes/rat.png); 
+  list-style: circle inside url("../images/emotes/rat.png"); 
 }
 
 .buttons img {
@@ -1127,19 +1778,36 @@ tr td {
 .illustration-gallery {
   display: flex;
   flex-flow: row wrap;
-  gap: 1em;
-  align-items: center;
+  gap: 1.2em;
+  align-items: flex-start;
   justify-content: center;
 }
 
 .illustration-gallery .illustration {
-  border: 1px solid black;
+  width: 200px;
   height: 200px;
-  transition: .2s;
-
+  transition: transform .25s ease, box-shadow .2s ease;
+  transform-origin: center;
+  display: inline-block;
+  position: relative;
 }
-.illustration-gallery .illustration:hover {
-  transform: scale(1.1);
+
+/* Versetzter Effekt wie bei category-tiles */
+.illustration-gallery .illustration:nth-child(3n+1) { 
+  transform: translateY(-8px) rotate(-1.2deg);
+} 
+
+.illustration-gallery .illustration:nth-child(3n+2) { 
+  transform: translateY(0) rotate(.6deg);
+} 
+
+.illustration-gallery .illustration:nth-child(3n+3) { 
+  transform: translateY(6px) rotate(-.6deg);
+} 
+
+.illustration-gallery .illustration:hover { 
+  transform: translateY(-4px) scale(1.03) rotate(0deg);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 12%);
 }
 
 .pet {
