@@ -5,6 +5,7 @@ vibe: exploding
 layout: post.njk
 categories:
   - games
+date: 2025-09
 tags: post
 ---
 Prices for video games keep climbing, and we all hate it. But here’s another perspective: rising prices hurt the role of video games as a piece of art. _Mario Kart World_ cost me 80 bucks, and I’d love to play _Donkey Kong Bananza_ if it weren’t locked behind the 70. Even though I’m incredibly excited for the new _Resident Evil_, I know it will be in negotiation with my wallet.

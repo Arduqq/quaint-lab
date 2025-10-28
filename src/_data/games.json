@@ -18,7 +18,35 @@
       {
         "title": "Kunitsu-Gami",
         "image": "/images/home/kunitsugami.png",
-        "description": "My game of the year. It made me feel like coming home from school again. Perfection.",
+        "description": "My game of the year 2024. It made me feel like coming home from school again. Perfection.",
+        "review": "https://www.backloggd.com/u/Arduqq/review/2141359/"
+      },
+      {
+        "title": "Dragon's Dogma 2",
+        "image": "/images/home/dragons-dogma.png",
+        "description": "An absolute blast. I wish I could live in this game forever. Making your stunningly beautiful character while exploring this very odd world felt like some of the most interesting gaming experiences to me despite playing the game prior. The combat goes really hard and surprisingly, it felt like community."
+
+      },
+      {
+        "title": "Story of Seasons: Grand Bazaar",
+        "image": "/images/home/grand-bazaar.png",
+        "description": "A relief of a farming sim remake!! The game is lots of fun and marries all the little systems surprisingly well. I definitely over-engineered my time in it, but it's perfect for playing something that isn't forever trapped in the Stardew Valley of it all."
+
+      },
+      {
+        "title": "Hundred Line Last Defense Academy",
+        "image": "/images/home/hundred-line.png",
+        "description": "The fact that this game exists in this form is a miracle. It's a epos of a visual novel, and without any damn competition my game of the year. Strong character writing, bonkers endings, fun combat, and they will never not make you gasp."
+      },
+      {
+        "title": "Mario Kart World",
+        "image": "/images/home/mk-world.png",
+        "description": "This is my perfect plug-off game. It's such a blast and pure joy to cruise around the open world and not get lost in the details. I am having so much fun with the knockout tours, and I hope to see it grow."
+      },
+      {
+        "title": "Rune Factory: Guardians of Azuma",
+        "image": "/images/home/rf-goa.png",
+        "description": "Rune Factory is one of my most beloved franchises and having a fresh spin on the formula kept me cuffed to the controller. The characters are joyous, the combat decent, and the town building truly shines in how it compliments the overall gameplay. I long for a beautiful future for the main line entries as well.",
         "review": "https://www.backloggd.com/u/Arduqq/review/2141359/"
       }
 ]

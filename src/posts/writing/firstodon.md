@@ -4,6 +4,7 @@ excerpt: "Since establishing my own Mastodon instance for my friends, I've often
 vibe: "informing"
 layout: post.njk
 categories: [fediverse, guide]
+date: 2024-04
 tags: post
 ---
 Since establishing my own Mastodon instance, [Blasius.Club](https://blasius.club), for my friends, I've often discussed ways to welcome new users. While they can understand the medium on their own, discovering content for their timeline can be challenging. Moving away from automatically curated content designed to keep you glued to your screen is tough, so I've collected some suggestions to help everyone get accustomed to the Fediverse. At the end of this post, you'll find all the links I found useful for refining my content feed.

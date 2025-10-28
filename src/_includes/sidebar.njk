@@ -1,13 +1,17 @@
 <aside>
-  <h1>A Quaint Lab</h1>
-  <section id="about"><p>This is a laboratory. Please behave, and solely touch what is to be touched.</p></section>
+  <h1 class="mutant">A Quaint Lab</h1>
+  <img src="/images/quaint-lab-hc.png">
+  <section id="about"><img class="alive nervous" style="float:left" src="/images/snail.png"><p>This is a laboratory. Please behave, and solely touch what is to be touched.</p></section>
   <h2>Navigation</h2>
   {% include 'navigation.njk' %}
+
+  {# Categories moved to reads.njk and atelier.njk per layout decision #}
   <fieldset id="theme-switcher">
     <legend><h3>Themes</h3></legend>
     <label><input type="radio" name="theme" value="contrast"> Contrast</label>
     <label><input type="radio" name="theme" value="cute"> Cute</label>
     <label><input type="radio" name="theme" value="bluemaro"> Bluemaro</label>
+    <label><input type="radio" name="theme" value="forest"> Forest</label>
   </fieldset>
   
   <script>
@@ -51,9 +55,18 @@
     <a class="art-preview-more" href="/atelier">See more ></a>
 
   </section>
-  <section id="comments">
-    <div id="c_widget"></div>
-    <p>(or just write lyonid öat protonmöil dot com!)</p>
+    <h2>Contact</h2>
+  <section class="contact">
+    <p><b>Neocities:</b> <a target="__blank" href="https://neocities.org/site/unartur">un.artur</a></p>
+    <p><b>Discord:</b> un.artur</p>
+    <p>
+      <b>Mail:</b>
+      <a href="mailto:lyonid@protonmail.com?subject=[{{title}}]"
+        >lyonid [at] protonmail [dot] com</a
+      >
+    </p>
+      <img alt="Button with a zombie standing in front of a cobblestone wall" src="/images/pages/contacts/ql-button-1.gif" />
+      <img alt="Button saying Quaint Lab" src="/images/pages/contacts/ql-button-2.gif" />
+      <img alt="Button saying Quaint Laboratorium" src="/images/pages/contacts/ql-button-3.png" />
   </section>
-  <script src="/js/comment-widget.js"></script>
 </aside>

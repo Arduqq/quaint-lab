@@ -2,12 +2,12 @@
 
 * {
   box-sizing: border-box;
-  font-family: 'Eczar', serif;
+  font-family: Eczar, serif;
 }
 
 body {
   all: unset;
-  background-image: url(fnh-bg.png);
+  background-image: url("fnh-bg.png");
   background-attachment: fixed;
 }
 
@@ -21,7 +21,7 @@ a {
 body > a {
   display: block;
   padding: 25px;
-  background: rgba(0, 0, 0,.8);
+  background: rgb(0 0 0 / 80%);
   width: 400px;
   margin: 0 auto;
   border: 4px solid white;
@@ -50,7 +50,7 @@ body > a {
   image-rendering: pixelated;
 }
 
-.wrapper:before, .wrapper:after {
+.wrapper::before, .wrapper::after {
   background-size: 100% auto;
   width: 100%;
   display: block;
@@ -59,19 +59,19 @@ body > a {
   background-repeat: no-repeat;
 }
 
-.wrapper:before {
-  filter: drop-shadow(0px 5px 5px #262626) drop-shadow(0px 10px 10px #262626);
+.wrapper::before {
+  filter: drop-shadow(0 5px 5px #262626) drop-shadow(0 10px 10px #262626);
   top: -270px;
   height: 280px;
-  background-image: url(moonless-guard-t.png); 
+  background-image: url("moonless-guard-t.png"); 
   background-position: bottom;
 }
 
-.wrapper:after {
-  filter: drop-shadow(0px -5px 5px #262626) drop-shadow(0px -10px 10px #262626);
+.wrapper::after {
+  filter: drop-shadow(0 -5px 5px #262626) drop-shadow(0 -10px 10px #262626);
   bottom: -180px;
   height: 180px;
-  background-image: url(moonless-guard-b.png); 
+  background-image: url("moonless-guard-b.png"); 
   background-position: top;
 }
 
@@ -86,8 +86,8 @@ body > a {
   max-width: 900px;
   gap: 10px;
   padding: 0 10vw;
-  color: rgba(240, 240, 240, 1);
-  background-image: url(moonless-guard-m.png);
+  color: rgb(240 240 240 / 100%);
+  background-image: url("moonless-guard-m.png");
   background-size: 100% auto;
   animation: open 5s cubic-bezier(1,.3,.2, 1) forwards;
 }
@@ -109,7 +109,6 @@ body > a {
 
 
 .ending { 
-  display: block; 
   font-size: 3em; 
   text-align: center; 
   display: flex; 

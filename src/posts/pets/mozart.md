@@ -4,7 +4,7 @@ posttitle: "Mozart"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: calm
 x: 15
 y: 28
 image: mozart.png

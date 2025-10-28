@@ -1,0 +1,58 @@
+{#
+  Breadcrumbs include
+  - Attempts to infer a sensible back link (Atelier vs Archive) when not provided.
+  - Accepts optional variables in context: backUrl, backLabel, currentLabel, hasArtwork
+#}
+{% if hasArtwork is defined %}
+  {% set _hasArtwork = hasArtwork %}
+{% else %}
+  {% set _hasArtwork = false %}
+{% endif %}
+
+{# If not provided, try to infer from category or page.inputPath #}
+{% if not _hasArtwork %}
+  {% if category is defined and category.hasArtwork is defined %}
+    {% set _hasArtwork = category.hasArtwork %}
+  {% elseif page is defined and page.inputPath %}
+    {% if '/posts/artwork/' in page.inputPath %}
+      {% set _hasArtwork = true %}
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{# Decide labels/urls #}
+{% if backUrl is not defined %}
+  {% if _hasArtwork %}
+    {% set _backUrl = '/atelier/' %}
+    {% set _backLabel = 'Atelier' %}
+  {% else %}
+    {% set _backUrl = '/archive/' %}
+    {% set _backLabel = 'Archive' %}
+  {% endif %}
+{% else %}
+  {% set _backUrl = backUrl %}
+  {% set _backLabel = backLabel or 'Back' %}
+{% endif %}
+
+{% if currentLabel is not defined %}
+  {% if category is defined and category.name %}
+    {% set _current = category.name %}
+  {% elseif page is defined and (page.data.posttitle or page.data.title) %}
+    {% set _current = page.data.posttitle or page.data.title %}
+  {% else %}
+    {% set _current = '' %}
+  {% endif %}
+{% else %}
+  {% set _current = currentLabel %}
+{% endif %}
+
+{# Only render when we have a back link available #}
+{% if _backUrl %}
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="{{ _backUrl }}" class="breadcrumbs-back">{{ _backLabel }}</a>
+    {% if _current %}
+      <span class="breadcrumbs-sep">›</span>
+      <span class="breadcrumbs-current">{{ _current }}</span>
+    {% endif %}
+  </div>
+{% endif %}

@@ -3,6 +3,7 @@ posttitle: "In the Virtual Pet Matrix"
 excerpt: "I have been digging and digging and digging. Some might already be tired of me blabbering about what my pet turned into yesterday and what concept I try to reference by putting some arbitrary pixel mess on this and that creature. I live in a matrix that has led me into the wildest adventures through the internet. On many walks, I stumble over the thought of just writing out my experiences with virtual pet sites. Why that is, I am unsure of, yet there is an urge to talk about what makes this very niche genre of the internet so enjoyable."
 vibe: "chill"
 layout: post.njk
+date: 2022-03
 categories: [pet sites, ramblings]
 tags: post
 ---

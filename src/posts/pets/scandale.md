@@ -4,7 +4,7 @@ posttitle: "Scandale"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: ecstatic
 x: 30
 y: 60
 image: scandale.png

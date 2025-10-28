@@ -4,7 +4,7 @@ posttitle: "Vicar Amelia"
 comment: A fan pet of Vicar Amelia from Bloodborne.
 home: Moderneopets
 personality: righteous
-spirit: kind
+spirit: calm
 x: 80
 y: 20
 image: amelia.png

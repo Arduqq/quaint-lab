@@ -4,7 +4,7 @@ posttitle: "Bebel"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: calm
 x: 34
 y: 70
 image: bebel.png

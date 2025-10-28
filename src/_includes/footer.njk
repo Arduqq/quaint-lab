@@ -1,6 +1,47 @@
 <footer>
-  <span>© un.artur, 2025 and beyond!</span>
-  <span>
-    <a target="__blank" href="https://blasius.club/@maus">Mastodon</a> ~ <a target="__blank" href="https://neocities.org/site/unartur">Neocities</a> ~ <a target="__blank" href="https://github.com/arduqq">GitHub</a>
-  </span>
+  <div id="blinkies">
+    {% for blinkie in collections.blinkies %}
+    <img src="/{{ blinkie.url }}" alt="{{ blinkie.fileSlug }}" />
+    {% endfor %}
+  </div>
+  <div id="fanlistings">
+    <a target="_blank" href="http://nosastra.com/rats/"
+      ><img alt="Fanlisting for rats" src="/images/pages/about/fanlistings/rats.gif" /></a
+    ><a target="_blank" href="http://fanlisting.altervista.org/dogs/"
+      ><img alt="Fanlisting for dogs" src="/images/pages/about/fanlistings/dogs.png" /></a
+    ><a target="_blank" href="https://cameras.thoughtdreams.org/"
+      ><img alt="Fanlisting for cameras" src="/images/pages/about/fanlistings/cameras.gif" /></a
+    ><a target="_blank" href="in-blue-rain.org/lasagna"
+      ><img alt="Fanlisting for lasagna" src="/images/pages/about/fanlistings/lasagna.png" /></a
+    ><a target="_blank" href="http://rhythm-emotion.net/bananas/"
+      ><img alt="Fanlisting for bananas" src="/images/pages/about/fanlistings/bananas.png" /></a
+    ><a target="_blank" href="https://herotovillain.com/slasher"
+      ><img alt="Fanlisting for slashers" src="/images/pages/about/fanlistings/slasher.png" /></a
+    ><a target="_blank" href="https://fan.kirai.org/paramore/"
+      ><img alt="Fanlisting for Paramore" src="/images/pages/about/fanlistings/paramore.png" /></a
+    ><a target="_blank" href="http://php.aking-mahal.net/"
+      ><img alt="Fanlisting for PHP" src="/images/pages/about/fanlistings/php.gif" /></a
+    ><a target="_blank" href="http://fan.winterlantern.net/bloodborne/"
+      ><img alt="Fanlisting for BBCode" src="/images/pages/about/fanlistings/bb.png" /></a
+    ><a target="_blank" href="https://eku53ru.net/fl/ac"
+      ><img alt="Fanlisting for Animal Crossing" src="/images/pages/about/fanlistings/ac.gif" /></a
+    ><a target="_blank" href="http://firaga.org/nier"
+      ><img alt="Fanlisting for NieR" src="/images/pages/about/fanlistings/nier.png" /></a
+    ><a target="_blank" href="https://fanlistings.nickifaulk.com/gw2/"
+      ><img alt="Fanlisting for Guild Wars" src="/images/pages/about/fanlistings/gw.jpg" /></a
+    ><a target="_blank" href="http://fire.nevarra.org/fan/"
+      ><img alt="Fanlisting for Fire Emblem" src="/images/pages/about/fanlistings/fe.png"
+    /></a>
+  </div>
+</section>
+
+<span>
+  <b>Colophon:</b> I built this website with
+  <a href="https://www.11ty.dev" target="_blank">Eleventy</a> hosting on
+  <a href="https://neocities.org" target="_blank">Neocities</a>. The code was
+  created in <a href="https://code.visualstudio.com">VSCode</a>, and is
+  accessible on
+  <a href="https://github.com/Arduqq/quaint-lab" target="_blank">GitHub</a>.
+</span>
+  <span><b>© un.artur, 2025 and beyond!</b></span>
 </footer>

@@ -2,43 +2,125 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = function(eleventyConfig) {
+  // Passthrough copy
+  eleventyConfig.addPassthroughCopy("./src/css");
+  eleventyConfig.addPassthroughCopy("./src/js");
+  eleventyConfig.addPassthroughCopy("./src/*.ico");
+  eleventyConfig.addPassthroughCopy("./src/images");
+  eleventyConfig.addPassthroughCopy("./src/fonts");
 
-    // Passthrough copy for CSS
-    eleventyConfig.addPassthroughCopy("./src/css");
-    // Passthrough copy for JS
-    eleventyConfig.addPassthroughCopy("./src/js");
-    // Passthrough copy for fonts
-    eleventyConfig.addPassthroughCopy("./src/*.ico");
-    // Passthrough copy for global images directory
-    eleventyConfig.addPassthroughCopy("./src/images");
-    eleventyConfig.addPassthroughCopy("./src/fonts");
-    // Collection for blinkies
-    eleventyConfig.addCollection("blinkies", function(collection) {
-        const blinkieDir = path.join(__dirname, "src", "images", "blinkies");
-        return fs.readdirSync(blinkieDir).map(file => {
-            return {
-                fileSlug: file,
-                url: `images/blinkies/${file}`
-            };
-        });
+  // simple slug helper
+  const slugify = (s = "") =>
+    String(s)
+      .toLowerCase()
+      .replace(/[^\w]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  // Filters
+  eleventyConfig.addFilter("slug", slugify);
+  eleventyConfig.addFilter("join", (arr, sep = ",") =>
+    Array.isArray(arr) ? arr.join(sep) : arr || ""
+  );
+  eleventyConfig.addFilter("toSlugs", (input, sep = " ") => {
+    const arr = Array.isArray(input) ? input : input ? [input] : [];
+    return arr.map(slugify).join(sep);
+  });
+
+  // Build a deduplicated categories collection with metadata (hasArtwork, thumb, posts)
+  eleventyConfig.addCollection("categoriesData", function(collectionApi) {
+    const items = collectionApi.getAll();
+    const map = new Map();
+
+    // consider only items coming from src/posts/**
+    items.forEach(item => {
+      if (!item.inputPath) return;
+      // only posts under /posts/
+      if (!item.inputPath.includes("/posts/")) return;
+      const cats = item.data && item.data.categories ? item.data.categories : [];
+      (Array.isArray(cats) ? cats : [cats]).forEach(cat => {
+        if (!cat) return;
+        const name = String(cat);
+        if (!map.has(name)) {
+          map.set(name, { name: name, posts: [], hasArtwork: false, nonArtworkCount: 0, thumb: null });
+        }
+        const entry = map.get(name);
+        entry.posts.push(item);
+        // mark artwork categories and pick representative thumbnail if available
+        if (item.inputPath.includes('/posts/artwork/')) {
+          entry.hasArtwork = true;
+          if (item.data && item.data.image && !entry.thumb) {
+            entry.thumb = '/images/artwork/thumbnails/' + item.data.image;
+          }
+        } else {
+          entry.nonArtworkCount = (entry.nonArtworkCount || 0) + 1;
+        }
+      });
     });
 
-    eleventyConfig.addCollection("exhibition-winter", function(collectionApi) {
-        return collectionApi.getFilteredByTags("artwork", "exhibition-winter");
-      });
-    
-    eleventyConfig.addCollection("exhibitions", function(collectionApi) {
-        return collectionApi.getFilteredByGlob("./src/posts/exhibitions/*.md");
-      });
+    // Convert to array and sort alphabetically
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+  });
 
-    // Directory configuration
-    return {
-        markdownTemplateEngine: 'njk',
-        htmlTemplateEngine: 'njk',
-        templateFormats: ['md', 'njk', 'html', '11ty.js'],
-        dir: {
-            input: 'src',
-            output: 'dist'
-        }
-    };
+  // Collection: categories -> array of { name, posts[] }
+  eleventyConfig.addCollection("categories", function (collectionApi) {
+    const map = new Map();
+    collectionApi.getAll().forEach((item) => {
+      const cats = item.data && item.data.categories;
+      if (!cats) return;
+      const arr = Array.isArray(cats) ? cats : [cats];
+      arr.forEach((cat) => {
+        if (!map.has(cat)) map.set(cat, []);
+        map.get(cat).push(item);
+      });
+    });
+
+    return [...map.entries()].map(([name, posts]) => ({
+      name,
+      // sort posts newest-first if they have dates
+      posts: posts.sort((a, b) => (b.date || 0) - (a.date || 0)),
+    }));
+  });
+
+  // Collection: allCategories -> simple alphabetized array of category names
+  eleventyConfig.addCollection("allCategories", function (collectionApi) {
+    const set = new Set();
+    collectionApi.getAll().forEach((item) => {
+      const cats = item.data && item.data.categories;
+      if (!cats) return;
+      (Array.isArray(cats) ? cats : [cats]).forEach((c) => set.add(c));
+    });
+    return [...set].sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: "base" })
+    );
+  });
+
+  eleventyConfig.addCollection("blinkies", function(collection) {
+    const blinkieDir = path.join(__dirname, "src", "images", "blinkies");
+    let files = [];
+    try {
+      files = fs.readdirSync(blinkieDir);
+    } catch (e) {
+      files = [];
+    }
+    return files.map(file => ({ fileSlug: file, url: `images/blinkies/${file}` }));
+  });
+
+  eleventyConfig.addCollection("exhibition-winter", function(collectionApi) {
+    return collectionApi.getFilteredByTags("artwork", "exhibition-winter");
+  });
+
+  eleventyConfig.addCollection("exhibitions", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("./src/posts/exhibitions/*.md");
+  });
+
+  // Directory / template configuration
+  return {
+    markdownTemplateEngine: 'njk',
+    htmlTemplateEngine: 'njk',
+    templateFormats: ['md', 'njk', 'html', '11ty.js'],
+    dir: {
+      input: 'src',
+      output: 'dist'
+    }
+  };
 };

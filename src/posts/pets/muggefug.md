@@ -4,7 +4,7 @@ posttitle: "Muggefug"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: calm
 x: 25
 y: 76
 image: muggefug.png

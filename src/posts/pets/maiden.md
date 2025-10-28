@@ -4,7 +4,7 @@ posttitle: "Maiden in Black"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: calm
 x: 70
 y: 30
 image: maiden.png

@@ -4,7 +4,7 @@ posttitle: "Drobot"
 comment: A fan pet of Drobot from Skylanders.
 home: Moderneopets
 personality: bubbly
-spirit: energetic
+spirit: ecstatic
 x: 5
 y: 30
 image: drobot.png

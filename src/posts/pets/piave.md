@@ -4,7 +4,7 @@ posttitle: "Piave"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: eerie
 x: 0
 y: 50
 image: piave.png

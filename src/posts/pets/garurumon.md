@@ -4,7 +4,7 @@ posttitle: "Garurumon"
 comment: A fan pet of Garurumon from Digimon.
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: calm
 x: 80
 y: 73
 image: garurumon.png

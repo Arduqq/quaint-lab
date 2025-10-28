@@ -19,12 +19,14 @@ title: "aql"
   <link href="/css/comment-widget.css" rel="stylesheet" type="text/css" media="all">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="wrapper">
     {% include 'sidebar.njk' %}
-    <main>
+    <main id="main-content">
       {{ content | safe }}
     </main>
-    {% include 'footer.njk' %}
   </div>
+
+    {% include 'footer.njk' %}
 </body>
 </html>

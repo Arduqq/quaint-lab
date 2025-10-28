@@ -4,7 +4,7 @@ posttitle: "Sterni"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: ecstatic
 x: 2
 y: 40
 image: sterni.png

@@ -4,7 +4,7 @@ posttitle: "Unimon"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: calm
 x: 80
 y: 85
 image: unimon.png

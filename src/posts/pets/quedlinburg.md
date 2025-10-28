@@ -4,7 +4,7 @@ posttitle: "Quedlinburg"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: calm
 x: 15
 y: 45
 image: quedlinburg.png

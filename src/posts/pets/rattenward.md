@@ -4,7 +4,7 @@ posttitle: "Rattenward"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: alien
 x: 25
 y: 40
 image: rattenward.png

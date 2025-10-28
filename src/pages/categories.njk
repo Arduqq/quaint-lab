@@ -1,0 +1,78 @@
+---
+pagination:
+  data: collections.categoriesData
+  size: 1
+  alias: category
+permalink: "/categories/{{ category.name | slug }}/"
+layout: base.njk
+---
+
+{% if category.hasArtwork is defined %}
+
+
+{# Determine whether this category contains artwork posts so we can choose the gallery layout #}
+{# categoriesData provides hasArtwork and thumb already; fallback to scanning posts if missing #}
+  {% set hasArtwork = category.hasArtwork %}
+{% else %}
+  {% set hasArtwork = false %}
+  {% for p in category.posts %}
+    {% if p.inputPath and '/posts/artwork/' in p.inputPath %}
+      {% set hasArtwork = true %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{# If category has artwork, show artwork gallery first #}
+{% if hasArtwork %}
+
+<section>
+    {# Breadcrumbs: show where this category is reachable from (atelier vs archive) #}
+    {% include 'breadcrumbs.njk' %}
+  <h2>Category: {{ category.name }}</h2>
+  <div class="illustration-gallery">
+    {% for post in category.posts %}
+      {% if post.inputPath and '/posts/artwork/' in post.inputPath %}
+        <a class="illustration" href="{{ post.url }}">
+          <img src="/images/artwork/thumbnails/{{ post.data.image }}" alt="{{ post.data.posttitle or post.data.title }}">
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+  </section>
+{% endif %}
+
+{# Always show non-artwork posts as a feed if present #}
+{% set hasNonArtwork = false %}
+{% for post in category.posts %}
+  {% if not (post.inputPath and '/posts/artwork/' in post.inputPath) %}
+    {% set hasNonArtwork = true %}
+  {% endif %}
+{% endfor %}
+
+{% if hasNonArtwork %}
+
+  <section class="feed">
+    {% include 'breadcrumbs.njk' %}
+        {# Breadcrumbs: show where this category is reachable from (atelier vs archive) #}
+  <h2>Category: {{ category.name }}</h2>
+    {% for post in category.posts | reverse %}
+      {% if not (post.inputPath and '/posts/artwork/' in post.inputPath) %}
+        <a class="post" href="{{ post.url }}" data-categories="{{ post.data.categories | toSlugs }}">
+          <div class="post-info">
+            <div class="post-meta"><time>{{ post.data.date }}</time></div>
+            <h3 class="post-title">{{ post.data.posttitle or post.data.title }}</h3>
+            <p class="post-excerpt">{{ post.data.excerpt }}</p>
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </section>
+{% endif %}
+
+{% if hasArtwork %}
+  <p><a href="/atelier/">← Back to atelier</a></p>
+{% else %}
+  <p><a href="/archive/">← Back to archive</a></p>
+{% endif %}
+
+</section>

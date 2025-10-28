@@ -15,6 +15,8 @@
     <main class="post">
       <section>
         {% block nav %}{% endblock %}
+        {# Render breadcrumbs (will infer Atelier vs Archive when possible) #}
+        {% include "breadcrumbs.njk" %}
         <h1 title="{{ posttitle }}">{{ posttitle }}</h1>
         {% block main_content %}
           {{ content | safe }}
@@ -23,11 +25,14 @@
     </main>
 
     <aside>
-      <div id="c_widget"></div>
-      <script src="/js/comment-widget.js"></script>
+    <p>
+      <b>Thoughts? I wanna put them here! Write me:</b>
+      <a href="mailto:lyonid@protonmail.com?subject=[{{posttitle}}]"
+        > lyonid [at] protonmail [dot] com</a
+      >
+    </p>
     </aside>
 
-    {% include "footer.njk" %}
   </div>
 </body>
 </html>

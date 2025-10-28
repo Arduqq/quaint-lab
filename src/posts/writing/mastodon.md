@@ -4,6 +4,7 @@ excerpt: "After a long time of shabby googling, uneducated guessing, and no time
 vibe: "chill"
 layout: post.njk
 categories: [fediverse, experiences]
+date: 2022-06
 tags: post
 ---
 

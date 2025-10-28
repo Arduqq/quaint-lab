@@ -4,7 +4,7 @@ posttitle: "Nim"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: ecstatic
 x: 45
 y: 20
 image: nim.png

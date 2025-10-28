@@ -3,20 +3,42 @@ title: "Writing Archive"
 layout: base.njk
 permalink: "archive/"
 ---
+
+
 <section>
   <h2>{{ title }}</h2>
-  <p>I write about online culture, games and maybe research.</p>
+  <p class="tagline">Short takes on games, online culture and occasional research — quick reads and longer essays.</p>
 </section>
+
+<section class="categories-list">
+  <h2>Categories</h2>
+  <ul class="category-pills" aria-label="Categories">
+    {# Compact pill list for non-artwork categories #}
+    {% for category in collections.categoriesData %}
+      {% if category.nonArtworkCount and category.nonArtworkCount > 0 %}
+        <li>
+          <a class="pill category-entry" href="/categories/{{ category.name | slug }}/" title="{{ category.name }}: {{ category.nonArtworkCount }} posts">
+            {% if category.thumb %}
+              <img class="pill-thumb" src="{{ category.thumb }}" alt="" aria-hidden="true" />
+            {% endif %}
+            <span class="pill-label">{{ category.name }}</span>
+            <small class="pill-count" aria-hidden="true">{{ category.nonArtworkCount }}</small>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</section>
+
 <section class="feed">
   <h2>Latest Archivals</h2>
-  {% for post in collections.post %}
-  <a class="post" href="{{post.url}}">
-    <div class="post-info">
-      <h3>{{ post.data.posttitle }}</h3>
-      <p>{{ post.data.excerpt }}
-        {% for category in post.data.categories %}
-        {% endfor %}</p>
-    </div>
-  </a>
+  {% for post in collections.post | reverse %}
+    <a class="post" href="{{ post.url }}" data-categories="{{ post.data.categories | toSlugs }}">
+      <div class="post-info">
+        <div class="post-meta"><time>{{ post.data.date }}</time></div>
+        <h3 class="post-title">{{ post.data.posttitle or post.data.title }}</h3>
+        <p class="post-excerpt">{{ post.data.excerpt }}</p>
+      </div>
+    </a>
   {% endfor %}
 </section>

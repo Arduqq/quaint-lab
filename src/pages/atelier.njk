@@ -5,7 +5,7 @@ permalink: "atelier/"
 ---
 <section>
   <h2>{{ title }}</h2>
-  <p>This is the place where I collect all the artwork I have been putting out there. Instead of throwing everything at you, we are doing exhibitions over here at the atelier. That helps me organize my work, but also give it more context, so you aren't just looking at stuff.</p>
+  <p class="tagline">Curated galleries of my artwork — browse exhibitions or click a gallery to see the pieces inside.</p>
 </section>
 
 <section class="exhibitions">
@@ -13,6 +13,43 @@ permalink: "atelier/"
     {% for exhibition in collections.exhibitions %}
       <a href="{{ exhibition.url }}"><img src="/images/{{ exhibition.data.poster }}" alt="{{ exhibition.data.posttitle }}"> </a>
     {% endfor %}
+</section>
+
+<section class="categories-gallery">
+  <h2>Galleries by Category</h2>
+  <div class="category-grid">
+    {# Avoid duplicate category names by tracking previous name (collections.categories may contain duplicates) #}
+    {% set _prev = "" %}
+    {% for category in collections.categoriesData %}
+      {% if category.name != _prev %}
+        {# find a representative artwork thumbnail for this category, if any #}
+        {% set thumb = "" %}
+        {% for p in category.posts %}
+          {% if p.inputPath and '/posts/artwork/' in p.inputPath and p.data.image and thumb == "" %}
+            {% set thumb = '/images/artwork/thumbnails/' + p.data.image %}
+          {% endif %}
+        {% endfor %}
+
+        {# Only render categories that actually contain artwork posts #}
+            {% if thumb %}
+              {# count artwork posts in this category #}
+              {% set artCount = 0 %}
+              {% for p in category.posts %}
+                {% if p.inputPath and '/posts/artwork/' in p.inputPath %}
+                  {% set artCount = artCount + 1 %}
+                {% endif %}
+              {% endfor %}
+              <a class="category-tile" href="/categories/{{ category.name | slug }}/" title="{{ category.name }}: {{ artCount }} artworks">
+                <img src="{{ thumb }}" alt="{{ category.name }} gallery" />
+                <span class="category-name">{{ category.name }}</span>
+                <span class="category-count" role="status" aria-label="{{ artCount }} artworks" title="{{ artCount }} artworks">{{ artCount }}</span>
+              </a>
+            {% endif %}
+
+        {% set _prev = category.name %}
+      {% endif %}
+    {% endfor %}
+  </div>
 </section>
 
 <section class="feed">

@@ -4,6 +4,7 @@ excerpt: "This is a German poem that I wrote about a person licking arm pits of 
 vibe: "very weird"
 layout: post.njk
 categories: [misc]
+date: 2024-08 
 tags: post
 ---
 

@@ -4,7 +4,7 @@ posttitle: "Lady Maria"
 comment: ...
 home: Moderneopets
 personality: trashy
-spirit: kind
+spirit: eerie
 x: 75
 y: 40
 image: maria.png
