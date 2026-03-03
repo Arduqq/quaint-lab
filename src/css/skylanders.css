@@ -1,0 +1,199 @@
+body.skylanders-page {
+    background: url(/images/clouds.png) repeat;
+    background-color: #004a99;
+    font-family: 'Atkinson Hyperlegible', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+.skylanders-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(0, 74, 153, 0.85);
+    border: 4px solid #ffcc00;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2);
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.skylanders-header {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 2px dashed #ffcc00;
+    margin-bottom: 30px;
+}
+
+.skylanders-header h1 {
+    font-size: 3rem;
+    color: #ffcc00;
+    text-shadow: 3px 3px 0px #b38f00, 5px 5px 15px rgba(0, 0, 0, 0.5);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.skylanders-header a {
+    color: #99ccff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+
+.skylanders-header a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.game-section {
+    margin-bottom: 50px;
+}
+
+.game-section h2 {
+    color: #ffcc00;
+    border-bottom: 2px solid #ffcc00;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+.skylanders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+/* Default state: Greyed out and static */
+.skylander-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border: 2px solid #336699;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.skylander-item img {
+    max-width: 110px;
+    height: auto;
+    filter: grayscale(100%) opacity(0.6);
+    margin-bottom: 12px;
+    transition: filter 0.3s, transform 0.3s;
+}
+
+.skylander-name {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #cccccc;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    margin-top: auto;
+}
+
+/* Collected state: Colored and animated */
+.skylander-item.collected {
+    background: linear-gradient(135deg, #0059b3 0%, #003366 100%);
+    border-color: #3399ff;
+}
+
+.skylander-item.collected img {
+    filter: grayscale(0%) opacity(1) drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+}
+
+.skylander-item.collected .skylander-name {
+    color: #ffffff;
+}
+
+.skylander-item.collected::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Hover effects ONLY for collected items */
+.skylander-item.collected:hover {
+    transform: translateY(-10px) scale(1.05);
+    border-color: #ffcc00;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 204, 0, 0.4);
+    z-index: 10;
+}
+
+.skylander-item.collected:hover img {
+    transform: rotate(5deg);
+}
+
+.skylander-metadata {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.meta-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.meta-icon.level {
+    color: #ffcc00;
+}
+
+.meta-icon.favorite {
+    color: #ff4d4d;
+    font-size: 0.8rem;
+}
+
+.meta-icon.card {
+    color: #99ccff;
+    font-size: 0.8rem;
+}
+
+/* Tooltip fix for the new items */
+#custom-tooltip {
+    z-index: 10001 !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #002b55;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ffcc00;
+    border-radius: 6px;
+    border: 3px solid #002b55;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffe066;
+}

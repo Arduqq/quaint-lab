@@ -1,10 +1,12 @@
 ---
-posttitle: "Virtual Digital Hypothetical Pet"
-excerpt: "Digimon as a franchise transcended in so many hemispheres. Looking back at old designs, I can't help but marvel at the character and edge combined with utter inconsistency. I ADORE it. Of course my snow kitty would turn into a ball with guns that would turn into a celestial mecha - why the hell would it not? It's bold, it's dumb, and it makes me wonder why I, as a gender non-conforming person, am so enthralled by it. And why do I get the very same feeling when I care for some virtual pet?"
-vibe: "lamentful"
+posttitle: Virtual Digital Hypothetical Pet
+excerpt: Digimon as a franchise transcended in so many hemispheres. Looking back at old designs, I can't help but marvel at the character and edge combined with utter inconsistency. I ADORE it. Of course my snow kitty would turn into a ball with guns that would turn into a celestial mecha - why the hell would it not? It's bold, it's dumb, and it makes me wonder why I, as a gender non-conforming person, am so enthralled by it. And why do I get the very same feeling when I care for some virtual pet?
+vibe: lamentful
 layout: post.njk
-date: 2022-01 
-categories: [pet sites, ramblings]
+date: 2022-01-22
+categories:
+  - pet sites
+  - ramblings
 tags: post
 ---
 

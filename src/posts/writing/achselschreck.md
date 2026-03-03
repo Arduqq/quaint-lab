@@ -1,10 +1,11 @@
 ---
-posttitle: "Der Achselschreck (the pit fright)"
-excerpt: "This is a German poem that I wrote about a person licking arm pits of children who would not shower, turning into arm pit licking demons themselves. It was made in lights of a past magazine that I co-created called Blasius (you may recognize that name as it's what my Mastodon instance is called!)."
-vibe: "very weird"
+posttitle: Der Achselschreck (the pit fright)
+excerpt: This is a German poem that I wrote about a person licking arm pits of children who would not shower, turning into arm pit licking demons themselves. It was made in lights of a past magazine that I co-created called Blasius (you may recognize that name as it's what my Mastodon instance is called!).
+vibe: very weird
 layout: post.njk
-categories: [misc]
-date: 2024-08 
+categories:
+  - misc
+date: 2024-08-01
 tags: post
 ---
 

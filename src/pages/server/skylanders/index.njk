@@ -1,0 +1,69 @@
+---
+title: Skylanders Collection
+layout: blank.njk
+permalink: "/server/skylanders/"
+---
+
+<link href="/css/skylanders.css" rel="stylesheet" type="text/css" media="all">
+
+<div class="skylanders-page-wrapper">
+    <style>
+        body {
+            background: url(/images/clouds.png) repeat !important;
+            background-color: #004a99 !important;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .wrapper {
+            max-width: none !important;
+            padding: 0 !important;
+        }
+        
+        #main-content {
+            padding: 0 !important;
+        }
+    </style>
+
+    <div class="skylanders-container">
+        <header class="skylanders-header">
+            <h1>Skylanders Collection</h1>
+            <a href="/server/">[ Return to Server Index ]</a>
+        </header>
+
+        {% for entry in skylanders %}
+        <section class="game-section">
+            <h2>{{ entry.game }}</h2>
+            <div class="skylanders-grid">
+                {% for character in entry.characters %}
+                <div class="skylander-item {{ 'collected' if character.owned }}" 
+                     data-tooltip="{{ character.name }}"
+                     data-tooltip-image="{{ character.tooltip_image if character.tooltip_image else character.image }}">
+                    <img src="{{ character.image }}" alt="{{ character.name }}" loading="lazy">
+                    <span class="skylander-name">{{ character.name }}</span>
+                    
+                    {% if character.owned %}
+                    <div class="skylander-metadata">
+                        {% if character.level %}
+                        <div class="meta-icon level" data-tooltip="Level {{ character.level }}">Lvl {{ character.level }}</div>
+                        {% endif %}
+                        
+                        {% if character.favorite %}
+                        <div class="meta-icon favorite" data-tooltip="Favorite">❤️</div>
+                        {% endif %}
+                        
+                        {% if character.is_card %}
+                        <div class="meta-icon card" data-tooltip="Card Version">🎴</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="/js/tooltip.js"></script>

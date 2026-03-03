@@ -1,0 +1,30 @@
+body {
+    background: url(../images/base.gif) no-repeat;
+    background-size: cover;
+    image-rendering: pixelated;
+    font-family: Consolas, monaco, monospace;
+    background-color: rgb(12, 32, 18);
+}
+
+a {
+    color: #85ff98;
+}
+
+main {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0 auto;
+    justify-content: center;
+    background: rgb(12, 32, 18);
+    color: #85ff98;
+    padding: 1rem;
+    max-width:800px;
+    width: 90%;
+
+}
+
+main > section {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    padding: 1rem;
+}

@@ -5,62 +5,191 @@ permalink: "microgame/"
 ---
 
 <section class="decorator">
-  <h2>{{ title }}</h2>
-  <p>This is a simple tool to generate a cute little microgame cartridge form WarioWare: DIY for the Nintendo DS. It's one of my most beloved video games, and I needed this generator for a small project.</p>
-  <div class="controls">
-    <div class="option-group">
-      <h2>Choose Base</h2>
-      <div id="baseOptions" class="option-grid"></div>
-      <label>Base Color:
-        <input type="color" id="baseColor" value="#ffffff" />
-      </label>
-    </div>
-
-    <div class="option-group">
-      <h2>Choose Cover</h2>
-      <div id="coverOptions" class="option-grid"></div>
-      <label>Cover Color 1:
-        <input type="color" id="coverColorAccent" value="#ff00ff" />
-      </label>
-      <label>Cover Color 2:
-        <input type="color" id="coverColorBorder" value="#000000" />
-      </label>
-    </div>
+  <div class="decorator-header">
+    <h2>{{ title }}</h2>
+    <p>This is a simple tool to generate a cute little microgame cartridge from <strong>WarioWare: DIY</strong> for the Nintendo DS. It's one of my most beloved video games, and I needed this generator for a small project.</p>
   </div>
 
-  <canvas id="preview" width="112" height="104"></canvas>
+  <div class="decorator-main">
+    <div class="canvas-container">
+      <canvas id="preview" width="112" height="104"></canvas>
+      <div class="action-buttons">
+        <button id="randomizeAll" class="btn primary" data-tooltip="Completely randomize the cartridge">Randomize All</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="option-group">
+        <div class="group-header">
+          <h3>Choose Base</h3>
+          <div class="color-picker-row">
+            <label>Base: <input type="color" id="baseColor" value="#ffffff" /></label>
+            <button class="btn-icon" data-random="baseColor" data-tooltip="Randomize base color">🎲</button>
+          </div>
+        </div>
+        <div id="baseOptions" class="option-grid"></div>
+      </div>
+
+      <div class="option-group">
+        <div class="group-header">
+          <h3>Choose Cover</h3>
+          <div class="color-picker-row">
+            <label>C1: <input type="color" id="coverColorAccent" value="#ff00ff" /></label>
+            <button class="btn-icon" data-random="coverColorAccent" data-tooltip="Randomize accent color">🎲</button>
+            <label>C2: <input type="color" id="coverColorBorder" value="#000000" /></label>
+            <button class="btn-icon" data-random="coverColorBorder" data-tooltip="Randomize border color">🎲</button>
+          </div>
+        </div>
+        <div id="coverOptions" class="option-grid"></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <style>
-  .decorator .controls {
+  .decorator {
+    padding: var(--padding-unit);
+    background: var(--section-background-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+  }
+
+  .decorator-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 1rem;
+  }
+
+  .decorator-main {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
     justify-content: center;
+    align-items: flex-start;
+  }
+
+  .canvas-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    position: sticky;
+    top: 2rem;
+    flex: 0 0 auto;
+  }
+
+  .decorator canvas {
+    width: 224px;
+    height: 208px;
+    image-rendering: pixelated;
+    border: 4px solid var(--border-color);
+    background: #222;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-radius: 12px;
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    border: 2px solid var(--border-color);
+    background: var(--section-background-color);
+    color: var(--text-color);
+    font-family: var(--main-font);
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    background: var(--highlight-color);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .btn.primary {
+    background: var(--accent-color, #ffcc00);
+  }
+
+  .btn-icon {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+
+  .btn-icon:hover {
+    background: var(--highlight-color);
+  }
+
+  .decorator .controls {
+    flex: 1 1 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   .decorator .option-group {
-    flex: 1 1 300px;
+    background: rgba(0,0,0,0.03);
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .decorator h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-left: 4px solid var(--border-color);
+    padding-left: 0.5rem;
+  }
+
+  .color-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .decorator .option-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 0.75rem;
   }
 
   .decorator .option-grid label {
-    display: inline-block;
-    border: 2px solid transparent;
-    border-radius: 6px;
+    display: block;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
+    background: #fff;
+    padding: 4px;
+  }
+
+  .decorator .option-grid label:hover {
+    border-color: var(--highlight-color);
+    transform: scale(1.05);
   }
 
   .option-grid input[type="radio"]:checked + img {
-    outline: 2px solid #0077ff;
+    outline: 2px solid var(--highlight-color);
+    background: var(--highlight-color);
+    border-radius: 4px;
   }
 
   .option-grid input {
@@ -71,28 +200,29 @@ permalink: "microgame/"
     display: block;
     width: 100%;
     image-rendering: pixelated;
-    background: #eee;
   }
 
-  .decorator canvas {
-    width: 224px; /* 2x upscaled from 112 */
-    height: 208px; /* 2x upscaled from 104 */
-    image-rendering: pixelated;
-    border: 2px solid #aaa;
-    display: block;
-    margin: 2rem auto;
+  .decorator input[type="color"] {
+    border: 1px solid var(--border-color);
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 4px;
+    background: none;
+    vertical-align: middle;
   }
 
-  .decorator label {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  @media (max-width: 600px) {
-    .decorator .controls {
+  @media (max-width: 900px) {
+    .decorator-main {
       flex-direction: column;
       align-items: center;
+    }
+    .canvas-container {
+      position: static;
+    }
+    .decorator .controls {
+      width: 100%;
     }
   }
 </style>
@@ -102,9 +232,9 @@ permalink: "microgame/"
 const baseList = Array.from({ length: 8 }, (_, i) => `base-${i + 1}.png`);
 const coverList = Array.from({ length: 16 }, (_, i) => `cover-${i + 1}.png`);
 
+const baseColor = document.getElementById("baseColor");
 const coverColorAccent = document.getElementById("coverColorAccent");
 const coverColorBorder = document.getElementById("coverColorBorder");
-
 
 const canvas = document.getElementById("preview");
 const ctx = canvas.getContext("2d");
@@ -196,15 +326,12 @@ function colorizeImageTwoTone(img, accentHex, borderHex) {
     if (a === 0) continue;
 
     if (r === 255 && g === 255 && b === 255) {
-      // White pixel: use border color
       data[i] = br;
       data[i + 1] = bg;
       data[i + 2] = bb;
     } else if (r === 0 && g === 0 && b === 0) {
-      // Black pixel: make transparent
       data[i + 3] = 0;
     } else {
-      // All others: use accent color
       data[i] = ar;
       data[i + 1] = ag;
       data[i + 2] = ab;
@@ -216,7 +343,7 @@ function colorizeImageTwoTone(img, accentHex, borderHex) {
 }
 
 
-const SCALE = 4;
+const SCALE = 8;
 const WIDTH = IMAGE_SIZEX;
 const HEIGHT = IMAGE_SIZEY;
 
@@ -238,15 +365,43 @@ async function draw() {
     coverColorBorder.value
   );
 
-  ctx.imageSmoothingEnabled = false; // <- Important to preserve pixel sharpness
-
-  // Draw scaled base
-  ctx.drawImage(baseLayer, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH * SCALE, HEIGHT * SCALE);
-  // Draw scaled cover
-  ctx.drawImage(coverLayer, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH * SCALE, HEIGHT * SCALE);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(baseLayer, 0, 0, WIDTH, HEIGHT, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(coverLayer, 0, 0, WIDTH, HEIGHT, 0, 0, canvas.width, canvas.height);
 }
 
+function getRandomHex() {
+  return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+}
 
+function randomizeAll() {
+  const randomBaseIdx = Math.floor(Math.random() * baseList.length);
+  const randomCoverIdx = Math.floor(Math.random() * coverList.length);
+  
+  selectedBase = baseList[randomBaseIdx];
+  selectedCover = coverList[randomCoverIdx];
+  
+  document.getElementById(`base-${selectedBase}`).checked = true;
+  document.getElementById(`cover-${selectedCover}`).checked = true;
+  
+  baseColor.value = getRandomHex();
+  coverColorAccent.value = getRandomHex();
+  coverColorBorder.value = getRandomHex();
+  draw();
+}
+
+document.getElementById('randomizeAll').addEventListener('click', randomizeAll);
+
+document.querySelectorAll('[data-random]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.getAttribute('data-random');
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.value = getRandomHex();
+      draw();
+    }
+  });
+});
 
 createOptions("baseOptions", baseList, "base", "base", name => {
   selectedBase = name;
@@ -258,10 +413,8 @@ createOptions("coverOptions", coverList, "cover", "cover", name => {
 });
 
 [baseColor, coverColorAccent, coverColorBorder].forEach(input =>
-  input.addEventListener("change", draw)
+  input.addEventListener("input", draw)
 );
 
-
 draw();
-
 </script>

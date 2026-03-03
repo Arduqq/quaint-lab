@@ -1,10 +1,12 @@
 ---
-posttitle: "Mastodon Reckoning of Blasius"
-excerpt: "After a long time of shabby googling, uneducated guessing, and no time at all, I managed to set up my very own Mastodon instance. I genuinely loved it, and it brought me back to some great feelings that I had when I wrote silly bots and websites. This project is not only one of passion but also an attempt to move closer to a friend group that I thoroughly treasure. Mending together two creative ideas into one is what I am trying to achieve here, but we will see how it goes. It's all a test run."
-vibe: "chill"
+posttitle: Mastodon Reckoning of Blasius
+excerpt: After a long time of shabby googling, uneducated guessing, and no time at all, I managed to set up my very own Mastodon instance. I genuinely loved it, and it brought me back to some great feelings that I had when I wrote silly bots and websites. This project is not only one of passion but also an attempt to move closer to a friend group that I thoroughly treasure. Mending together two creative ideas into one is what I am trying to achieve here, but we will see how it goes. It's all a test run.
+vibe: chill
 layout: post.njk
-categories: [fediverse, experiences]
-date: 2022-06
+categories:
+  - fediverse
+  - experiences
+date: 2022-06-24
 tags: post
 ---
 

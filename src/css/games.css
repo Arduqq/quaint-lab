@@ -1,0 +1,67 @@
+/* Cartridge grid and tooltip styles for /games/ */
+/* shelf-style grid: many narrow spines on a wooden shelf */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  align-items: end;
+  position: relative;
+  padding-bottom: 2.4rem; /* space for shelf bar */
+  justify-items: center;
+}
+
+.game-card {
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  background: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  transition: transform .12s ease;
+}
+.game-card:hover,
+.game-card:focus {
+  transform: translateY(-6px) rotate(-1deg);
+  z-index: 2;
+}
+
+.cartridge {
+  width: 140px; /* uniform container size */
+  height: 160px;
+  display:block;
+  overflow: hidden;
+  background: transparent;
+  border-radius: 0;
+  position: relative;
+}
+.cartridge img {
+  width: 140px;
+  height: 160px;
+  object-fit: contain; /* preserve PNG transparency */
+  display: block;
+  image-rendering: auto;
+}
+
+.game-meta { padding-top: .5rem; display:none; }
+.game-meta h3 { margin: 0; font-size: .9rem; }
+.game-meta .short { display:none; }
+
+/* vertical title on the spine for non-image fallback / accessible label */
+
+.games-grid::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 18px;
+  bottom: 0.6rem;
+  background: linear-gradient(180deg,#b87944,#8b4f2a);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.45) inset;
+  border-top: 2px solid rgba(0,0,0,0.25);
+  z-index: 0;
+}
+
+/* ensure cards float above shelf */
+.game-card { z-index: 2; }

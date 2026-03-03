@@ -1,10 +1,12 @@
 ---
 posttitle: "Subeta: A Muse in Disguise"
-excerpt: "A walk in the public park, the wind blowing at your naked ears, the gravel building up in those shoes that you should have thrown out long ago, and, from time to time, you see a squirrel quickly jumping over the tree branches that have been losing their leaves quite early this year. You take a deep breath, you exhale and just can't wait to go home - to cover in your favorite blanket. Only then you realize that this home that you are longing for is of cardboard and that path that you have been walking on is of glue, paper and the most beautiful coat of paint. Visiting Subeta is a stroll in a field of splendid dreams that will fade away if you lose your focus. Well, for me at least."
-vibe: "kinda mad"
+excerpt: A walk in the public park, the wind blowing at your naked ears, the gravel building up in those shoes that you should have thrown out long ago, and, from time to time, you see a squirrel quickly jumping over the tree branches that have been losing their leaves quite early this year. You take a deep breath, you exhale and just can't wait to go home - to cover in your favorite blanket. Only then you realize that this home that you are longing for is of cardboard and that path that you have been walking on is of glue, paper and the most beautiful coat of paint. Visiting Subeta is a stroll in a field of splendid dreams that will fade away if you lose your focus. Well, for me at least.
+vibe: kinda mad
 layout: post.njk
-date: 2022-02 
-categories: [pet sites, ramblings]
+date: 2022-02-01
+categories:
+  - pet sites
+  - ramblings
 tags: post
 ---
 ## The Allure of Virtual Pet Sites

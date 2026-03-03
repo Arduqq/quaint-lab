@@ -1,43 +1,22 @@
 <aside>
   <h1 class="mutant">A Quaint Lab</h1>
-  <img src="/images/quaint-lab-hc.png">
-  <section id="about"><img class="alive nervous" style="float:left" src="/images/snail.png"><p>This is a laboratory. Please behave, and solely touch what is to be touched.</p></section>
+  <div class="site-logo" role="img"><a href="https://www.imood.com/users/Lyonid"><img src="https://moods.imood.com/display/uname-Lyonid/imood.gif" alt="The current mood of Lyonid at www.imood.com" border="0"></a></div>
+  
+  {% include 'appearance-switcher.njk' %}
+
+  <section id="about">
+<img class="alive nervous" style="float:left" src="/images/snail.png"><p>This is a laboratory. Please behave, and solely touch what is to be touched.</p></section>
   <h2>Navigation</h2>
   {% include 'navigation.njk' %}
-
   {# Categories moved to reads.njk and atelier.njk per layout decision #}
-  <fieldset id="theme-switcher">
-    <legend><h3>Themes</h3></legend>
-    <label><input type="radio" name="theme" value="contrast"> Contrast</label>
-    <label><input type="radio" name="theme" value="cute"> Cute</label>
-    <label><input type="radio" name="theme" value="bluemaro"> Bluemaro</label>
-    <label><input type="radio" name="theme" value="forest"> Forest</label>
-  </fieldset>
-  
-  <script>
-    const root = document.documentElement;
-    const radios = document.querySelectorAll('input[name="theme"]');
-    const savedTheme = localStorage.getItem('theme') || 'contrast';
-  
-    root.setAttribute('data-theme', savedTheme);
-  
-    // Set the correct radio as checked
-    radios.forEach(radio => {
-      if (radio.value === savedTheme) {
-        radio.checked = true;
-      }
-  
-      radio.addEventListener('change', (e) => {
-        const selectedTheme = e.target.value;
-        root.setAttribute('data-theme', selectedTheme);
-        localStorage.setItem('theme', selectedTheme);
-      });
-    });
-  </script>
-  
-  
 
-  <h2 title=""Webrings>Webrings</h2>
+  <h2 title="Sound"s>Sound</h2>
+  <audio controls loop>
+    <source src="/sounds/home.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <h2 title="Webrings">Webrings</h2>
 
 </iframe><object title="Melonland Surf Club Webring Integration" id="melonland-surf-club" data="https://melonland.net/surf-badge.svg?fill=#129e8d" type="image/svg+xml" style="width: 100px; height: 100px;"></object>
   <h2 title="Some Artwork">Some Artwork</h2>

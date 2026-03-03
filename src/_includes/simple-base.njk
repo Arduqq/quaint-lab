@@ -8,7 +8,7 @@
   <meta name="author" content="Lyonid" />
   <title>aql: {{ title }}{% if posttitle %} ~ {{ posttitle }}{% endif %}</title>
   <link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
-  <link href="/css/comment-widget.css" rel="stylesheet" type="text/css" media="all" />
+  <link href="/css/accessibility.css" rel="stylesheet" type="text/css" media="all">
 </head>
 <body>
   <div class="wrapper">
@@ -25,14 +25,15 @@
     </main>
 
     <aside>
-    <p>
-      <b>Thoughts? I wanna put them here! Write me:</b>
-      <a href="mailto:lyonid@protonmail.com?subject=[{{posttitle}}]"
-        > lyonid [at] protonmail [dot] com</a
-      >
-    </p>
+      {% include 'appearance-switcher.njk' %}
+
+      <section>
+        <h3>Thoughts? I wanna put them here!</h3>
+        <p>Write me: <a href="mailto:lyonid@protonmail.com?subject=[{{posttitle}}]"
+          > lyonid [at] protonmail [dot] com</a></p>
+      </section>
     </aside>
 
   </div>
-</body>
-</html>
+
+  <script src="/js/tooltip.js"></script>

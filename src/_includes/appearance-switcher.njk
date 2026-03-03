@@ -1,0 +1,158 @@
+  <fieldset id="appearance-switcher" class="theme-picker">
+    <legend><h3>Themes</h3></legend>
+    
+    <div class="theme-list">
+      <label class="theme-option" data-theme-option="chaos">
+        <input type="radio" name="theme" value="chaos">
+        <span class="theme-name">Chaos</span>
+      </label>
+
+      <label class="theme-option" data-theme-option="ink">
+        <input type="radio" name="theme" value="ink">
+        <span class="theme-name">Ink</span>
+      </label>
+
+      <label class="theme-option" data-theme-option="juliet">
+        <input type="radio" name="theme" value="juliet">
+        <span class="theme-name">Juliet</span>
+      </label>
+
+      <label class="theme-option" data-theme-option="plus100">
+        <input type="radio" name="theme" value="plus100">
+        <span class="theme-name">Plus100</span>
+      </label>
+
+      <label class="theme-option" data-theme-option="sashimi">
+        <input type="radio" name="theme" value="sashimi">
+        <span class="theme-name">Sashimi</span>
+      </label>
+
+      <label class="theme-option" data-theme-option="sunsetred">
+        <input type="radio" name="theme" value="sunsetred">
+        <span class="theme-name">Sunset Red</span>
+      </label>
+
+      <label class="theme-option" data-theme-option="twilight">
+        <input type="radio" name="theme" value="twilight">
+        <span class="theme-name">Twilight</span>
+      </label>
+    </div>
+
+    <div class="destination-list">
+      <label class="destination-option" data-destination="sofia" data-tooltip="Sofia">
+        <input type="radio" name="destination" value="sofia">
+        <img src="/images/sofia.gif" alt="Sofia">
+      </label>
+
+      <label class="destination-option" data-destination="fjoron" data-tooltip="Fjoron">
+        <input type="radio" name="destination" value="fjoron">
+        <img src="/images/fjoron.gif" alt="Fjoron">
+      </label>
+
+      <label class="destination-option" data-destination="larva" data-tooltip="Larva">
+        <input type="radio" name="destination" value="larva">
+        <img src="/images/larva.gif" alt="Larva">
+      </label>
+
+      <label class="destination-option" data-destination="even-thicket" data-tooltip="Even Thicket">
+        <input type="radio" name="destination" value="even-thicket">
+        <img src="/images/even-thicket.gif" alt="Even Thicket">
+      </label>
+
+      <label class="destination-option" data-destination="first-mine" data-tooltip="First Mine">
+        <input type="radio" name="destination" value="first-mine">
+        <img src="/images/first-mine.gif" alt="First Mine">
+      </label>
+    </div>
+  </fieldset>
+
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const appearanceContainer = document.querySelector('#appearance-switcher');
+      if (!appearanceContainer) return;
+
+      // --- Theme Logic ---
+      const themeRadios = appearanceContainer.querySelectorAll('input[name="theme"]');
+      const themeLabels = appearanceContainer.querySelectorAll('.theme-option');
+      const savedTheme = localStorage.getItem('theme') || root.getAttribute('data-theme') || 'chaos';
+
+      function setTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        themeRadios.forEach(r => r.checked = (r.value === theme));
+        themeLabels.forEach(l => {
+          if (l.getAttribute('data-theme-option') === theme) l.classList.add('active');
+          else l.classList.remove('active');
+        });
+      }
+
+      setTheme(savedTheme);
+      themeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => setTheme(e.target.value));
+      });
+      themeLabels.forEach(label => {
+        label.addEventListener('click', (e) => {
+          const input = label.querySelector('input[name="theme"]');
+          if (input) {
+            input.checked = true;
+            setTheme(input.value);
+          }
+        });
+      });
+
+      // --- Destination Logic ---
+      const destMapping = {
+        'sofia': 'sofia.webp',
+        'fjoron': 'fjoron.webp',
+        'larva': 'larva.webp',
+        'even-thicket': 'even-thicket.webp',
+        'first-mine': 'first-mine.webp'
+      };      const destOptions = appearanceContainer.querySelectorAll('.destination-option');
+
+      function setDestination(name, skipBackground = false) {
+        if (!name || !destMapping[name]) name = 'sofia';
+        
+        if (!skipBackground) {
+          const url = '/images/destinations/' + destMapping[name];
+          root.style.setProperty('--destination-image', `url('${url}')`);
+        }
+        
+        localStorage.setItem('destination', name);
+
+        destOptions.forEach(o => {
+          const isMatch = o.getAttribute('data-destination') === name;
+          o.classList.toggle('active', isMatch);
+          const inp = o.querySelector('input[name="destination"]');
+          if (inp) inp.checked = isMatch;
+        });
+      }
+
+      const savedDest = localStorage.getItem('destination') || 'sofia';
+      setDestination(savedDest);
+
+      destOptions.forEach(opt => {
+        opt.addEventListener('click', (e) => {
+          const name = opt.getAttribute('data-destination');
+          if (!name || root.classList.contains('is-flying')) return;
+          
+          // Immediate UI feedback (selection highlight)
+          setDestination(name, true);
+
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setDestination(name);
+            return;
+          }
+
+          root.classList.add('is-flying');
+          setTimeout(() => {
+            // Actual background swap while in flight
+            setDestination(name);
+            root.classList.add('is-landing');
+            void root.offsetWidth;
+            root.classList.remove('is-flying', 'is-landing');
+          }, 800);
+        });
+      });
+    })();
+  </script>

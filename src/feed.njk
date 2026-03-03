@@ -1,0 +1,23 @@
+---
+permalink: "feed.xml"
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Quaint Lab</title>
+    <description>Short takes on games, online culture and occasional research — quick reads and longer essays.</description>
+    <link>https://unartur.neocities.org/</link>
+    <atom:link href="https://unartur.neocities.org/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>{{ collections.post | last | dateToRfc822 if collections.post | length > 0 else "" }}</lastBuildDate>
+    {% for post in collections.post | reverse %}
+    <item>
+      <title>{{ post.data.posttitle or post.data.title }}</title>
+      <link>https://unartur.neocities.org{{ post.url }}</link>
+      <description>{{ post.data.excerpt }}</description>
+      <pubDate>{{ post.date | dateToRfc822 }}</pubDate>
+      <guid>https://unartur.neocities.org{{ post.url }}</guid>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

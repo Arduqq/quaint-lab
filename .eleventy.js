@@ -7,7 +7,10 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("./src/js");
   eleventyConfig.addPassthroughCopy("./src/*.ico");
   eleventyConfig.addPassthroughCopy("./src/images");
+  eleventyConfig.addPassthroughCopy("./src/sounds");
   eleventyConfig.addPassthroughCopy("./src/fonts");
+  // Copy server pages' static assets (images/css) so they are available at /server/...
+  eleventyConfig.addPassthroughCopy({"./src/pages/server/fear-and-hunger": "server/fear-and-hunger"});
 
   // simple slug helper
   const slugify = (s = "") =>
@@ -24,6 +27,9 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addFilter("toSlugs", (input, sep = " ") => {
     const arr = Array.isArray(input) ? input : input ? [input] : [];
     return arr.map(slugify).join(sep);
+  });
+  eleventyConfig.addFilter("dateToRfc822", (date) => {
+    return new Date(date).toUTCString();
   });
 
   // Build a deduplicated categories collection with metadata (hasArtwork, thumb, posts)
@@ -111,6 +117,17 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.addCollection("exhibitions", function(collectionApi) {
     return collectionApi.getFilteredByGlob("./src/posts/exhibitions/*.md");
+  });
+
+  // Games collection: pick up explicit posts placed under src/posts/games/
+  eleventyConfig.addCollection("games", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("./src/posts/games/*.md").sort((a,b) => (b.date || 0) - (a.date || 0));
+  });
+
+  // Combined post collection for archive and RSS
+  eleventyConfig.addCollection("post", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("./src/posts/writing/*.md")
+      .sort((a, b) => (a.date || 0) - (b.date || 0));
   });
 
   // Directory / template configuration

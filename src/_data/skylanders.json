@@ -1,0 +1,1535 @@
+[
+  {
+    "game": "Skylanders Spyro's Adventure",
+    "characters": [
+      {
+        "name": "Spyro",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/63/SpyroS1.png/120px-SpyroS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Double Trouble",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/ef/DoubleTroubleS1.png/120px-DoubleTroubleS1.png",
+        "owned": true,
+        "level": 5,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Wrecking Ball",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/3e/WreckingBallS1.png/120px-WreckingBallS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Voodood",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d1/VoodoodS1.png/120px-VoodoodS1.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Trigger Happy",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b4/TriggerHappyS1.png/120px-TriggerHappyS1.png",
+        "owned": true,
+        "level": 3,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Drobot",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/79/DrobotS1.png/120px-DrobotS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": "https://i.imgur.com/PpsM7od.png"
+      },
+      {
+        "name": "Drill Sergeant",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/20/Drill_SergeantS1.png/120px-Drill_SergeantS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Boomer",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/a/ad/BoomerS1.png/120px-BoomerS1.png",
+        "owned": true,
+        "level": 9,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Gill Grunt",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/46/GillGruntS1.png/120px-GillGruntS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Zap",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/1/1c/ZapS1.png/120px-ZapS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Slam Bam",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/1/1e/SlamBamS1.png/120px-SlamBamS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Wham-Shell",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/de/WhamShellS1.png/120px-WhamShellS1.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Eruptor",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/e3/EruptorS1.png/120px-EruptorS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Ignitor",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/70/IgnitorS1.png/120px-IgnitorS1.png",
+        "owned": true,
+        "level": 6,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Flameslinger",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b8/FlameslingerS1.png/120px-FlameslingerS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Sunburn",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/61/SunburnS1.png/120px-SunburnS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Stealth Elf",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/77/StealthElfS1.png/120px-StealthElfS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Zook",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/fd/ZookS1.png/120px-ZookS1.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Stump Smash",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/41/StumpSmashS1.png/120px-StumpSmashS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Camo",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/4b/CamoS1.png/120px-CamoS1.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Chop Chop",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/fd/ChopChopS1.png/120px-ChopChopS1.png",
+        "owned": true,
+        "level": 4,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Cynder",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/97/CynderS1.png/120px-CynderS1.png",
+        "owned": true,
+        "level": 19,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Hex",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b2/HexS1.png/120px-HexS1.png",
+        "owned": true,
+        "level": 8,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Ghost Roaster",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/69/GhostRoasterS1.png/120px-GhostRoasterS1.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Terrafin",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d5/TerrafinS1.png/120px-TerrafinS1.png",
+        "owned": true,
+        "level": 9,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Prism Break",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/c5/PrismBreakS1.png/120px-PrismBreakS1.png",
+        "owned": true,
+        "level": 2,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Bash",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/1/1a/BashS1.png/120px-BashS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Dino-Rang",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/e0/DinoRangS1.png/120px-DinoRangS1.png",
+        "owned": true,
+        "level": 5,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Whirlwind",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d1/WhirlwindS1.png/120px-WhirlwindS1.png",
+        "owned": true,
+        "level": 10,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Lightning Rod",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/e7/LightningRodS1.png/120px-LightningRodS1.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Sonic Boom",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/cf/SonicBoomS1.png/120px-SonicBoomS1.png",
+        "owned": true,
+        "level": 4,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Warnado",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/fe/WarnadoS1.png/120px-WarnadoS1.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      }
+    ]
+  },
+  {
+    "game": "Skylanders Giants",
+    "characters": [
+      {
+        "name": "Ninjini",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/0e/Ninjini.png/120px-Ninjini.png",
+        "owned": true,
+        "level": 2,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Bouncer",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f5/Bouncer.png/120px-Bouncer.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": true,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Thumpback",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b9/Thumpback.png/120px-Thumpback.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Hot Head",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/95/HotHead.png/120px-HotHead.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Tree Rex",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/29/TreeRex.png/120px-TreeRex.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Eye-Brawl",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/5/5b/EyeBrawl.png/120px-EyeBrawl.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": true,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Crusher",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/7a/Crusher.png/120px-Crusher.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Swarm",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/1/1e/Swarm.png/120px-Swarm.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Pop Fizz",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/33/PopFizzS1.png/120px-PopFizzS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Sprocket",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/4d/SprocketS1.png/120px-SprocketS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Chill",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/3d/ChillS1.png/120px-ChillS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Hot Dog",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/6a/HotDogS1.png/120px-HotDogS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": true,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Shroomboom",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d7/ShroomboomS1.png/120px-ShroomboomS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Fright Rider",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/fe/FrightRider.png/120px-FrightRider.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Flashwing",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d3/Flashwing.png/120px-Flashwing.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Jet Vac",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/22/JetVacS1.png/120px-JetVacS1.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      }
+    ]
+  },
+  {
+    "game": "Skylanders Swap Force",
+    "characters": [
+      {
+        "name": "Hoot Loop",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/40/HootLoop.png/120px-HootLoop.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Trap Shadow",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/2a/TrapShadow.png/120px-TrapShadow.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Magna Charge",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/03/MagnaCharge.png/120px-MagnaCharge.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Spy Rise",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/3f/SpyRise.png/120px-SpyRise.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Wash Buckler",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/36/WashBuckler.png/120px-WashBuckler.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Freeze Blade",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f0/FreezeBlade.png/120px-FreezeBlade.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Blast Zone",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/05/BlastZone.png/120px-BlastZone.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Fire Kraken",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/20/FireKraken.png/120px-FireKraken.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Stink Bomb",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/91/StinkBomb.png/120px-StinkBomb.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Grilla Drilla",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/66/GrillaDrilla.png/120px-GrillaDrilla.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Rattle Shake",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/5/59/RattleShake.png/120px-RattleShake.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Night Shift",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/74/NightShift.png/120px-NightShift.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Doom Stone",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/7d/DoomStone.png/120px-DoomStone.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Rubble Rouser",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/fc/RubbleRouser.png/120px-RubbleRouser.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Free Ranger",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/a/a5/FreeRanger.png/120px-FreeRanger.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Boom Jet",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/1/1d/BoomJet.png/120px-BoomJet.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Star Strike",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/a/a6/StarStrike.png/120px-StarStrike.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Dune Bug",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/c7/DuneBug.png/120px-DuneBug.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Countdown",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/05/Countdown.png/120px-Countdown.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Wind-Up",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/78/WindUp.png/120px-WindUp.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Riptide",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f6/Riptide.png/120px-Riptide.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Punk Shock",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/42/PunkShock.png/120px-PunkShock.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Fryno",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/0a/FrynoS1.png/120px-FrynoS1.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Smolderdash",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/2c/Smolderdash.png/120px-Smolderdash.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Bumble Blast",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/a/ab/BumbleBlast.png/120px-BumbleBlast.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Zoo Lou",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/48/ZooLou.png/120px-ZooLou.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Roller Brawl",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/9b/RollerBrawl.png/120px-RollerBrawl.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Grim Creeper",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/9a/GrimCreeper.png/120px-GrimCreeper.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Scorp",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/25/Scorp.png/120px-Scorp.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Slobber Tooth",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/95/SlobberTooth.png/120px-SlobberTooth.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Pop Thorn",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/21/PopThorn.png/120px-PopThorn.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Scratch",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/0a/ScratchToy.png/120px-ScratchToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      }
+    ]
+  },
+  {
+    "game": "Skylanders Trap Team",
+    "characters": [
+      {
+        "name": "Blastermind",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d1/BlastermindToy.png/120px-BlastermindToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Enigma",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/36/EnigmaToy.png/120px-EnigmaToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Jawbreaker",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/7d/JawbreakerToy.png/120px-JawbreakerToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Gearshift",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/03/GearshiftToy.png/120px-GearshiftToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Snap Shot",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/46/SnapShotToy.png/120px-SnapShotToy.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Lob-Star",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/ee/LobStarToy.png/120px-LobStarToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Wildfire",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/7a/WildfireToy.png/120px-WildfireToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Ka-Boom",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/95/KaBoomToy.png/120px-KaBoomToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Bushwhack",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/7e/BushwhackToy.png/120px-BushwhackToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Tuff Luck",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/a/a8/TuffLuckToy.png/120px-TuffLuckToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Krypt King",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/eb/KryptKingToy.png/120px-KryptKingToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Short Cut",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/6a/ShortCutToy.png/120px-ShortCutToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Wallop",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f6/WallopToy.png/120px-WallopToy.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Head Rush",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/21/HeadRushToy.png/120px-HeadRushToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Gusto",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/1/1d/GustoToy.png/120px-GustoToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Thunderbolt",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/fd/ThunderboltToy.png/120px-ThunderboltToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Knight Light",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/cb/KnightLightToy.png/120px-KnightLightToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Knight Mare",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/df/KnightMareToy.png/120px-KnightMareToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "D\u00e9j\u00e0 Vu",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b1/DejaVuToy.png/120px-DejaVuToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Cobra Cadabra",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/ec/CobraCadabraToy.png/120px-CobraCadabraToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Chopper",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/3e/ChopperToy.png/120px-ChopperToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Tread Head",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/dd/TreadHeadToy.png/120px-TreadHeadToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Flip Wreck",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/a/aa/FlipWreckToy.png/120px-FlipWreckToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Echo",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b9/EchoToy.png/120px-EchoToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Torch",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/1/19/TorchToy.jpg/120px-TorchToy.jpg",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Trail Blazer",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b5/TrailBlazerToy.png/120px-TrailBlazerToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Food Fight",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/65/FoodFightToy.png/120px-FoodFightToy.png",
+        "owned": true,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "High Five",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/37/HighFiveToy.png/120px-HighFiveToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Bat Spin",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/37/BatSpinToy.png/120px-BatSpinToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Funny Bone",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/0b/FunnyBoneToy.png/120px-FunnyBoneToy.png",
+        "owned": true,
+        "level": 1,
+        "favorite": true,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Fist Bump",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/6a/FistBumpToy.png/120px-FistBumpToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Rocky Roll",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/8/89/RockyRollToy.png/120px-RockyRollToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Blades",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/91/BladesToy.png/120px-BladesToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Fling Kong",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/33/FlingKongToy.png/120px-FlingKongToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Spotlight",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/0a/SpotlightToy.png/120px-SpotlightToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Blackout",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/ec/BlackoutToy.png/120px-BlackoutToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      }
+    ]
+  },
+  {
+    "game": "Skylanders Superchargers",
+    "characters": [
+      {
+        "name": "Splat",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/ca/SplatToy.png/120px-SplatToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Big Bubble Pop Fizz",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f3/BigBubblePopFizzToy.png/120px-BigBubblePopFizzToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "High Volt",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/e9/HighVoltToy.png/120px-HighVoltToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Double Dare Trigger Happy",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/8/82/DoubleDareTriggerHappyToy.png/120px-DoubleDareTriggerHappyToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Dive-Clops",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/21/SkylandersWebsite_dive-clops.png/116px-SkylandersWebsite_dive-clops.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Deep Dive Gill Grunt",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/c1/DeepDiveGillGruntToy.png/120px-DeepDiveGillGruntToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Spitfire",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b4/SpitfireToy.png/120px-SpitfireToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Lava Lance Eruptor",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f5/LavaLanceEruptorToy.png/120px-LavaLanceEruptorToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Thrillipede",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/0d/ThrillipedeToy.png/120px-ThrillipedeToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Super Shot Stealth Elf",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/0/0f/SuperShotStealthElfToy.png/120px-SuperShotStealthElfToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Fiesta",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/44/FiestaToy.png/120px-FiestaToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Bone Bash Roller Brawl",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/2d/BoneBashRollerBrawlToy.png/120px-BoneBashRollerBrawlToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Smash Hit",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/39/SmashHitToy.png/120px-SmashHitToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Shark Shooter Terrafin",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/6/61/SharkShooterTerrafinToy.png/120px-SharkShooterTerrafinToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Stormblade",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/5/54/StormbladeToy.png/120px-StormbladeToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Hurricane Jet-Vac",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/1/1f/HurricaneJetVacToy.png/120px-HurricaneJetVacToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Astroblast",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d2/AstroblastToy.png/120px-AstroblastToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Nightfall",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/4b/NightfallToy.png/120px-NightfallToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Hammer Slam Bowser",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/74/HammerSlamBowser.png/120px-HammerSlamBowser.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Turbo Charge Donkey Kong",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/cc/TurboChargeDonkeyKong.png/120px-TurboChargeDonkeyKong.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      }
+    ]
+  },
+  {
+    "game": "Skylanders Imaginators",
+    "characters": [
+      {
+        "name": "Buckshot",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d5/BuckshotToy.png/120px-BuckshotToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Mysticat",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/42/MysticatToy.png/120px-MysticatToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Pain-Yatta",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/e8/PainYattaToy.png/120px-PainYattaToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Chain Reaction",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f3/ChainReactionToy.png/120px-ChainReactionToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Ro-Bow",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/e/e5/RoBowToy.png/120px-RoBowToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Dr. Krankcase",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/c4/DrKrankcaseToy.png/120px-DrKrankcaseToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "King Pen",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/c/cb/KingPenToy.png/120px-KingPenToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Tidepool",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/39/TidepoolToy.png/120px-TidepoolToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Grave Clobber",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/5/5e/GraveClobberToy.png/120px-GraveClobberToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Ember",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/42/EmberToy.png/120px-EmberToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Flare Wolf",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/5/53/FlareWolfToy.png/120px-FlareWolfToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Tae Kwon Crow",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/93/TaeKwonCrowToy.png/120px-TaeKwonCrowToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Ambush",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d6/AmbushToy.png/120px-AmbushToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Boom Bloom",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/4e/BoomBloomToy.png/120px-BoomBloomToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Chompy Mage",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/a/a4/ChompyMageToy.png/120px-ChompyMageToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Chopscotch",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/7d/ChopscotchToy.png/120px-ChopscotchToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Pit Boss",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/31/PitBossToy.png/120px-PitBossToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Wolfgang",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f2/WolfgangToy.png/120px-WolfgangToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Barbella",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/9/97/BarbellaToy.png/120px-BarbellaToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Tri-Tip",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/5/52/TriTipToy.png/120px-TriTipToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Golden Queen",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/3/35/GoldenQueenToy.png/120px-GoldenQueenToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Air Strike",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/8/88/AirStrikeToy.png/120px-AirStrikeToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Wild Storm",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/7/76/WildStormToy.png/120px-WildStormToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Bad Juju",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/fd/BadJujuToy.png/120px-BadJujuToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Aurora",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/21/AuroraToy.png/120px-AuroraToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Blaster-Tron",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/49/BlasterTronToy.png/120px-BlasterTronToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Starcast",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/d/d4/StarcastToy.png/120px-StarcastToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Hood Sickle",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/2/23/HoodSickleToy.png/120px-HoodSickleToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Kaos",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/f/f8/KaosSenseiToy.png/120px-KaosSenseiToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Crash Bandicoot",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/b/b0/CrashBandicootSenseiToy.png/120px-CrashBandicootSenseiToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      },
+      {
+        "name": "Dr. Neo Cortex",
+        "image": "https://static.wikitide.net/quicksilvervaultwiki/thumb/4/4c/DrNeoCortexSenseiToy.png/120px-DrNeoCortexSenseiToy.png",
+        "owned": false,
+        "level": 1,
+        "favorite": false,
+        "is_card": false,
+        "tooltip_image": ""
+      }
+    ]
+  }
+]

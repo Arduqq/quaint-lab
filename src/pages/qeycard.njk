@@ -3,878 +3,583 @@ title: "The Qeycard Maker"
 layout: base.njk
 permalink: "qeycard/"
 ---
-  <script>
-    var c = null;
-    var ctx = null;
-    const assets = {
-      background: [
-        {
-          name: "null",
-          flavour: ""
-        },
-        {
-          name: "amethyst",
-          flavour: "Sturdy"
-        },
-        {
-          name: "aspique",
-          flavour: "Silly"
-        },
-        {
-          name: "desert",
-          flavour: "Leaking"
-        },
-        {
-          name: "dreams",
-          flavour: "Dreamy"
-        },
-        {
-          name: "drive",
-          flavour: "Flashy"
-        },
-        {
-          name: "evening",
-          flavour: "Calm"
-        },
-        {
-          name: "fire",
-          flavour: "Angry"
-        },
-        {
-          name: "gummiburg",
-          flavour: "Tall"
-        },
-        {
-          name: "lab",
-          flavour: "Busy"
-        },
-        {
-          name: "league",
-          flavour: "Fit"
-        },
-        {
-          name: "plains",
-          flavour: "Calm"
-        },
-        {
-          name: "space",
-          flavour: "Clever"
-        },
-        {
-          name: "spots",
-          flavour: "Clumsy"
-        },
-        {
-          name: "woods",
-          flavour: "Lost"
-        },
-        {
-          name: "wynter",
-          flavour: "Strong"
-        },
-        {
-          name: "broccoloxy",
-          flavour: "Flimsy"
-        },
-        {
-          name: "cases",
-          flavour: "Stonecold"
-        },
-        {
-          name: "cave",
-          flavour: "Hot"
-        },
-        {
-          name: "curious",
-          flavour: "Empty"
-        },
-        {
-          name: "greengoo",
-          flavour: "Gritty"
-        }
-      ],
-      skin: [
-        {
-          name: "null",
-          flavour: ""
-        },
-        {
-          name: "human1",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human2",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human3",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human4",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human5",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human6",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human7",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human8",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human9",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human10",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human11",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human12",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human13",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "human14",
-          flavour: "with dreams and hopes"
-        },
-        {
-          name: "aspeyx",
-          flavour: "from a planet unknown"
-        },
-        {
-          name: "castrum",
-          flavour: "of strong hands"
-        },
-        {
-          name: "confis",
-          flavour: "under thick coats of sugar"
-        },
-        {
-          name: "debinare",
-          flavour: "between rifts"
-        },
-        {
-          name: "dyiones",
-          flavour: "beneath flesh"
-        },
-        {
-          name: "elatine",
-          flavour: "on wobbling heights"
-        },
-        {
-          name: "erden",
-          flavour: "underground"
-        },
-        {
-          name: "goliath",
-          flavour: "in ruined state"
-        },
-        {
-          name: "gundr",
-          flavour: "within themselves"
-        },
-        {
-          name: "krimsen",
-          flavour: "out of leaking mountains"
-        },
-        {
-          name: "marshmel",
-          flavour: "in soft embrace"
-        },
-        {
-          name: "solare",
-          flavour: "in confinement"
-        },
-        {
-          name: "wynter",
-          flavour: "behind storming blizzards"
-        },
-        {
-          name: "berrygum",
-          flavour: "from berries"
-        },
-        {
-          name: "bubblegum",
-          flavour: "from bubbles"
-        },
-        {
-          name: "lemogum",
-          flavour: "from lemonade"
-        },
-        {
-          name: "cheese",
-          flavour: "through strings and bones"
-        },
-        {
-          name: "galaxis",
-          flavour: "over the entire world"
-        },
-        {
-          name: "networth",
-          flavour: "inside the cyberspace"
-        },
-        {
-          name: "split",
-          flavour: "next to you"
-        },
-        {
-          name: "tronnie",
-          flavour: "between planes of existence"
-        }
-      ],
-      base: [
-        {
-          name: "base",
-          flavour: ""
-        }
-      ],
-      mouth: [
-        {
-          name: "null",
-          flavour: ""
-        },
-        {
-          name: "bunny-boy",
-          flavour: "rests"
-        },
-        {
-          name: "cainhurst",
-          flavour: "dwells"
-        },
-        {
-          name: "creep",
-          flavour: "creeps"
-        },
-        {
-          name: "crunch",
-          flavour: "munches"
-        },
-        {
-          name: "formidable-grind",
-          flavour: "crunches"
-        },
-        {
-          name: "hmh",
-          flavour: "sleeps"
-        },
-        {
-          name: "hungry",
-          flavour: "slithers"
-        },
-        {
-          name: "pause",
-          flavour: "dances"
-        },
-        {
-          name: "point-three",
-          flavour: "lurks"
-        },
-        {
-          name: "rrrh",
-          flavour: "walks"
-        },
-        {
-          name: "sass",
-          flavour: "observes"
-        },
-        {
-          name: "smirky",
-          flavour: "smirks"
-        },
-        {
-          name: "wait-for-me",
-          flavour: "crawls"
-        },
-        {
-          name: "woah",
-          flavour: "cries"
-        },
-        {
-          name: "alien",
-          flavour: "abducts"
-        },
-        {
-          name: "blow",
-          flavour: "blows"
-        },
-        {
-          name: "broccoli",
-          flavour: "crunches"
-        },
-        {
-          name: "golden",
-          flavour: "shines"
-        },
-        {
-          name: "teeeeeth",
-          flavour: "grids"
-        },
-        {
-          name: "unimpressed",
-          flavour: "sighs"
-        },
-        {
-          name: "worm",
-          flavour: "slithers"
-        },
-      ],
-      eyes: [
-        {
-          name: "null",
-          flavour: ""
-        },
-        {
-          name: "blocute",
-          flavour: "fortunately"
-        },
-        {
-          name: "confused",
-          flavour: "unwell"
-        },
-        {
-          name: "cyclops",
-          flavour: "carefully"
-        },
-        {
-          name: "facet",
-          flavour: "rapidly"
-        },
-        {
-          name: "goggle",
-          flavour: "angrily"
-        },
-        {
-          name: "happy",
-          flavour: "happily"
-        },
-        {
-          name: "ksksks",
-          flavour: "silently"
-        },
-        {
-          name: "lizzard",
-          flavour: "loudly"
-        },
-        {
-          name: "shy",
-          flavour: "mindfully"
-        },
-        {
-          name: "sly",
-          flavour: "mindlessly"
-        },
-        {
-          name: "triple",
-          flavour: "carelessly"
-        },
-        {
-          name: "ugh",
-          flavour: "doubtfully"
-        },
-        {
-          name: "cloudeye",
-          flavour: "ambiguously"
-        },
-        {
-          name: "crying",
-          flavour: "unfortunately"
-        },
-        {
-          name: "curious",
-          flavour: "curiously"
-        },
-        {
-          name: "loose",
-          flavour: "loosely"
-        },
-        {
-          name: "rolleye",
-          flavour: "clumsily"
-        },
-        {
-          name: "sasgy",
-          flavour: "arrogantly"
-        },
-        {
-          name: "tripod",
-          flavour: "vividly"
-        },
-        {
-          name: "windmill",
-          flavour: "forcefully"
-        },
-        {
-          name: "xxx",
-          flavour: "finally"
-        },
-      ],
-      beard: [
-        {
-          name: "null",
-          flavour: ""
-        },
-        {
-          name: "boucheron",
-          flavour: "Helios",
-        },
-        {
-          name: "dad",
-          flavour: "Apex",
-        },
-        {
-          name: "dotty",
-          flavour: "Sector",
-        },
-        {
-          name: "fine-moustache",
-          flavour: "Cortex",
-        },
-        {
-          name: "i-swear-its-hip",
-          flavour: "Eterna",
-        },
-        {
-          name: "it-shapes-my-face",
-          flavour: "Vortex",
-        },
-        {
-          name: "it-will-grow-soon",
-          flavour: "Nebula",
-        },
-        {
-          name: "meow",
-          flavour: "Lunare",
-        },
-        {
-          name: "whoops",
-          flavour: "Solarum",
-        },
-        {
-          name: "wise",
-          flavour: "Observatorium",
-        },
-        {
-          name: "years",
-          flavour: "Botanicum",
-        },
-        {
-          name: "bed",
-          flavour: "Yingete"
-        },
-        {
-          name: "fade",
-          flavour: "Jiun"
-        },
-        {
-          name: "mushy",
-          flavour: "Parasola"
-        },
-        {
-          name: "rooted",
-          flavour: "Hydrus"
-        },
-        {
-          name: "turnip",
-          flavour: "Elex"
-        },
-      ],
-      hair: [
-        {
-          name: "null",
-          flavour: ""
-        },
-        {
-          name: "antenna",
-          flavour: "Ashera"
-        },
-        {
-          name: "buckle",
-          flavour: "Omnivore"
-        },
-        {
-          name: "comb",
-          flavour: "Atalante"
-        },
-        {
-          name: "coral",
-          flavour: "Minty"
-        },
-        {
-          name: "crown",
-          flavour: "Lucerne"
-        },
-        {
-          name: "evil",
-          flavour: "Sinister"
-        },
-        {
-          name: "fuzzy",
-          flavour: "Morningstar"
-        },
-        {
-          name: "gel",
-          flavour: "Quastenflosser"
-        },
-        {
-          name: "helmet",
-          flavour: "Windy"
-        },
-        {
-          name: "long",
-          flavour: "Elster"
-        },
-        {
-          name: "mess",
-          flavour: "Dumpster"
-        },
-        {
-          name: "scene",
-          flavour: "Veil"
-        },
-        {
-          name: "seamonster",
-          flavour: "Monado"
-        },
-        {
-          name: "snake",
-          flavour: "Lizard"
-        },
-        {
-          name: "spike",
-          flavour: "Madame"
-        },
-        {
-          name: "sun",
-          flavour: "Accord"
-        },
-        {
-          name: "tears",
-          flavour: "Hypernicus"
-        },
-        {
-          name: "tentacle",
-          flavour: "Omega"
-        },
-        {
-          name: "boxy",
-          flavour: "Quader"
-        },
-        {
-          name: "honoured",
-          flavour: "Vita"
-        },
-        {
-          name: "schwush",
-          flavour: "Zygrum"
-        },
-        {
-          name: "trying",
-          flavour: "Fatalis"
-        },
-        {
-          name: "cloudy",
-          flavour: "Flump"
-        },
-        {
-          name: "full",
-          flavour: "Iota"
-        },
-        {
-          name: "fullside",
-          flavour: "Feline"
-        },
-        {
-          name: "quiet",
-          flavour: "Canine"
-        },
-        {
-          name: "poodle",
-          flavour: "Intra"
-        },
-        {
-          name: "scrunch",
-          flavour: "Porta"
-        }
-      ],
-      clothes: [
-        {
-          name: "null",
-          flavour: ""
-        },
-        {
-          name: "coat",
-          flavour: "Gamma"
-        },
-        {
-          name: "hunk",
-          flavour: "South"
-        },
-        {
-          name: "leather",
-          flavour: "Tetra"
-        },
-        {
-          name: "mumu",
-          flavour: "Alpha"
-        },
-        {
-          name: "sweater",
-          flavour: "Delta"
-        },
-        {
-          name: "zip",
-          flavour: "Minor"
-        },
-        {
-          name: "apron",
-          flavour: "Major"
-        },
-        {
-          name: "bubbles",
-          flavour: "Epsilon"
-        },
-        {
-          name: "foil",
-          flavour: "My"
-        },
-        {
-          name: "pot",
-          flavour: "Iota"
-        },
-        {
-          name: "steel",
-          flavour: "My"
-        },
-        {
-          name: "stump",
-          flavour: "Xi"
-        },
-        {
-          name: "toilet",
-          flavour: "Pi"
-        }
-      ],
-      accessory: [
-        {
-          name: "null",
-          flavour: "",
-        },
-        {
-          name: "geckopride",
-          flavour: "",
-        },
-        {
-          name: "geckotrans",
-          flavour: "",
-        },
-        {
-          name: "geckonb",
-          flavour: "",
-        },
-        {
-          name: "geckoace",
-          flavour: "",
-        },
-        {
-          name: "geckoaro",
-          flavour: "",
-        },
-        {
-          name: "geckobi",
-          flavour: "",
-        },
-        {
-          name: "geckopan",
-          flavour: "",
-        },
-        {
-          name: "geckomlm",
-          flavour: "",
-        },
-        {
-          name: "geckolesbian",
-          flavour: "",
-        },
-        {
-          name: "geckopoly",
-          flavour: "",
-        },
-        {
-          name: "geckodisability",
-          flavour: "",
-        },
-        {
-          name: "geckointer",
-          flavour: "",
-        },
-        {
-          name: "geckogenderfluid",
-          flavour: "",
-        },
-        {
-          name: "geckogandalf",
-          flavour: "",
-        },
-      ]
-    }
 
-    var currentSelection = {
-      background: null,
-      skin: null,
-      base: "base",
-      mouth: null,
-      eyes: null,
-      beard: null,
-      hair: null,
-      clothes: null,
-      accessory: null,
-    };
-
-    var currentName = {
-      background: null,
-      skin: null,
-      base: "base",
-      mouth: null,
-      eyes: null,
-      beard: null,
-      hair: null,
-      clothes: null,
-      accessory: null,
-    }
-
-    function redraw() {
-      ctx.clearRect(0, 0, 500, 500);
-      for (const entry of Object.entries(currentSelection)) {
-        var property = document.getElementById(entry[0] + "-" + entry[1]);
-        var image = new Image();
-        image.src = '/images/qeycard/' +entry[0] + '/' + entry[1] + '.png';
-        ctx.drawImage(image, 0, 0, 500, 500 * image.height / image.width);
-      }
-    }
-
-    function randomize() {
-      options = [];
-      options.push(document.getElementsByClassName('background-option'));
-      options.push(document.getElementsByClassName('skin-option'));
-      options.push(document.getElementsByClassName('mouth-option'));
-      options.push(document.getElementsByClassName('eyes-option'));
-      options.push(document.getElementsByClassName('beard-option'));
-      options.push(document.getElementsByClassName('hair-option'));
-      options.push(document.getElementsByClassName('clothes-option'));
-      options.push(document.getElementsByClassName('accessory-option'));
-      for (const i in options) {
-        options[i][Math.floor(Math.random() * options[i].length)].click();
-
-      }
-      redraw();
-    }
-
-    function loadAssets() {
-      for (const entry of Object.entries(assets)) {
-        var category = entry[0];
-        var options = entry[1]
-        for (const value of Object.values(options)) {
-          var label = document.createElement('label');
-          var option = document.createElement('input');
-          var selected = null;
-          option.setAttribute("type", "radio")
-          option.id = category + '-' + value.name;
-          label.style.backgroundImage = 'url(/images/qeycard/' + category + '/' + value.name + '.png)';
-          label.setAttribute("for", category + '-' + value.name);
-          label.setAttribute("alt", value.name)
-          label.setAttribute("title", value.name)
-          option.id = category + '-' + value.name;
-          option.value = value.name;
-          option.name = category;
-          option.className = category + '-option';
-          label.appendChild(option);
-          option.addEventListener('change', function () {
-            currentSelection[this.name] = this.value;
-            currentName[this.name] = this.flavour;
-            redraw();
-          });
-          document.getElementById(category).appendChild(label);
-        }
-
-      }
-    }
-
-    function save() {
-
-      var link = document.createElement('a');
-      link.download = 'qeycard.png';
-      link.href = c.toDataURL('image/png')
-      link.click();
-    }
-
-    window.onload = function () {
-      loadAssets();
-      c = document.getElementById("canvas");
-      ctx = c.getContext("2d");
-      const randomizeButton = document.getElementById("randomize");
-      randomizeButton.addEventListener('click', function () {
-        randomize();
-      });
-      redraw();
-    }
-  </script>
-  <section>
+<section class="qey-decorator">
+  <div class="qey-header text-center">
     <h2>{{ title }}</h2>
-      <div class="maker">
-          <p><strong>Qeycard Maker v1.1</strong> Click together your own lab portrait. Right-click / Hold down the final
-            picture and save it for whatever purpose you like. No credits needed.</p>
-          <canvas id="canvas" width="500" height="500" style="border:1px solid #d3d3d3;"></canvas>
-          <div class="editor">
-            <input type="radio" id="category-background" name="category-nav" value="background">
-            <input type="radio" id="category-skin" name="category-nav" value="skin">
-            <input type="radio" id="category-mouth" name="category-nav" value="mouth">
-            <input type="radio" id="category-eyes" name="category-nav" value="eyes">
-            <input type="radio" id="category-beard" name="category-nav" value="beard">
-            <input type="radio" id="category-hair" name="category-nav" value="hair">
-            <input type="radio" id="category-clothes" name="category-nav" value="clothes">
-            <input type="radio" id="category-accessory" name="category-nav" value="accessory">
-            <button id="randomize">✨</button>
-            <label for="category-background">Background</label>
-            <label for="category-skin">Skin</label>
-            <label for="category-mouth">Mouth</label>
-            <label for="category-eyes">Eyes</label>
-            <label for="category-beard">Beard</label>
-            <label for="category-hair">Hair</label>
-            <label for="category-clothes">Clothes</label>
-            <label for="category-accessory">Accessory</label>
-            <button onClick="save()">💾</button>
-            <div class="category" id="background"></div>
-            <div class="category" id="skin"></div>
-            <div class="category" id="base"></div>
-            <div class="category" id="mouth"></div>
-            <div class="category" id="eyes"></div>
-            <div class="category" id="beard"></div>
-            <div class="category" id="hair"></div>
-            <div class="category" id="clothes"></div>
-            <div class="category" id="accessory"></div>
-  
-          </div>
-        </div>
-      <div class="changelog">
-        <p><strong>v1.2 PRISM Update</strong> Added 12 natural, 6 hair styles, and little Gecko accessories! 🌈 </p>
-        <p><strong>v1.1 The Broccoli Update</strong> Added 5 Backgrounds, 5 Beards, 7 Clothes, 9 Eyes, 4 Hair styles, 7
-          mouths and 9 skins. And it's a little ... planty! 🥦 Also made the page a little more pretty.</p>
+    <p><strong>Qeycard Maker v1.2</strong> — Click together your own lab portrait. Right-click or hold down the final picture to save it. No credits needed!</p>
+  </div>
+
+  <div class="qey-container">
+    <!-- Left Column -->
+    <div class="qey-column side-left">
+      <details open class="option-group">
+        <summary><h3>Background</h3></summary>
+        <div id="background" class="option-grid"></div>
+      </details>
+
+      <details open class="option-group">
+        <summary><h3>Skin</h3></summary>
+        <div id="skin" class="option-grid"></div>
+      </details>
+
+      <details class="option-group">
+        <summary><h3>Clothes</h3></summary>
+        <div id="clothes" class="option-grid"></div>
+      </details>
+
+      <details class="option-group">
+        <summary><h3>Accessory</h3></summary>
+        <div id="accessory" class="option-grid"></div>
+      </details>
+    </div>
+
+    <!-- Center Column -->
+    <div class="qey-column main-preview">
+      <div class="canvas-wrapper">
+        <canvas id="canvas" width="500" height="500"></canvas>
       </div>
-      </section>
+      <div class="action-buttons">
+        <button id="randomize" class="btn primary" data-tooltip="Completely randomize your Qeycard">✨ Randomize All</button>
+        <button id="save" class="btn" data-tooltip="Download your Qeycard">💾 Save Image</button>
+      </div>
+      
+      <div class="changelog mt-4">
+        <p><small><strong>v1.2 PRISM Update:</strong> Added 12 natural, 6 hair styles, and Gecko accessories! 🌈</small></p>
+        <p><small><strong>v1.1 Broccoli Update:</strong> Added planty backgrounds, beards, clothes, and more! 🥦</small></p>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="qey-column side-right">
+      <details open class="option-group">
+        <summary><h3>Hair</h3></summary>
+        <div id="hair" class="option-grid"></div>
+      </details>
+
+      <details open class="option-group">
+        <summary><h3>Eyes</h3></summary>
+        <div id="eyes" class="option-grid"></div>
+      </details>
+
+      <details class="option-group">
+        <summary><h3>Mouth</h3></summary>
+        <div id="mouth" class="option-grid"></div>
+      </details>
+
+      <details class="option-group">
+        <summary><h3>Beard</h3></summary>
+        <div id="beard" class="option-grid"></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .qey-decorator {
+    padding: var(--padding-unit);
+    background: var(--section-background-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .qey-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 1rem;
+  }
+
+  /* Desktop Grid Layout */
+  .qey-container {
+    display: grid;
+    grid-template-columns: 1fr 520px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .qey-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0; /* Prevents grid items from overflowing */
+  }
+
+  .main-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    position: sticky;
+    top: 1rem;
+  }
+
+  .canvas-wrapper {
+    background: #222;
+    padding: 10px;
+    border: 4px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 520px;
+    box-sizing: border-box;
+  }
+
+  #canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #fff;
+    image-rendering: pixelated;
+  }
+
+  .option-group {
+    background: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .option-group summary {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    background: rgba(0,0,0,0.05);
+    font-weight: bold;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+  }
+
+  .option-group summary:hover {
+    background: rgba(0,0,0,0.08);
+  }
+
+  .option-group summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .option-group summary::before {
+    content: '▶';
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+  }
+
+  .option-group[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  .option-group h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    display: inline;
+  }
+
+  .option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 0.4rem;
+    padding: 0.8rem;
+    max-height: 350px;
+    overflow-y: auto;
+  }
+
+  /* Custom checkbox style using the asset as background */
+  .option-grid label {
+    display: block;
+    aspect-ratio: 1;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    image-rendering: pixelated;
+    transition: all 0.15s;
+    background-color: #fff;
+    position: relative;
+  }
+
+  .option-grid label:hover {
+    transform: scale(1.08);
+    border-color: var(--highlight-color);
+    z-index: 1;
+  }
+
+  .option-grid input {
+    display: none;
+  }
+
+  .option-grid input:checked + span {
+    position: absolute;
+    inset: -2px;
+    border: 2.5px solid var(--highlight-color);
+    border-radius: 4px;
+    pointer-events: none;
+  }
+
+  .btn {
+    padding: 0.7rem 1.2rem;
+    border: 2px solid var(--border-color);
+    background: var(--section-background-color);
+    color: var(--text-color);
+    font-family: var(--main-font);
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    background: var(--highlight-color);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .btn.primary {
+    background: var(--accent-color, #ffcc00);
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .mt-4 { margin-top: 1rem; }
+  .text-center { text-align: center; }
+
+  /* Responsive Adjustments */
+  @media (max-width: 1200px) {
+    .qey-container {
+      grid-template-columns: 1fr 1fr;
+    }
+    .main-preview {
+      grid-column: span 2;
+      position: static;
+      order: -1;
+      margin-bottom: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .qey-container {
+      grid-template-columns: 1fr;
+    }
+    .main-preview {
+      grid-column: span 1;
+    }
+    .qey-decorator {
+      padding: 1rem;
+    }
+  }
+</style>
+
+<script type="module">
+  const assets = {
+    background: [
+      { name: "null", flavour: "" },
+      { name: "amethyst", flavour: "Sturdy" },
+      { name: "aspique", flavour: "Silly" },
+      { name: "desert", flavour: "Leaking" },
+      { name: "dreams", flavour: "Dreamy" },
+      { name: "drive", flavour: "Flashy" },
+      { name: "evening", flavour: "Calm" },
+      { name: "fire", flavour: "Angry" },
+      { name: "gummiburg", flavour: "Tall" },
+      { name: "lab", flavour: "Busy" },
+      { name: "league", flavour: "Fit" },
+      { name: "plains", flavour: "Calm" },
+      { name: "space", flavour: "Clever" },
+      { name: "spots", flavour: "Clumsy" },
+      { name: "woods", flavour: "Lost" },
+      { name: "wynter", flavour: "Strong" },
+      { name: "broccoloxy", flavour: "Flimsy" },
+      { name: "cases", flavour: "Stonecold" },
+      { name: "cave", flavour: "Hot" },
+      { name: "curious", flavour: "Empty" },
+      { name: "greengoo", flavour: "Gritty" }
+    ],
+    skin: [
+      { name: "null", flavour: "" },
+      { name: "human1", flavour: "with dreams and hopes" },
+      { name: "human2", flavour: "with dreams and hopes" },
+      { name: "human3", flavour: "with dreams and hopes" },
+      { name: "human4", flavour: "with dreams and hopes" },
+      { name: "human5", flavour: "with dreams and hopes" },
+      { name: "human6", flavour: "with dreams and hopes" },
+      { name: "human7", flavour: "with dreams and hopes" },
+      { name: "human8", flavour: "with dreams and hopes" },
+      { name: "human9", flavour: "with dreams and hopes" },
+      { name: "human10", flavour: "with dreams and hopes" },
+      { name: "human11", flavour: "with dreams and hopes" },
+      { name: "human12", flavour: "with dreams and hopes" },
+      { name: "human13", flavour: "with dreams and hopes" },
+      { name: "human14", flavour: "with dreams and hopes" },
+      { name: "aspeyx", flavour: "from a planet unknown" },
+      { name: "castrum", flavour: "of strong hands" },
+      { name: "confis", flavour: "under thick coats of sugar" },
+      { name: "debinare", flavour: "between rifts" },
+      { name: "dyiones", flavour: "beneath flesh" },
+      { name: "elatine", flavour: "on wobbling heights" },
+      { name: "erden", flavour: "underground" },
+      { name: "goliath", flavour: "in ruined state" },
+      { name: "gundr", flavour: "within themselves" },
+      { name: "krimsen", flavour: "out of leaking mountains" },
+      { name: "marshmel", flavour: "in soft embrace" },
+      { name: "solare", flavour: "in confinement" },
+      { name: "wynter", flavour: "behind storming blizzards" },
+      { name: "berrygum", flavour: "from berries" },
+      { name: "bubblegum", flavour: "from bubbles" },
+      { name: "lemogum", flavour: "from lemonade" },
+      { name: "cheese", flavour: "through strings and bones" },
+      { name: "galaxis", flavour: "over the entire world" },
+      { name: "networth", flavour: "inside the cyberspace" },
+      { name: "split", flavour: "next to you" },
+      { name: "tronnie", flavour: "between planes of existence" }
+    ],
+    base: [ { name: "base", flavour: "" } ],
+    mouth: [
+      { name: "null", flavour: "" },
+      { name: "bunny-boy", flavour: "rests" },
+      { name: "cainhurst", flavour: "dwells" },
+      { name: "creep", flavour: "creeps" },
+      { name: "crunch", flavour: "munches" },
+      { name: "formidable-grind", flavour: "crunches" },
+      { name: "hmh", flavour: "sleeps" },
+      { name: "hungry", flavour: "slithers" },
+      { name: "pause", flavour: "dances" },
+      { name: "point-three", flavour: "lurks" },
+      { name: "rrrh", flavour: "walks" },
+      { name: "sass", flavour: "observes" },
+      { name: "smirky", flavour: "smirks" },
+      { name: "wait-for-me", flavour: "crawls" },
+      { name: "woah", flavour: "cries" },
+      { name: "alien", flavour: "abducts" },
+      { name: "blow", flavour: "blows" },
+      { name: "broccoli", flavour: "crunches" },
+      { name: "golden", flavour: "shines" },
+      { name: "teeeeeth", flavour: "grids" },
+      { name: "unimpressed", flavour: "sighs" },
+      { name: "worm", flavour: "slithers" }
+    ],
+    eyes: [
+      { name: "null", flavour: "" },
+      { name: "blocute", flavour: "fortunately" },
+      { name: "confused", flavour: "unwell" },
+      { name: "cyclops", flavour: "carefully" },
+      { name: "facet", flavour: "rapidly" },
+      { name: "goggle", flavour: "angrily" },
+      { name: "happy", flavour: "happily" },
+      { name: "ksksks", flavour: "silently" },
+      { name: "lizzard", flavour: "loudly" },
+      { name: "shy", flavour: "mindfully" },
+      { name: "sly", flavour: "mindlessly" },
+      { name: "triple", flavour: "carelessly" },
+      { name: "ugh", flavour: "doubtfully" },
+      { name: "cloudeye", flavour: "ambiguously" },
+      { name: "crying", flavour: "unfortunately" },
+      { name: "curious", flavour: "curiously" },
+      { name: "loose", flavour: "loosely" },
+      { name: "rolleye", flavour: "clumsily" },
+      { name: "sasgy", flavour: "arrogantly" },
+      { name: "tripod", flavour: "vividly" },
+      { name: "windmill", flavour: "forcefully" },
+      { name: "xxx", flavour: "finally" }
+    ],
+    beard: [
+      { name: "null", flavour: "" },
+      { name: "boucheron", flavour: "Helios" },
+      { name: "dad", flavour: "Apex" },
+      { name: "dotty", flavour: "Sector" },
+      { name: "fine-moustache", flavour: "Cortex" },
+      { name: "i-swear-its-hip", flavour: "Eterna" },
+      { name: "it-shapes-my-face", flavour: "Vortex" },
+      { name: "it-will-grow-soon", flavour: "Nebula" },
+      { name: "meow", flavour: "Lunare" },
+      { name: "whoops", flavour: "Solarum" },
+      { name: "wise", flavour: "Observatorium" },
+      { name: "years", flavour: "Botanicum" },
+      { name: "bed", flavour: "Yingete" },
+      { name: "fade", flavour: "Jiun" },
+      { name: "mushy", flavour: "Parasola" },
+      { name: "rooted", flavour: "Hydrus" },
+      { name: "turnip", flavour: "Elex" }
+    ],
+    hair: [
+      { name: "null", flavour: "" },
+      { name: "antenna", flavour: "Ashera" },
+      { name: "buckle", flavour: "Omnivore" },
+      { name: "comb", flavour: "Atalante" },
+      { name: "coral", flavour: "Minty" },
+      { name: "crown", flavour: "Lucerne" },
+      { name: "evil", flavour: "Sinister" },
+      { name: "fuzzy", flavour: "Morningstar" },
+      { name: "gel", flavour: "Quastenflosser" },
+      { name: "helmet", flavour: "Windy" },
+      { name: "long", flavour: "Elster" },
+      { name: "mess", flavour: "Dumpster" },
+      { name: "scene", flavour: "Veil" },
+      { name: "seamonster", flavour: "Monado" },
+      { name: "snake", flavour: "Lizard" },
+      { name: "spike", flavour: "Madame" },
+      { name: "sun", flavour: "Accord" },
+      { name: "tears", flavour: "Hypernicus" },
+      { name: "tentacle", flavour: "Omega" },
+      { name: "boxy", flavour: "Quader" },
+      { name: "honoured", flavour: "Vita" },
+      { name: "schwush", flavour: "Zygrum" },
+      { name: "trying", flavour: "Fatalis" },
+      { name: "cloudy", flavour: "Flump" },
+      { name: "full", flavour: "Iota" },
+      { name: "fullside", flavour: "Feline" },
+      { name: "quiet", flavour: "Canine" },
+      { name: "poodle", flavour: "Intra" },
+      { name: "scrunch", flavour: "Porta" }
+    ],
+    clothes: [
+      { name: "null", flavour: "" },
+      { name: "coat", flavour: "Gamma" },
+      { name: "hunk", flavour: "South" },
+      { name: "leather", flavour: "Tetra" },
+      { name: "mumu", flavour: "Alpha" },
+      { name: "sweater", flavour: "Delta" },
+      { name: "zip", flavour: "Minor" },
+      { name: "apron", flavour: "Major" },
+      { name: "bubbles", flavour: "Epsilon" },
+      { name: "foil", flavour: "My" },
+      { name: "pot", flavour: "Iota" },
+      { name: "steel", flavour: "My" },
+      { name: "stump", flavour: "Xi" },
+      { name: "toilet", flavour: "Pi" }
+    ],
+    accessory: [
+      { name: "null", flavour: "" },
+      { name: "geckopride", flavour: "" },
+      { name: "geckotrans", flavour: "" },
+      { name: "geckonb", flavour: "" },
+      { name: "geckoace", flavour: "" },
+      { name: "geckoaro", flavour: "" },
+      { name: "geckobi", flavour: "" },
+      { name: "geckopan", flavour: "" },
+      { name: "geckomlm", flavour: "" },
+      { name: "geckolesbian", flavour: "" },
+      { name: "geckopoly", flavour: "" },
+      { name: "geckodisability", flavour: "" },
+      { name: "geckointer", flavour: "" },
+      { name: "geckogenderfluid", flavour: "" },
+      { name: "geckogandalf", flavour: "" }
+    ]
+  };
+
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  
+  const currentSelection = {
+    background: "null",
+    skin: "null",
+    base: "base",
+    clothes: "null",
+    accessory: "null",
+    hair: "null",
+    eyes: "null",
+    mouth: "null",
+    beard: "null"
+  };
+
+  const imageCache = {};
+
+  async function loadImage(category, name) {
+    const path = `/images/qeycard/${category}/${name}.png`;
+    if (imageCache[path]) return imageCache[path];
+    
+    return new Promise(resolve => {
+      const img = new Image();
+      img.src = path;
+      img.onload = () => {
+        imageCache[path] = img;
+        resolve(img);
+      };
+      img.onerror = () => resolve(null);
+    });
+  }
+
+  async function redraw() {
+    ctx.clearRect(0, 0, 500, 500);
+    const layers = ["background", "skin", "base", "clothes", "accessory", "beard", "mouth", "eyes", "hair"];
+    
+    for (const layer of layers) {
+      const name = currentSelection[layer];
+      if (name && name !== "null") {
+        const img = await loadImage(layer, name);
+        if (img) ctx.drawImage(img, 0, 0, 500, 500);
+      }
+    }
+  }
+
+  function loadAssets() {
+    for (const [category, items] of Object.entries(assets)) {
+      const container = document.getElementById(category);
+      if (!container) continue;
+
+      items.forEach(item => {
+        const label = document.createElement('label');
+        label.dataset.tooltip = item.name !== "null" ? item.name : "None";
+        label.style.backgroundImage = `url(/images/qeycard/${category}/${item.name}.png)`;
+        
+        const input = document.createElement('input');
+        input.type = "radio";
+        input.name = category;
+        input.value = item.name;
+        if (currentSelection[category] === item.name) input.checked = true;
+
+        const highlight = document.createElement('span');
+
+        label.appendChild(input);
+        label.appendChild(highlight);
+        
+        input.addEventListener('change', () => {
+          currentSelection[category] = item.name;
+          redraw();
+        });
+        
+        container.appendChild(label);
+      });
+    }
+  }
+
+  function randomize() {
+    for (const category of Object.keys(assets)) {
+      if (category === "base") continue;
+      const items = assets[category];
+      const randomItem = items[Math.floor(Math.random() * items.length)];
+      currentSelection[category] = randomItem.name;
+      
+      const input = document.querySelector(`input[name="${category}"][value="${randomItem.name}"]`);
+      if (input) input.checked = true;
+    }
+    redraw();
+  }
+
+  function save() {
+    const link = document.createElement('a');
+    link.download = 'qeycard.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  loadAssets();
+  redraw();
+
+  document.getElementById("randomize").addEventListener('click', randomize);
+  document.getElementById("save").addEventListener('click', save);
+</script>

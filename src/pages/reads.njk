@@ -7,7 +7,8 @@ permalink: "archive/"
 
 <section>
   <h2>{{ title }}</h2>
-  <p class="tagline">Short takes on games, online culture and occasional research — quick reads and longer essays.</p>
+  <p class="tagline">Short takes on games, online culture and occasional research — quick reads and longer essays.
+  <a href="/feed.xml" target="_blank">[RSS Feed]</a></p>
 </section>
 
 <section class="categories-list">
@@ -35,7 +36,7 @@ permalink: "archive/"
   {% for post in collections.post | reverse %}
     <a class="post" href="{{ post.url }}" data-categories="{{ post.data.categories | toSlugs }}">
       <div class="post-info">
-        <div class="post-meta"><time>{{ post.data.date }}</time></div>
+  <div class="post-meta"><time>{{ post.data.date.toLocaleDateString() }}</time></div>
         <h3 class="post-title">{{ post.data.posttitle or post.data.title }}</h3>
         <p class="post-excerpt">{{ post.data.excerpt }}</p>
       </div>

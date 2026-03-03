@@ -1,0 +1,24 @@
+---
+title: "Games"
+layout: base.njk
+permalink: "games/"
+---
+<section class="games-landing">
+  <h2>Games I've Been Playing</h2>
+  <p class="tagline">A small catalogue of recent playthroughs and impressions — click a cartridge for the full writeup.</p>
+  <link rel="stylesheet" href="/css/games.css">
+
+  <div class="games-grid">
+    {% for p in collections.games %}
+      <a class="game-card" href="{{ p.url }}" data-tooltip="{{ p.data.excerpt | e }}">
+        <div class="cartridge">
+          <img src="{{ p.data.image }}" alt="{{ p.data.posttitle }} thumbnail">
+        </div>
+        <div class="game-meta">
+          <h3>{{ p.data.posttitle }}</h3>
+          <p class="short">{{ p.data.excerpt }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>

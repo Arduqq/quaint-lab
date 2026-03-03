@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "writing/game-prices.md",
+                "file": "writing/achselschreck.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "game-prices"
+              "title": "achselschreck"
             }
           }
         ]
@@ -44,7 +44,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "Dateiexplorer"
             }
           },
           {
@@ -160,28 +160,33 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "bases:Create new base": false,
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "switcher:Schnellauswahl öffnen": false,
+      "graph:Graph-Ansicht öffnen": false,
+      "canvas:Neuen Canvas erstellen": false,
+      "daily-notes:Heutige Notiz öffnen": false,
+      "templates:Vorlage einfügen": false,
+      "command-palette:Befehlspalette öffnen": false,
+      "bases:Neue Base erstellen": false
     }
   },
   "active": "174493b5e7c3738c",
   "lastOpenFiles": [
-    "writing/virtual.md",
-    "embracing.md",
-    "writing/game-prices.md",
-    "and.md",
+    "artwork/watercolor/jellyfish.md",
+    "artwork/watercolor/triceratops.md",
+    "writing/My OSRS Quest Journey.md",
+    "writing/big-data-junko.md",
     "writing/achselschreck.md",
-    "writing/Untitled.md",
+    "writing/firstodon.md",
+    "writing/virtual.md",
+    "Untitled.base",
+    "Untitled.md",
+    "writing/game-prices.md",
+    "embracing.md",
+    "and.md",
     "writing/Untitled",
     "writing/mastodon.md",
     "writing/matrix.md",
     "writing/subeta.md",
-    "writing/firstodon.md",
     "pets/unimon.md",
     "pets/bebel.md",
     "pets/adenine.md",
@@ -194,10 +199,6 @@
     "artwork/arpg/slugratsona.md",
     "artwork/arpg/verdelet-1.md",
     "artwork/arpg/verdelet-2.md",
-    "artwork/arpg/pokemon-2.md",
-    "artwork/watercolor/triceratops.md",
-    "artwork/watercolor/jellyfish.md",
-    "artwork/karat/sergio-1.md",
-    "artwork/karat/sergio-6.md"
+    "artwork/arpg/pokemon-2.md"
   ]
 }
