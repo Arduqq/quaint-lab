@@ -1,0 +1,1124 @@
+---
+title: "Skylanders Card Maker"
+layout: blank.njk
+permalink: "/server/skylanders/nfc-card/"
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+  @font-face {
+    font-family: 'Critters';
+    src: url('/fonts/critters.woff');
+  }
+
+  body {
+    background: url(/images/ui/clouds.png) repeat;
+    background-color: #004a99;
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    color: #fff;
+  }
+  .wrapper { max-width: none !important; padding: 0 !important; }
+  #main-content { padding: 0 !important; }
+
+  .nfc-wrap { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  .nfc-header {
+    text-align: center; padding: 24px 24px 20px;
+    background: rgba(0, 20, 60, 0.75);
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    border-radius: 12px;
+    margin-bottom: 18px;
+  }
+  .nfc-header h1 { color: #ffcc00; font-size: 1.7rem; margin: 0 0 5px; text-transform: uppercase; letter-spacing: 2px; }
+  .nfc-header p { opacity: .65; max-width: 500px; margin: 0 auto 12px; font-size: .88rem; line-height: 1.5; }
+  .nfc-back { color: #99ccff; font-size: .82rem; text-decoration: none; }
+  .nfc-back:hover { color: #fff; }
+
+  .nfc-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr 300px;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .nfc-panel {
+    background: rgba(0, 20, 60, 0.75);
+    border: 1px solid rgba(255, 204, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .panel-title {
+    background: rgba(0, 0, 0, 0.35);
+    border-bottom: 1px solid rgba(255, 204, 0, 0.15);
+    padding: 9px 13px;
+    font-size: .68rem; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    color: #ffcc00;
+  }
+  .panel-body { padding: 10px 12px; }
+
+  .nfc-search {
+    width: 100%; box-sizing: border-box;
+    background: rgba(0,0,0,.35);
+    border: 1px solid rgba(255,204,0,.22);
+    border-radius: 5px;
+    color: #fff; padding: 6px 9px;
+    font-family: inherit; font-size: .82rem;
+    margin-bottom: 7px;
+  }
+  .nfc-search::placeholder { color: rgba(255,255,255,.3); }
+  .nfc-search:focus { outline: none; border-color: rgba(255,204,0,.65); }
+
+  .elem-filters { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 7px; }
+  .elem-btn {
+    background: rgba(0,0,0,.25);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 4px; padding: 3px; cursor: pointer;
+    transition: background .12s, border-color .12s; line-height: 0;
+  }
+  .elem-btn img { width: 19px; height: 19px; object-fit: contain; image-rendering: pixelated; }
+  .elem-btn.active { background: rgba(255,204,0,.2); border-color: #ffcc00; }
+  .elem-btn-clear {
+    background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.14);
+    border-radius: 4px; padding: 2px 6px; cursor: pointer;
+    color: rgba(255,255,255,.45); font-size: .68rem;
+    transition: color .12s; font-family: inherit;
+  }
+  .elem-btn-clear:hover { color: #fff; }
+
+  .char-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 4px; max-height: 500px; overflow-y: auto; padding-right: 2px;
+  }
+  .char-grid::-webkit-scrollbar { width: 4px; }
+  .char-grid::-webkit-scrollbar-track { background: rgba(0,0,0,.2); border-radius: 2px; }
+  .char-grid::-webkit-scrollbar-thumb { background: rgba(255,204,0,.3); border-radius: 2px; }
+
+  .char-thumb {
+    aspect-ratio: 1; background: rgba(0,0,0,.3);
+    border: 1.5px solid rgba(80,120,180,.22);
+    border-radius: 5px; cursor: pointer; overflow: hidden;
+    transition: border-color .12s, background .12s;
+  }
+  .char-thumb:hover { border-color: rgba(255,204,0,.5); background: rgba(0,60,120,.4); }
+  .char-thumb.selected { border-color: #ffcc00; background: rgba(0,80,160,.55); box-shadow: 0 0 0 1px #ffcc00; }
+  .char-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; }
+  .char-no-results { grid-column: span 4; text-align: center; padding: 20px; opacity: .4; font-size: .78rem; }
+
+  .panel-preview { position: sticky; top: 14px; }
+  .canvas-outer {
+    padding: 12px; display: flex; justify-content: center; align-items: flex-start;
+    background: rgba(0,0,0,.25);
+    border-bottom: 1px solid rgba(255,204,0,.1);
+  }
+  #card-canvas { width: auto; height: auto; max-width: 100%; display: block; border-radius: 4px; }
+
+  .preview-actions {
+    padding: 11px; display: flex; flex-direction: column; align-items: center; gap: 7px;
+  }
+  .nfc-btn {
+    background: rgba(255,204,0,.15); border: 2px solid rgba(255,204,0,.45);
+    color: #ffcc00; font-family: inherit; font-weight: bold; font-size: .88rem;
+    padding: 8px 20px; border-radius: 7px; cursor: pointer;
+    transition: background .12s; width: 100%; max-width: 260px;
+  }
+  .nfc-btn:hover { background: rgba(255,204,0,.3); border-color: #ffcc00; }
+  .nfc-btn:disabled { opacity: .32; cursor: default; }
+  .size-note { font-size: .7rem; opacity: .38; text-align: center; }
+
+  .opt-section { padding: 10px 13px; border-bottom: 1px solid rgba(255,255,255,.055); }
+  .opt-section:last-child { border-bottom: none; }
+  .opt-label { font-size: .66rem; text-transform: uppercase; letter-spacing: 1.2px; color: #ffcc00; margin-bottom: 7px; display: block; }
+
+  .bg-swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .bg-swatches.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+  .bg-swatch {
+    border: 2px solid rgba(255,255,255,.14); border-radius: 5px;
+    cursor: pointer; padding: 5px 7px; font-size: .72rem;
+    font-family: inherit; color: #fff; text-align: center;
+    transition: border-color .12s; font-weight: bold;
+  }
+  .bg-swatch:hover { border-color: rgba(255,204,0,.5); }
+  .bg-swatch.active { border-color: #ffcc00; }
+
+  .nfc-input {
+    width: 100%; box-sizing: border-box;
+    background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.18);
+    border-radius: 5px; color: #fff; padding: 6px 8px;
+    font-family: inherit; font-size: .82rem; margin-bottom: 4px;
+  }
+  .nfc-input:focus { outline: none; border-color: rgba(255,204,0,.6); }
+  textarea.nfc-input { resize: vertical; min-height: 60px; line-height: 1.4; }
+
+  .toggle-row {
+    display: flex; align-items: center; gap: 7px;
+    font-size: .8rem; color: rgba(255,255,255,.7);
+    cursor: pointer; user-select: none; margin-top: 4px;
+  }
+  .toggle-row input[type="checkbox"] { accent-color: #ffcc00; width: 13px; height: 13px; cursor: pointer; }
+
+  .attack-fields { margin-top: 8px; }
+  .attack-fields.hidden { display: none; }
+
+  .upload-label {
+    display: block; text-align: center;
+    background: rgba(0,0,0,.3); border: 1px dashed rgba(255,204,0,.35);
+    border-radius: 5px; padding: 8px; cursor: pointer;
+    font-size: .78rem; color: rgba(255,204,0,.7);
+    transition: border-color .12s, color .12s; margin-bottom: 5px;
+  }
+  .upload-label:hover { border-color: #ffcc00; color: #ffcc00; }
+  .upload-label input { display: none; }
+
+  .clear-btn {
+    background: transparent; border: 1px solid rgba(255,255,255,.18);
+    border-radius: 5px; color: rgba(255,255,255,.45); font-family: inherit;
+    font-size: .72rem; padding: 4px 10px; cursor: pointer; width: 100%;
+    transition: color .12s, border-color .12s;
+  }
+  .clear-btn:hover { color: #fff; border-color: rgba(255,255,255,.4); }
+  .custom-indicator { font-size: .7rem; color: #ffcc00; margin-top: 3px; text-align: center; display: none; }
+
+  /* Archive image picker */
+  .arc-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+  .arc-tab {
+    flex: 1; background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.14);
+    border-radius: 5px; color: rgba(255,255,255,.5); font-size: .72rem;
+    font-family: inherit; padding: 4px 0; cursor: pointer; transition: all .12s;
+  }
+  .arc-tab:hover { color: #fff; border-color: rgba(255,255,255,.35); }
+  .arc-tab.active { background: rgba(255,204,0,.15); border-color: #ffcc00; color: #ffcc00; }
+  .arc-gallery {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+    max-height: 220px; overflow-y: auto; padding-right: 2px;
+  }
+  .arc-gallery::-webkit-scrollbar { width: 4px; }
+  .arc-gallery::-webkit-scrollbar-track { background: rgba(0,0,0,.2); border-radius: 2px; }
+  .arc-gallery::-webkit-scrollbar-thumb { background: rgba(255,204,0,.3); border-radius: 2px; }
+  .arc-thumb {
+    aspect-ratio: 1; background: rgba(0,0,0,.35); border: 1.5px solid rgba(255,255,255,.1);
+    border-radius: 4px; overflow: hidden; cursor: pointer; padding: 0;
+    transition: border-color .12s;
+  }
+  .arc-thumb:hover { border-color: rgba(255,204,0,.5); }
+  .arc-thumb.selected { border-color: #ffcc00; box-shadow: 0 0 0 1px #ffcc00; }
+  .arc-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .arc-empty { font-size: .72rem; color: rgba(255,255,255,.35); line-height: 1.5; padding: 6px 0; }
+  .arc-status-msg { font-size: .68rem; color: rgba(255,255,255,.3); display: block; margin-top: 3px; }
+
+  @media (max-width: 960px) {
+    .nfc-layout { grid-template-columns: 1fr 1fr; }
+    .panel-preview { grid-column: span 2; order: -1; position: static; }
+    #card-canvas { max-height: 480px; }
+  }
+  @media (max-width: 580px) {
+    .nfc-layout { grid-template-columns: 1fr; }
+    .panel-preview { grid-column: 1; }
+  }
+</style>
+
+<div class="nfc-wrap">
+  <header class="nfc-header">
+    <h1>Skylanders Card Maker</h1>
+    <p>Build a custom NFC card for any Skylander and export a print-ready PNG at exactly 54 × 85.6 mm — standard NFC card size, ready for Cricut.</p>
+    <a href="/server/skylanders/" class="nfc-back">← Back to Collection</a>
+  </header>
+
+  <div class="nfc-layout">
+
+    <!-- Left: Character Picker -->
+    <div class="nfc-panel">
+      <div class="panel-title">Character</div>
+      <div class="panel-body">
+        <input type="text" id="char-search" class="nfc-search" placeholder="Search characters…" autocomplete="off">
+        <div class="elem-filters" id="elem-filters">
+          {% set elements = ["fire","water","earth","wind","magic","nature","undead","tech"] %}
+          {% for el in elements %}
+          <button class="elem-btn" data-element="{{ el }}" title="{{ el | capitalize }}">
+            <img src="/images/server/elements/{{ el }}.png" alt="{{ el }}">
+          </button>
+          {% endfor %}
+          <button class="elem-btn-clear" id="elem-clear">✕</button>
+        </div>
+        <div class="char-grid" id="char-grid"></div>
+      </div>
+    </div>
+
+    <!-- Center: Preview -->
+    <div class="nfc-panel panel-preview">
+      <div class="panel-title">
+        Card Preview
+        <span style="opacity:.38;font-weight:normal;text-transform:none;letter-spacing:0"> — 54 × 85.6 mm @ 300 DPI</span>
+      </div>
+      <div class="canvas-outer">
+        <canvas id="card-canvas" width="638" height="1011"></canvas>
+      </div>
+      <div class="preview-actions">
+        <button class="nfc-btn" id="export-btn" disabled>↓ Export PNG</button>
+        <span class="size-note">638 × 1011 px · transparent rounded corners · Cricut-ready</span>
+      </div>
+    </div>
+
+    <!-- Right: Style + Attack -->
+    <div class="nfc-panel">
+      <div class="panel-title">Style &amp; Attack</div>
+
+      <div class="opt-section">
+        <span class="opt-label">Background</span>
+        <div class="bg-swatches">
+          <button class="bg-swatch active" data-bg="element"
+            style="background:linear-gradient(135deg,#220044,#8822CC)">Element</button>
+          <button class="bg-swatch" data-bg="portal"
+            style="background:linear-gradient(135deg,#001033,#002b6b)">Portal</button>
+          <button class="bg-swatch" data-bg="skylands"
+            style="background:linear-gradient(135deg,#002266,#0077CC)">Skylands</button>
+          <button class="bg-swatch" data-bg="night"
+            style="background:linear-gradient(135deg,#06050F,#101028)">Night</button>
+        </div>
+        <div id="arc-bg-gallery" class="arc-gallery" style="margin-top:8px"></div>
+        <span id="arc-bg-status" class="arc-status-msg"></span>
+      </div>
+
+      <div class="opt-section">
+        <span class="opt-label">Art Pattern</span>
+        <div class="bg-swatches">
+          <button class="bg-swatch" data-pattern="none"
+            style="background:rgba(0,0,0,.35)">None</button>
+          <button class="bg-swatch active" data-pattern="clouds"
+            style="background:rgba(0,0,0,.35)">Clouds</button>
+          <button class="bg-swatch" data-pattern="polka"
+            style="background:rgba(0,0,0,.35)">Polka</button>
+          <button class="bg-swatch" data-pattern="hex"
+            style="background:rgba(0,0,0,.35)">Hex</button>
+          <button class="bg-swatch" data-pattern="stars"
+            style="background:rgba(0,0,0,.35)">Stars</button>
+        </div>
+        <div id="arc-detail-gallery" class="arc-gallery" style="margin-top:8px"></div>
+        <span id="arc-detail-status" class="arc-status-msg"></span>
+      </div>
+
+      <div class="opt-section">
+        <span class="opt-label">Name Font</span>
+        <div class="bg-swatches cols3">
+          <button class="bg-swatch active" data-font="bebas"
+            style="font-family:'Bebas Neue',Impact;font-size:.95rem;letter-spacing:1px;background:rgba(0,0,0,.35)">Bebas</button>
+          <button class="bg-swatch" data-font="critters"
+            style="font-family:'Critters',serif;font-size:.9rem;background:rgba(0,0,0,.35)">Critters</button>
+          <button class="bg-swatch" data-font="rajdhani"
+            style="font-family:'Rajdhani',Arial;font-weight:700;font-size:.82rem;background:rgba(0,0,0,.35)">Rajdhani</button>
+        </div>
+      </div>
+
+      <div class="opt-section">
+        <span class="opt-label">Card Name</span>
+        <input type="text" id="name-input" class="nfc-input" placeholder="Uses character name">
+        <label class="toggle-row">
+          <input type="checkbox" id="show-name" checked> Show name
+        </label>
+      </div>
+
+      <div class="opt-section">
+        <span class="opt-label">Attack</span>
+        <label class="toggle-row">
+          <input type="checkbox" id="show-attack" checked> Show attack section
+        </label>
+        <div class="attack-fields" id="attack-fields">
+          <input type="text" id="attack-name" class="nfc-input" style="margin-top:7px" placeholder="Attack name (e.g. FIREBALL)">
+          <input type="text" id="attack-damage" class="nfc-input" placeholder="Damage (e.g. 60)">
+          <textarea id="attack-desc" class="nfc-input" placeholder="Attack description…"></textarea>
+        </div>
+      </div>
+
+      <div class="opt-section">
+        <span class="opt-label">Badges</span>
+        <label class="toggle-row"><input type="checkbox" id="show-element" checked> Element icon</label>
+        <label class="toggle-row" style="margin-top:5px"><input type="checkbox" id="show-logo" checked> Skylanders logo</label>
+      </div>
+
+      <div class="opt-section">
+        <span class="opt-label">Custom Image</span>
+        <label class="upload-label">
+          ↑ Upload custom art
+          <input type="file" id="custom-img" accept="image/*">
+        </label>
+        <button class="clear-btn" id="clear-custom">✕ Clear custom image</button>
+        <div class="custom-indicator" id="custom-indicator">Custom image active</div>
+      </div>
+
+      <div class="opt-section" id="arc-art-section" style="display:none">
+        <span class="opt-label">Archive Art</span>
+        <div id="arc-art-gallery" class="arc-gallery"></div>
+        <span id="arc-art-status" class="arc-status-msg"></span>
+        <button class="clear-btn" id="arc-clear" style="margin-top:6px">✕ Clear archive layers</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SKYLANDERS_ALL = {{ skylanders | dump | safe }};
+const CHARS = SKYLANDERS_ALL.flatMap(g =>
+  (g.characters || []).map(c => ({
+    name:    c.name,
+    image:   c.image,
+    hiRes:   c.tooltip_image || '',
+    element: c.element || '',
+    game:    g.game
+  }))
+);
+</script>
+
+<script type="module">
+  // ── Card dimensions (portrait NFC: 54mm × 85.6mm @ 300 DPI) ──────────────
+  const CARD_W = 638, CARD_H = 1011, CORNER_R = 38;
+
+  const HDR_H  = 118;
+  const DIV1_H = 9;
+  const ART_Y  = HDR_H + DIV1_H;   // 127
+  const DIV2_H = 9;
+  const ATK_H  = 282;
+  const DIV3_H = 4;
+  const FTR_H  = 127;
+  const FTR_Y  = CARD_H - FTR_H;   // 884
+
+  const ELEMENTS = ['fire','water','earth','wind','magic','nature','undead','tech'];
+
+  const ELEMENT_PALETTES = {
+    fire:   { dark: '#5c1400', mid: '#7A1800', mid2: '#C83200', accent: '#FF5500', highlight: '#FF9955', text: '#FFCC99' },
+    water:  { dark: '#001c4a', mid: '#002266', mid2: '#0055AA', accent: '#0099FF', highlight: '#66CCFF', text: '#AADDFF' },
+    earth:  { dark: '#3d2000', mid: '#553300', mid2: '#8F5A10', accent: '#CC8833', highlight: '#FFBB66', text: '#EECC99' },
+    wind:   { dark: '#002233', mid: '#003355', mid2: '#005588', accent: '#00AACC', highlight: '#44DDFF', text: '#AAEEFF' },
+    magic:  { dark: '#3a0044', mid: '#5500AA', mid2: '#9900CC', accent: '#CC33FF', highlight: '#EE99FF', text: '#FFCCFF' },
+    nature: { dark: '#0f3200', mid: '#143800', mid2: '#2C7200', accent: '#55AA00', highlight: '#99DD44', text: '#AAEE55' },
+    undead:  { dark: '#1a1a1a', mid: '#222244', mid2: '#4444AA', accent: '#6666CC', highlight: '#9999DD', text: '#BBBBEE' },
+    tech:   { dark: '#452e00', mid: '#604000', mid2: '#9A7000', accent: '#DDAA00', highlight: '#FFDD55', text: '#FFEE99' },
+  };
+  const BG_FIXED = {
+    portal:   { dark: '#001440', mid: '#001E55', mid2: '#002F88', accent: '#3366CC', highlight: '#6699FF', text: '#99BBFF' },
+    skylands: { dark: '#002b6e', mid: '#0060AA', mid2: '#0088DD', accent: '#55AAEE', highlight: '#99CCFF', text: '#CCE8FF' },
+    night:    { dark: '#0a0a22', mid: '#0C0C26', mid2: '#181844', accent: '#4444BB', highlight: '#8888EE', text: '#9999EE' },
+  };
+
+  // Font definitions for the name — each is a function of font-size
+  const FONT_DEFS = {
+    bebas:    fs => `${fs}px 'Bebas Neue', Impact, sans-serif`,
+    critters: fs => `${fs}px 'Critters', serif`,
+    rajdhani: fs => `700 ${fs}px 'Rajdhani', Arial, sans-serif`,
+  };
+
+  const state = {
+    characterName: null,
+    element: null,
+    customName: '',
+    attackName: '',
+    attackDamage: '',
+    attackDesc: '',
+    background: 'element',
+    pattern: 'clouds',
+    nameFont: 'bebas',
+    showName: true,
+    showAttack: true,
+    showElement: true,
+    showLogo: true,
+  };
+
+  // Portal background images — drawn beneath the element gradient overlay
+  const PORTAL_BG = {
+    fire:   '/images/server/bg/portal-fire.png',
+    earth:  '/images/server/bg/portal-earth.png',
+    tech:   '/images/server/bg/portal-tech.png',
+    water:  '/images/server/bg/portal-water.png',
+    wind:   '/images/server/bg/portal-air.png',
+    magic:  '/images/server/bg/portal-magic.png',
+    nature: '/images/server/bg/portal-life.png',
+  };
+
+  let charImg = null;
+  let logoImg = null;
+  let skylandsImg = null;
+  let usingCustomImg = false;
+  const elemImgCache = {};
+  const portalBgCache = {};
+
+  // ── Archive image state ────────────────────────────────────────────────────
+  // Static index generated by `npm run publish-archive` (scripts/reclassify-tumblr.mjs
+  // --publish) — same shape as the curation server's /api/skylanders-index, but
+  // served as a plain file alongside the synced images so this works on the live
+  // site (and locally) without any server running.
+  const ARCHIVE_INDEX_URL = '/images/skylanders-archive/skylanders-index.json';
+  let archiveIndex  = null; // full index, loaded once
+  let arcBgImg      = null; // loaded Image for background layer
+  let arcDetailImg  = null; // loaded Image for detail layer
+  let arcArtImg     = null; // loaded Image for character art from archive
+  let arcBgUrl      = null;
+  let arcDetailUrl  = null;
+  let arcArtUrl     = null;
+  const arcImgCache = {};
+
+  async function loadArcImg(url) {
+    if (!url) return null;
+    if (!arcImgCache[url]) {
+      const img = new Image(); img.crossOrigin = 'anonymous';
+      arcImgCache[url] = await new Promise(r => { img.onload = () => r(img); img.onerror = () => r(null); img.src = url; });
+    }
+    return arcImgCache[url];
+  }
+
+  async function fetchArchiveIndex() {
+    if (archiveIndex) return archiveIndex;
+    try {
+      const res = await fetch(ARCHIVE_INDEX_URL);
+      if (!res.ok) return null;
+      archiveIndex = await res.json();
+      return archiveIndex;
+    } catch { return null; }
+  }
+
+  const canvas = document.getElementById('card-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  function scaleCanvas() {
+    const available = canvas.parentElement.clientWidth - 24;
+    const dw = Math.min(available, 400);
+    canvas.style.width  = dw + 'px';
+    canvas.style.height = Math.round(dw * CARD_H / CARD_W) + 'px';
+  }
+  scaleCanvas();
+  window.addEventListener('resize', scaleCanvas);
+
+  // ── Image helpers ──────────────────────────────────────────────────────────
+  const tryLoad = src => new Promise(resolve => {
+    const img = new Image();
+    img.onload  = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+  const tryLoadCors = src => new Promise(resolve => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload  = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+
+  async function loadCharImg(name, hiResUrl) {
+    if (hiResUrl) { const i = await tryLoadCors(hiResUrl); if (i) return i; }
+    const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const base = `/images/server/characters/${slug}`;
+    return (await tryLoad(`${base}.png`)) || (await tryLoad(`${base}.jpg`));
+  }
+  async function loadElemImg(el) {
+    if (!el) return null;
+    if (!elemImgCache[el]) elemImgCache[el] = await tryLoad(`/images/server/elements/${el}.png`);
+    return elemImgCache[el];
+  }
+  async function loadPortalBg(el) {
+    if (!PORTAL_BG[el]) return null;
+    if (!portalBgCache[el]) portalBgCache[el] = await tryLoad(PORTAL_BG[el]);
+    return portalBgCache[el];
+  }
+  ELEMENTS.forEach(loadElemImg);
+  Object.keys(PORTAL_BG).forEach(loadPortalBg);
+  tryLoad('/images/server/skylanders-logo.png').then(img => { logoImg = img; });
+  tryLoad('/images/server/bg/skylands.jpg').then(img => { skylandsImg = img; });
+
+  function getPalette() {
+    if (state.background !== 'element') return BG_FIXED[state.background] || BG_FIXED.portal;
+    return ELEMENT_PALETTES[state.element] || ELEMENT_PALETTES.magic;
+  }
+
+  // ── Canvas helpers ─────────────────────────────────────────────────────────
+  function roundedRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x+w, y,   x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x,   y+h, r);
+    ctx.arcTo(x,   y+h, x,   y,   r);
+    ctx.arcTo(x,   y,   x+w, y,   r);
+    ctx.closePath();
+  }
+
+  function cornerBrackets(x, y, w, h, len, thick, color) {
+    ctx.save();
+    ctx.strokeStyle = color; ctx.lineWidth = thick; ctx.lineCap = 'square';
+    for (const [a,b,c] of [
+      [[x,y+len],[x,y],[x+len,y]],
+      [[x+w-len,y],[x+w,y],[x+w,y+len]],
+      [[x,y+h-len],[x,y+h],[x+len,y+h]],
+      [[x+w-len,y+h],[x+w,y+h],[x+w,y+h-len]],
+    ]) {
+      ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.lineTo(...c); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function wrapText(text, x, y, maxW, lineH, maxLines) {
+    const words = text.split(' ');
+    let line = '', drawn = 0;
+    for (const word of words) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width > maxW && line) {
+        if (maxLines && drawn >= maxLines - 1) { ctx.fillText(line + '…', x, y); return; }
+        ctx.fillText(line, x, y); line = word; y += lineH; drawn++;
+      } else { line = test; }
+    }
+    if (line) ctx.fillText(line, x, y);
+  }
+
+  function diagonalStripes(x, y, w, h, spacing, sw, color, alpha) {
+    ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = color;
+    for (let ox = -h; ox < w+h; ox += spacing) {
+      ctx.beginPath();
+      ctx.moveTo(x+ox, y); ctx.lineTo(x+ox+h, y+h);
+      ctx.lineTo(x+ox+h+sw, y+h); ctx.lineTo(x+ox+sw, y);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // ── Pattern renderer ───────────────────────────────────────────────────────
+  function drawPattern(type, x, y, w, h) {
+    if (type === 'none') return;
+    ctx.save();
+
+    if (type === 'clouds') {
+      let s = 42;
+      const rnd = () => { s = Math.imul(s, 1664525) + 1013904223 | 0; return (s >>> 0) / 4294967295; };
+      for (let i = 0; i < 22; i++) {
+        const bx = x + (rnd() * 1.15 - 0.075) * w;
+        const by = y + (rnd() * 1.15 - 0.075) * h;
+        const r  = 50 + rnd() * 110;
+        const a  = 0.09 + rnd() * 0.13;
+        const g  = ctx.createRadialGradient(bx, by, 0, bx, by, r);
+        g.addColorStop(0,   `rgba(255,255,255,${a.toFixed(3)})`);
+        g.addColorStop(0.5, `rgba(255,255,255,${(a * 0.35).toFixed(3)})`);
+        g.addColorStop(1,   'rgba(255,255,255,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(x, y, w, h);
+      }
+
+    } else if (type === 'polka') {
+      const sp = 52, r = 10;
+      for (let dy = sp * 0.5; dy <= h + sp; dy += sp) {
+        const offset = (Math.floor(dy / sp) % 2) * (sp / 2);
+        for (let dx = -sp + offset; dx <= w + sp; dx += sp) {
+          const g = ctx.createRadialGradient(x+dx, y+dy, 0, x+dx, y+dy, r);
+          g.addColorStop(0,   'rgba(255,255,255,0.28)');
+          g.addColorStop(0.5, 'rgba(255,255,255,0.10)');
+          g.addColorStop(1,   'rgba(255,255,255,0)');
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(x+dx, y+dy, r, 0, Math.PI*2); ctx.fill();
+        }
+      }
+
+    } else if (type === 'hex') {
+      ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+      ctx.lineWidth = 1;
+      const size = 26, hexH = Math.sqrt(3) * size, colStep = size * 1.5;
+      let colIdx = 0;
+      for (let hx = x - size * 2; hx < x + w + size * 2; hx += colStep, colIdx++) {
+        const rowOff = colIdx % 2 === 1 ? hexH / 2 : 0;
+        for (let hy = y - hexH + rowOff; hy < y + h + hexH; hy += hexH) {
+          ctx.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const a = (Math.PI / 3) * i - Math.PI / 6;
+            const px = hx + size * Math.cos(a), py = hy + size * Math.sin(a);
+            i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+          }
+          ctx.closePath(); ctx.stroke();
+        }
+      }
+
+    } else if (type === 'stars') {
+      let s = 77;
+      const rnd = () => { s = Math.imul(s, 1664525) + 1013904223 | 0; return (s >>> 0) / 4294967295; };
+      // Small dense field
+      for (let i = 0; i < 90; i++) {
+        const sx = x + rnd() * w, sy = y + rnd() * h;
+        const sr = 0.7 + rnd() * 1.8;
+        const sa = 0.18 + rnd() * 0.50;
+        const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, sr * 3.5);
+        g.addColorStop(0,   `rgba(255,255,255,${sa.toFixed(2)})`);
+        g.addColorStop(0.25,`rgba(255,255,255,${(sa * 0.5).toFixed(2)})`);
+        g.addColorStop(1,   'rgba(255,255,255,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(sx - sr*3.5, sy - sr*3.5, sr*7, sr*7);
+      }
+      // A few larger sparkle highlights
+      for (let i = 0; i < 8; i++) {
+        const sx = x + rnd() * w, sy = y + rnd() * h;
+        const sr = 3 + rnd() * 5;
+        const sa = 0.30 + rnd() * 0.30;
+        const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, sr * 4);
+        g.addColorStop(0,   `rgba(255,255,255,${sa.toFixed(2)})`);
+        g.addColorStop(0.15,`rgba(255,255,255,${(sa * 0.6).toFixed(2)})`);
+        g.addColorStop(1,   'rgba(255,255,255,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(sx - sr*4, sy - sr*4, sr*8, sr*8);
+        // Cross flare
+        ctx.strokeStyle = `rgba(255,255,255,${(sa * 0.4).toFixed(2)})`;
+        ctx.lineWidth = 0.7;
+        ctx.beginPath(); ctx.moveTo(sx - sr*5, sy); ctx.lineTo(sx + sr*5, sy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(sx, sy - sr*5); ctx.lineTo(sx, sy + sr*5); ctx.stroke();
+      }
+    }
+
+    ctx.restore();
+  }
+
+  // ── Main draw ──────────────────────────────────────────────────────────────
+  async function drawCard() {
+    const W = CARD_W, H = CARD_H;
+    const pal = getPalette();
+    const elemImg  = await loadElemImg(state.element);
+    const portalBg = state.background === 'element' ? await loadPortalBg(state.element) : null;
+    const sklBg    = state.background === 'skylands' ? skylandsImg : null;
+
+    const artH  = state.showAttack ? 462 : FTR_Y - DIV2_H - ART_Y;
+    const div2Y = ART_Y + artH;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.save();
+    roundedRect(0, 0, W, H, CORNER_R);
+    ctx.clip();
+
+    // ════ HEADER ════════════════════════════════════════════════════════
+    const hdrGrad = ctx.createLinearGradient(0, 0, W * 1.1, HDR_H);
+    hdrGrad.addColorStop(0,    pal.dark);
+    hdrGrad.addColorStop(0.25, pal.mid);
+    hdrGrad.addColorStop(0.6,  pal.accent);
+    hdrGrad.addColorStop(1,    pal.mid2);
+    ctx.fillStyle = hdrGrad;
+    ctx.fillRect(0, 0, W, HDR_H);
+
+    diagonalStripes(0, 0, W, HDR_H, 28, 10, '#000', 0.07);
+
+    const sheen = ctx.createLinearGradient(0, 0, 0, HDR_H * 0.5);
+    sheen.addColorStop(0, 'rgba(255,255,255,0.22)');
+    sheen.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = sheen;
+    ctx.fillRect(0, 0, W, HDR_H * 0.5);
+
+    // Element icon in header
+    const ESZ = 72, EX = 14, EY = (HDR_H - ESZ) / 2;
+    if (elemImg && state.showElement) {
+      ctx.save();
+      const ig = ctx.createRadialGradient(EX+ESZ/2, EY+ESZ/2, 0, EX+ESZ/2, EY+ESZ/2, ESZ*0.8);
+      ig.addColorStop(0, 'rgba(255,255,255,0.30)');
+      ig.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = ig;
+      ctx.beginPath(); ctx.arc(EX+ESZ/2, EY+ESZ/2, ESZ*0.8, 0, Math.PI*2); ctx.fill();
+      ctx.shadowColor = 'rgba(255,255,255,0.4)'; ctx.shadowBlur = 12;
+      ctx.drawImage(elemImg, EX, EY, ESZ, ESZ);
+      ctx.restore();
+    }
+
+    if (state.showName) {
+      const txt = state.customName.trim() || state.characterName || '???';
+      const nameX = EX + ESZ + 14, maxW = W - nameX - 14;
+      let fs = 68;
+      const fontFn = FONT_DEFS[state.nameFont] || FONT_DEFS.bebas;
+      ctx.font = fontFn(fs);
+      while (ctx.measureText(txt).width > maxW && fs > 26) { fs -= 2; ctx.font = fontFn(fs); }
+      ctx.save();
+      // Element-tinted glow shadow (character name pops in element color)
+      ctx.shadowColor = pal.accent;
+      ctx.shadowBlur = 18;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+      ctx.fillStyle = '#fff';
+      ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+      ctx.fillText(txt, nameX, HDR_H * 0.64);
+      ctx.restore();
+
+      if (state.element) {
+        ctx.font = `600 21px 'Rajdhani', Arial, sans-serif`;
+        ctx.fillStyle = pal.highlight || 'rgba(255,255,255,0.65)';
+        ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+        ctx.fillText(state.element.toUpperCase(), nameX, HDR_H * 0.90);
+      }
+    }
+
+    ctx.fillStyle = '#000'; ctx.fillRect(0, HDR_H, W, DIV1_H);
+
+    // ════ ART AREA ═══════════════════════════════════════════════════════
+    // Layer 1: portal/skylands preset OR archive background image
+    const archiveBg = portalBg || sklBg;
+    const bgBase = arcBgImg || archiveBg;
+    if (bgBase) {
+      const iw = bgBase.naturalWidth, ih = bgBase.naturalHeight;
+      const scale = Math.max(W / iw, artH / ih);
+      const dw = iw * scale, dh = ih * scale;
+      ctx.drawImage(bgBase, (W - dw) / 2, ART_Y + (artH - dh) / 2, dw, dh);
+    }
+
+    // Layer 2: element gradient (semi-transparent when a bg image is present)
+    const artGrad = ctx.createLinearGradient(0, ART_Y, W * 0.9, ART_Y + artH);
+    artGrad.addColorStop(0,   pal.mid);
+    artGrad.addColorStop(0.3, pal.mid2);
+    artGrad.addColorStop(0.6, pal.accent + 'cc');
+    artGrad.addColorStop(0.85,pal.mid2);
+    artGrad.addColorStop(1,   pal.mid);
+    ctx.globalAlpha = bgBase ? 0.48 : 1;
+    ctx.fillStyle = artGrad;
+    ctx.fillRect(0, ART_Y, W, artH);
+    ctx.globalAlpha = 1;
+
+    // Centre accent glow
+    const gcx = W/2, gcy = ART_Y + artH * 0.48;
+    const glow = ctx.createRadialGradient(gcx, gcy, 0, gcx, gcy, artH * 0.62);
+    glow.addColorStop(0,   pal.accent + '38');
+    glow.addColorStop(0.4, pal.accent + '14');
+    glow.addColorStop(1,   'transparent');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, ART_Y, W, artH);
+
+    // Element watermark — large faded icon centred behind the character
+    if (elemImg && state.showElement) {
+      const wmS = Math.min(artH, W) * 0.72;
+      ctx.save();
+      ctx.globalAlpha = 0.09;
+      ctx.drawImage(elemImg, (W - wmS) / 2, ART_Y + (artH - wmS) / 2, wmS, wmS);
+      ctx.restore();
+    }
+
+    // Vignette — light, just to push edges slightly inward
+    const vig = ctx.createRadialGradient(W/2, ART_Y+artH/2, artH*0.28, W/2, ART_Y+artH/2, artH*0.85);
+    vig.addColorStop(0, 'transparent');
+    vig.addColorStop(1, 'rgba(0,0,0,0.18)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, ART_Y, W, artH);
+
+    // Pattern drawn AFTER vignette so it reads as a bright overlay
+    drawPattern(state.pattern, 0, ART_Y, W, artH);
+
+    // Layer 3: archive detail image — between pattern and character
+    if (arcDetailImg) {
+      const iw = arcDetailImg.naturalWidth, ih = arcDetailImg.naturalHeight;
+      const scale = Math.min(W / iw, artH / ih);
+      const dw = iw * scale, dh = ih * scale;
+      ctx.drawImage(arcDetailImg, (W - dw) / 2, ART_Y + artH - dh, dw, dh);
+    }
+
+    // Layer 4: character art — archive art overrides static figure when selected
+    const srcImg = arcArtImg || charImg;
+    if (srcImg) {
+      const pad = 20;
+      let iw = srcImg.naturalWidth || 400, ih = srcImg.naturalHeight || 400;
+      const sc = Math.min((W-pad*2)/iw, (artH-pad*2)/ih);
+      iw *= sc; ih *= sc;
+      const ix = (W-iw)/2, iy = ART_Y + (artH-ih)/2;
+      ctx.save(); ctx.shadowColor = pal.accent; ctx.shadowBlur = 70; ctx.globalAlpha = 0.5; ctx.drawImage(srcImg,ix,iy,iw,ih); ctx.restore();
+      ctx.drawImage(srcImg, ix, iy, iw, ih);
+    } else {
+      ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.font = 'bold 27px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('Select a character', W/2, ART_Y + artH/2 - 18);
+      ctx.font = '18px Arial'; ctx.fillStyle = 'rgba(255,255,255,0.1)';
+      ctx.fillText('← Choose from the left panel', W/2, ART_Y + artH/2 + 22);
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    }
+
+    // Corner brackets
+    const BP = 14, BL = 46;
+    ctx.save(); ctx.shadowColor = pal.accent; ctx.shadowBlur = 14;
+    cornerBrackets(BP, ART_Y+BP, W-BP*2, artH-BP*2, BL, 6, pal.accent); ctx.restore();
+    cornerBrackets(BP, ART_Y+BP, W-BP*2, artH-BP*2, BL, 2, pal.highlight || '#fff');
+
+    ctx.fillStyle = '#000'; ctx.fillRect(0, div2Y, W, DIV2_H);
+
+    // ════ ATTACK SECTION ══════════════════════════════════════════════════
+    if (state.showAttack) {
+      const atkY0 = div2Y + DIV2_H;
+      ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, atkY0, W, ATK_H);
+
+      const sg = ctx.createLinearGradient(0, atkY0, 0, atkY0+ATK_H);
+      sg.addColorStop(0, pal.accent); sg.addColorStop(0.5, pal.highlight||pal.accent); sg.addColorStop(1, pal.accent);
+      ctx.fillStyle = sg; ctx.globalAlpha = 0.8; ctx.fillRect(0, atkY0, 5, ATK_H); ctx.globalAlpha = 1;
+
+      const PAD = 20;
+      let ay = atkY0 + PAD;
+      const an = state.attackName.trim(), ad = state.attackDesc.trim(), adm = state.attackDamage.trim();
+
+      if (an || ad) {
+        const ICON = 38, banH = ICON + 16;
+        const bg2 = ctx.createLinearGradient(0, ay, W, ay);
+        bg2.addColorStop(0, pal.accent + '2E'); bg2.addColorStop(0.6, pal.accent + '16'); bg2.addColorStop(1, 'transparent');
+        ctx.fillStyle = bg2; ctx.fillRect(0, ay-6, W, banH);
+
+        if (elemImg && state.showElement) ctx.drawImage(elemImg, PAD+4, ay, ICON, ICON);
+        const anx = (elemImg && state.showElement) ? PAD+ICON+16 : PAD+4;
+
+        ctx.font = `40px 'Bebas Neue', Impact, sans-serif`; ctx.fillStyle = pal.accent; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+        ctx.fillText((an || 'ATTACK').toUpperCase(), anx, ay + ICON/2);
+
+        if (adm) {
+          ctx.font = `700 60px 'Rajdhani', Arial, sans-serif`; ctx.fillStyle = '#fff'; ctx.textAlign = 'right';
+          ctx.fillText(adm, W-PAD, ay + ICON/2 + 13); ctx.textAlign = 'left';
+        }
+        ay += banH + 2;
+
+        const sep = ctx.createLinearGradient(PAD, 0, W-PAD, 0);
+        sep.addColorStop(0, 'transparent'); sep.addColorStop(0.12, pal.accent); sep.addColorStop(0.88, pal.accent); sep.addColorStop(1, 'transparent');
+        ctx.fillStyle = sep; ctx.globalAlpha = 0.40; ctx.fillRect(PAD, ay, W-PAD*2, 2); ctx.globalAlpha = 1;
+        ay += 14;
+
+        if (ad) {
+          ctx.font = `21px 'Atkinson Hyperlegible', Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.82)';
+          ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+          wrapText(ad, PAD+8, ay, W-PAD*2-8, 30, Math.floor((atkY0+ATK_H-20-ay)/30));
+        }
+      } else {
+        ctx.font = `19px 'Atkinson Hyperlegible', Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.16)';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('Fill in the Attack fields above →', W/2, atkY0 + ATK_H/2);
+      }
+
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, atkY0+ATK_H, W, DIV3_H);
+    }
+
+    // ════ FOOTER ══════════════════════════════════════════════════════════
+    const fg = ctx.createLinearGradient(0, FTR_Y, 0, H);
+    fg.addColorStop(0, pal.mid); fg.addColorStop(1, pal.dark);
+    ctx.fillStyle = fg; ctx.fillRect(0, FTR_Y, W, FTR_H);
+
+    // Element-colored top divider line
+    const dl = ctx.createLinearGradient(0, FTR_Y, W, FTR_Y);
+    dl.addColorStop(0,    'transparent');
+    dl.addColorStop(0.12, pal.accent);
+    dl.addColorStop(0.88, pal.accent);
+    dl.addColorStop(1,    'transparent');
+    ctx.fillStyle = dl; ctx.fillRect(0, FTR_Y, W, 3);
+
+    const fcy = FTR_Y + FTR_H / 2;
+
+    if (state.showLogo && logoImg) {
+      const lh = 76, lw = lh * (logoImg.naturalWidth / (logoImg.naturalHeight || 1));
+      ctx.save(); ctx.globalAlpha = 0.82; ctx.drawImage(logoImg, (W-lw)/2, fcy-lh/2, lw, lh); ctx.restore();
+    } else {
+      ctx.font = `bold 17px 'Atkinson Hyperlegible', Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('SKYLANDERS', W/2, fcy);
+    }
+
+    // Element icons flanking the logo on both sides
+    if (elemImg && state.showElement) {
+      const FI = 52;
+      ctx.save(); ctx.globalAlpha = 0.62;
+      ctx.drawImage(elemImg, 18,      fcy - FI/2, FI, FI);
+      ctx.drawImage(elemImg, W-FI-18, fcy - FI/2, FI, FI);
+      ctx.restore();
+    }
+
+    // ════ TRIPLE-LAYER BORDER ════════════════════════════════════════════
+    ctx.save();
+    roundedRect(2, 2, W-4, H-4, CORNER_R-2); ctx.strokeStyle = '#000'; ctx.lineWidth = 7; ctx.stroke();
+    roundedRect(7, 7, W-14, H-14, CORNER_R-7); ctx.strokeStyle = pal.accent; ctx.lineWidth = 2.5; ctx.globalAlpha = 0.65; ctx.stroke();
+    roundedRect(11, 11, W-22, H-22, CORNER_R-11); ctx.strokeStyle = pal.highlight||'rgba(255,255,255,0.5)'; ctx.lineWidth = 1; ctx.globalAlpha = 0.22; ctx.stroke();
+    ctx.restore();
+
+    ctx.restore(); // card clip
+  }
+
+  // ── Character selection ────────────────────────────────────────────────────
+  async function selectCharacter(char) {
+    state.characterName = char.name;
+    state.element = char.element || null;
+    if (!state.customName) document.getElementById('name-input').placeholder = char.name;
+    usingCustomImg = false;
+    document.getElementById('custom-indicator').style.display = 'none';
+    document.getElementById('custom-img').value = '';
+    // Reset archive selections on new character
+    arcBgImg = null; arcDetailImg = null; arcArtImg = null;
+    arcBgUrl = null; arcDetailUrl = null; arcArtUrl = null;
+    document.querySelectorAll('.char-thumb').forEach(el => el.classList.toggle('selected', el.dataset.name === char.name));
+    document.getElementById('export-btn').disabled = false;
+    charImg = await loadCharImg(char.name, char.hiRes);
+    drawCard();
+    loadArchivePickers(char.name);
+  }
+
+  // ── Archive image picker ───────────────────────────────────────────────────
+  function buildArcGallery(galleryEl, statusEl, images, activeUrl, onSelect) {
+    galleryEl.innerHTML = '';
+    if (!images.length) {
+      galleryEl.style.display = 'none';
+      if (statusEl) statusEl.textContent = '';
+      return;
+    }
+    galleryEl.style.display = '';
+    if (statusEl) statusEl.textContent = '';
+    images.forEach(imgData => {
+      const thumb = document.createElement('button');
+      thumb.className = 'arc-thumb' + (imgData.url === activeUrl ? ' selected' : '');
+      thumb.title = imgData.game;
+      const img = document.createElement('img');
+      img.src = imgData.url; img.alt = ''; img.loading = 'lazy'; img.crossOrigin = 'anonymous';
+      thumb.appendChild(img);
+      thumb.addEventListener('click', async () => {
+        galleryEl.querySelectorAll('.arc-thumb').forEach(t => t.classList.remove('selected'));
+        thumb.classList.add('selected');
+        onSelect(imgData.url, await loadArcImg(imgData.url));
+        drawCard();
+      });
+      galleryEl.appendChild(thumb);
+    });
+  }
+
+  async function loadArchivePickers(charName) {
+    const index = await fetchArchiveIndex();
+
+    const bgGallery     = document.getElementById('arc-bg-gallery');
+    const bgStatus      = document.getElementById('arc-bg-status');
+    const detailGallery = document.getElementById('arc-detail-gallery');
+    const detailStatus  = document.getElementById('arc-detail-status');
+    const artSection    = document.getElementById('arc-art-section');
+    const artGallery    = document.getElementById('arc-art-gallery');
+    const artStatus     = document.getElementById('arc-art-status');
+
+    if (!index) {
+      bgStatus.textContent = detailStatus.textContent = 'Archive index not found — run `npm run publish-archive`';
+      bgGallery.style.display = detailGallery.style.display = 'none';
+      artSection.style.display = 'none';
+      return;
+    }
+
+    // Background picker — all background-annotated images globally
+    buildArcGallery(bgGallery, bgStatus, index.backgrounds || [], arcBgUrl,
+      (url, img) => { arcBgUrl = url; arcBgImg = img; });
+
+    // Detail picker — all detail-annotated images globally
+    buildArcGallery(detailGallery, detailStatus, index.details || [], arcDetailUrl,
+      (url, img) => { arcDetailUrl = url; arcDetailImg = img; });
+
+    // Archive art — character-specific tagged images
+    const charImages = (index.byCharacter || {})[charName.toLowerCase()] || [];
+    artSection.style.display = charImages.length ? '' : 'none';
+    buildArcGallery(artGallery, artStatus, charImages, arcArtUrl,
+      (url, img) => { arcArtUrl = url; arcArtImg = img; });
+  }
+
+  // ── Build character grid ───────────────────────────────────────────────────
+  function buildGrid(filter = '', elemFilter = null) {
+    const grid = document.getElementById('char-grid');
+    grid.innerHTML = '';
+    const q = filter.toLowerCase();
+    const list = CHARS.filter(c => (!q || c.name.toLowerCase().includes(q)) && (!elemFilter || c.element === elemFilter));
+    if (!list.length) {
+      const m = document.createElement('div'); m.className = 'char-no-results'; m.textContent = 'No characters found'; grid.appendChild(m); return;
+    }
+    list.forEach(char => {
+      const btn = document.createElement('button');
+      btn.className = 'char-thumb'; btn.dataset.name = char.name; btn.title = char.name;
+      if (char.name === state.characterName) btn.classList.add('selected');
+      const img = document.createElement('img'); img.src = char.image; img.alt = char.name; img.loading = 'lazy';
+      btn.appendChild(img); btn.addEventListener('click', () => selectCharacter(char)); grid.appendChild(btn);
+    });
+  }
+
+  // ── Controls ───────────────────────────────────────────────────────────────
+  let elemFilter = null;
+
+  document.getElementById('char-search').addEventListener('input', e => buildGrid(e.target.value, elemFilter));
+
+  document.querySelectorAll('.elem-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (elemFilter === btn.dataset.element) { elemFilter = null; btn.classList.remove('active'); }
+      else { elemFilter = btn.dataset.element; document.querySelectorAll('.elem-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+      buildGrid(document.getElementById('char-search').value, elemFilter);
+    });
+  });
+  document.getElementById('elem-clear').addEventListener('click', () => {
+    elemFilter = null; document.querySelectorAll('.elem-btn').forEach(b => b.classList.remove('active'));
+    buildGrid(document.getElementById('char-search').value, null);
+  });
+
+  document.querySelectorAll('.bg-swatch[data-bg]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bg-swatch[data-bg]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); state.background = btn.dataset.bg; drawCard();
+    });
+  });
+
+  document.querySelectorAll('.bg-swatch[data-pattern]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bg-swatch[data-pattern]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); state.pattern = btn.dataset.pattern; drawCard();
+    });
+  });
+
+  document.querySelectorAll('.bg-swatch[data-font]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bg-swatch[data-font]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); state.nameFont = btn.dataset.font; drawCard();
+    });
+  });
+
+  document.getElementById('name-input').addEventListener('input', e => { state.customName = e.target.value; drawCard(); });
+  document.getElementById('show-name').addEventListener('change', e => { state.showName = e.target.checked; drawCard(); });
+  document.getElementById('show-attack').addEventListener('change', e => {
+    state.showAttack = e.target.checked;
+    document.getElementById('attack-fields').classList.toggle('hidden', !e.target.checked);
+    drawCard();
+  });
+  document.getElementById('show-element').addEventListener('change', e => { state.showElement = e.target.checked; drawCard(); });
+  document.getElementById('show-logo').addEventListener('change', e => { state.showLogo = e.target.checked; drawCard(); });
+  document.getElementById('attack-name').addEventListener('input', e => { state.attackName = e.target.value; drawCard(); });
+  document.getElementById('attack-damage').addEventListener('input', e => { state.attackDamage = e.target.value; drawCard(); });
+  document.getElementById('attack-desc').addEventListener('input', e => { state.attackDesc = e.target.value; drawCard(); });
+
+  document.getElementById('custom-img').addEventListener('change', async e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async ev => {
+      charImg = await tryLoad(ev.target.result);
+      if (charImg) { usingCustomImg = true; document.getElementById('custom-indicator').style.display = 'block'; document.getElementById('export-btn').disabled = false; drawCard(); }
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('arc-clear').addEventListener('click', () => {
+    arcBgImg = null; arcDetailImg = null; arcArtImg = null;
+    arcBgUrl = null; arcDetailUrl = null; arcArtUrl = null;
+    document.querySelectorAll('.arc-thumb').forEach(t => t.classList.remove('selected'));
+    drawCard();
+  });
+
+  document.getElementById('clear-custom').addEventListener('click', async () => {
+    document.getElementById('custom-img').value = ''; document.getElementById('custom-indicator').style.display = 'none'; usingCustomImg = false;
+    if (state.characterName) { const c = CHARS.find(c => c.name === state.characterName); if (c) charImg = await loadCharImg(c.name, c.hiRes); }
+    else charImg = null;
+    drawCard();
+  });
+
+  document.getElementById('export-btn').addEventListener('click', () => {
+    const slug = (state.customName.trim() || state.characterName || 'skylander').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const a = document.createElement('a'); a.download = `skylanders-nfc-${slug}.png`; a.href = canvas.toDataURL('image/png'); a.click();
+  });
+
+  // ── Init: wait for fonts before first draw ─────────────────────────────────
+  (async () => {
+    await Promise.allSettled([
+      document.fonts.load("68px 'Bebas Neue'"),
+      document.fonts.load("700 60px 'Rajdhani'"),
+      document.fonts.load("68px 'Critters'"),
+    ]);
+    buildGrid();
+    drawCard();
+    // Pre-load background/detail pickers immediately (no character needed)
+    fetchArchiveIndex().then(index => {
+      if (!index) return;
+      const bgGallery = document.getElementById('arc-bg-gallery');
+      const detailGallery = document.getElementById('arc-detail-gallery');
+      buildArcGallery(bgGallery, document.getElementById('arc-bg-status'), index.backgrounds || [], null,
+        (url, img) => { arcBgUrl = url; arcBgImg = img; });
+      buildArcGallery(detailGallery, document.getElementById('arc-detail-status'), index.details || [], null,
+        (url, img) => { arcDetailUrl = url; arcDetailImg = img; });
+    });
+  })();
+</script>

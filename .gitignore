@@ -3,3 +3,7 @@ node_modules/
 .DS_Store
 node_modules
 .env
+
+# Synced from ~/Desktop/skylanders-archive by `npm run publish-archive` —
+# regenerate via that script rather than tracking ~650MB of images in git.
+src/images/skylanders-archive/

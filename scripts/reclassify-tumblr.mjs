@@ -376,7 +376,6 @@ const editPanelHTML = isPublish ? '' : `
   </div>`;
 
 const tagModeJS = isPublish ? '' : `
-let tagModeOn   = false;
 let tagSelected = null; // { name, element }
 const tagPending = new Map(); // imageFile → { skylanders: Set, lbIdx }
 
@@ -900,6 +899,9 @@ let annFilter = null; // null | 'background' | 'detail' — cross-cutting annota
 const expanded = new Set(GO);
 let lbImgs  = [], lbIdx = 0;
 let query   = '';
+// Declared here (not inside tagModeJS) because makeCard/render reference it
+// unconditionally — in --publish builds it just stays false forever.
+let tagModeOn = false;
 
 function searchMatch(img, q) {
   return [(img.subject||''), (img.tags||[]).join(' '), (img.text||'')].join(' ').toLowerCase().includes(q);
@@ -1078,11 +1080,15 @@ function openLb(idx) {
   const img = lbImgs[lbIdx];
   if (!img) return;
   // Keep the edit panel open across navigation — just refresh it for the new image
-  if (document.getElementById('lb-edit').classList.contains('open')) {
-    fillEditPanel(img);
-  } else {
-    document.getElementById('lb-edit').classList.remove('open');
-    document.getElementById('lb').classList.remove('editing');
+  // (#lb-edit / fillEditPanel only exist when editing UI is built — --publish omits both)
+  const editPanel = document.getElementById('lb-edit');
+  if (editPanel) {
+    if (editPanel.classList.contains('open')) {
+      fillEditPanel(img);
+    } else {
+      editPanel.classList.remove('open');
+      document.getElementById('lb').classList.remove('editing');
+    }
   }
   document.getElementById('lb-img').src  = ARCHIVE_BASE + img.path;
   document.getElementById('lb-dl').href  = ARCHIVE_BASE + img.path;
@@ -1097,14 +1103,16 @@ function stepLb(d) { openLb((lbIdx + d + lbImgs.length) % lbImgs.length); }
 function closeLb() {
   const lb = document.getElementById('lb');
   lb.classList.remove('open', 'editing');
-  document.getElementById('lb-edit').classList.remove('open');
+  document.getElementById('lb-edit')?.classList.remove('open');
 }
 
 document.getElementById('lb').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeLb();
 });
 document.addEventListener('keydown', e => {
-  const editOpen = document.getElementById('lb-edit').classList.contains('open');
+  // #lb-edit / toggleEdit only exist when editing UI is built (--publish omits both)
+  const editPanel = document.getElementById('lb-edit');
+  const editOpen  = !!editPanel && editPanel.classList.contains('open');
   if (e.key === 'Escape') {
     if (editOpen) toggleEdit(); else closeLb();
   } else if (!editOpen) {
@@ -1139,13 +1147,66 @@ render();
 // Local standalone version — relative image paths (works via file:// or localhost:7373)
 writeFileSync(join(OUT, 'index.html'), html.replace(/'__ARCHIVE_BASE__'/, "''"));
 
-// Website version — absolute paths so it works when served from Eleventy at a different port
+// Website version — base path depends on build mode: the curation server's
+// localhost URL for local iteration, or the statically-synced publish path
+// for the live site (which has no server to talk to).
+const PUBLISH_IMAGE_BASE = '/images/skylanders-archive/';
 const websiteOutDir = join(__dir, '../src/pages/server/skylanders/archive');
-if (existsSync(websiteOutDir) || (() => { mkdirSync(websiteOutDir, { recursive: true }); return true; })()) {
+mkdirSync(websiteOutDir, { recursive: true });
+writeFileSync(
+  join(websiteOutDir, 'index.html'),
+  html.replace(/'__ARCHIVE_BASE__'/, `'${isPublish ? PUBLISH_IMAGE_BASE : 'http://localhost:7373/'}'`)
+);
+
+if (isPublish) {
+  // ── Sync image files into the website so the live site can serve them
+  // statically — no curation server required to browse the archive.
+  const publishImagesDir = join(__dir, '../src/images/skylanders-archive');
+  mkdirSync(publishImagesDir, { recursive: true });
+  console.log(`Syncing images to ${publishImagesDir} …`);
+  const rsync = spawnSync('rsync', [
+    '-a', '--delete',
+    '--exclude=_images', '--exclude=*.json*', '--exclude=*.html', '--exclude=.DS_Store',
+    OUT + '/', publishImagesDir + '/',
+  ], { stdio: 'inherit' });
+  if (rsync.status !== 0) {
+    console.error('rsync failed — aborting publish.');
+    process.exit(1);
+  }
+
+  // ── Static Skylander image index — the published equivalent of the
+  // curation server's /api/skylanders-index endpoint, so the NFC card
+  // maker's archive art pickers work on the live site without a server.
+  const byCharacter = {};
+  const backgrounds = [];
+  const details = [];
+  for (const post of manifest.posts) {
+    const postAnns = post.annotations || [];
+    for (const img of (post.images || [])) {
+      if (img.error || !img.file || !img.path) continue;
+      const imgAnns = img.annotations?.length ? img.annotations : postAnns;
+      const entry = {
+        url:    PUBLISH_IMAGE_BASE + img.path,
+        anns:   imgAnns,
+        game:   img.game || post.game,
+        file:   img.file,
+        postId: String(post.id),
+      };
+      if (imgAnns.includes('background')) backgrounds.push(entry);
+      if (imgAnns.includes('detail'))     details.push(entry);
+      const skyNames = Array.isArray(img.skylanders) ? img.skylanders : (post.skylanders || []);
+      for (const name of skyNames) {
+        const key = name.toLowerCase();
+        (byCharacter[key] = byCharacter[key] || []).push(entry);
+      }
+    }
+  }
   writeFileSync(
-    join(websiteOutDir, 'index.html'),
-    html.replace(/'__ARCHIVE_BASE__'/, "'http://localhost:7373/'")
+    join(publishImagesDir, 'skylanders-index.json'),
+    JSON.stringify({ byCharacter, backgrounds, details })
   );
+  console.log(`Published ${total} images + skylanders-index.json to ${publishImagesDir}`);
 }
+
 console.log(`index.html rebuilt.\nDone.`);
 

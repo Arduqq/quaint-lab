@@ -5,13 +5,16 @@
   "main": "comment-widget.js",
   "scripts": {
     "generate-thumbnails": "node generate-thumbnails.js",
+    "fetch-artwork": "node scripts/fetch-igdb.js",
     "build": "npm run generate-thumbnails && npx @11ty/eleventy",
     "start": "npx @11ty/eleventy --serve",
     "debug": "DEBUG=* npx @11ty/eleventy",
     "push": "npm run generate-thumbnails && npx @11ty/eleventy && export NEOCITIES_API_KEY='7ac7ed86a6da3051897b146b6b303a4b' && neocities push dist",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:js": "eslint \"src/**/*.js\" || true",
-  "lint": "npm run lint:css && npm run lint:js"
+    "lint": "npm run lint:css && npm run lint:js",
+    "publish-archive": "node scripts/reclassify-tumblr.mjs ~/Desktop/skylanders-archive --publish",
+    "studio": "node studio/server.js"
   },
   "keywords": [],
   "author": "",
