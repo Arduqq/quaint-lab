@@ -52,6 +52,7 @@ function applyMaterial(root, texturePath, textureLoader) {
   root.traverse(child => {
     if (child.isMesh) { const m = mat.clone(); if (mat.map) m.map = mat.map; child.material = m; }
   });
+  mat.dispose();
 }
 
 function frameObject(root) {
@@ -133,12 +134,14 @@ function clearScene() {
   if (!_s?.charBuild) return;
   _s.scene.remove(_s.charBuild.group);
   _s.charBuild.meshes.forEach(m => { m.geometry.dispose(); m.material.dispose?.(); });
+  _s.charBuild.skeleton.dispose();
   _s.charBuild = null;
 }
 
 async function loadIntoScene(entry) {
   clearScene();
   const res  = await fetch(entry.json);
+  if (!res.ok) throw new Error('Failed to load model: ' + res.status + ' ' + entry.json);
   const data = await res.json();
   const build = buildCharacterObject(data);
   applyMaterial(build.group, entry.texture, _s.textureLoader);
@@ -180,17 +183,21 @@ window.ProfileModelViewer = {
     _s = { containerEl, models, currentIdx: 0, scene, camera, renderer, controls,
            charBuild: null, textureLoader, boneUiEl: null, rafId: null, ro: null, io: null, visible: true };
 
+    const boneAc = new AbortController();
+    _s.boneAc = boneAc;
+
     // Bone UI appended to the parent .prof-mv-wrap so it sits outside the overflow:hidden canvas box
     const boneUiEl = buildBoneUi(containerEl.parentElement || containerEl);
     boneUiEl.style.display = 'none';
     _s.boneUiEl = boneUiEl;
 
-    document.getElementById('pmv-bone-select')?.addEventListener('change', syncSlidersFromBone);
+    document.getElementById('pmv-bone-select')?.addEventListener('change', syncSlidersFromBone, { signal: boneAc.signal });
     ['x', 'y', 'z'].forEach(ax =>
-      document.getElementById('pmv-bone-' + ax)?.addEventListener('input', onBoneRotChange)
+      document.getElementById('pmv-bone-' + ax)?.addEventListener('input', onBoneRotChange, { signal: boneAc.signal })
     );
 
     function loop() {
+      if (!_s) return;
       _s.rafId = requestAnimationFrame(loop);
       if (!_s.visible) return;
       controls.update();
@@ -234,6 +241,7 @@ window.ProfileModelViewer = {
   destroy() {
     if (!_s) return;
     cancelAnimationFrame(_s.rafId);
+    _s.boneAc?.abort();
     _s.ro?.disconnect();
     _s.io?.disconnect();
     clearScene();
