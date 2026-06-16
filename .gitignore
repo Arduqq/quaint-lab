@@ -4,6 +4,12 @@ node_modules/
 node_modules
 .env
 
-# Synced from ~/Desktop/skylanders-archive by `npm run publish-archive` —
+# Synced from skylanders-archive/ by `npm run publish-archive` —
 # regenerate via that script rather than tracking ~650MB of images in git.
 src/images/skylanders-archive/
+
+# Raw curation archive (~2GB of images + hardlinked sort folders, all
+# regenerable from _images/ + manifest.json via reclassify-tumblr.mjs).
+# manifest.json itself IS tracked — it's the hand-curated metadata.
+/skylanders-archive/*
+!/skylanders-archive/manifest.json
