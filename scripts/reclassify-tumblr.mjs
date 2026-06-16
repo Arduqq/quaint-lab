@@ -1283,6 +1283,67 @@ document.getElementById('img-picker-search').addEventListener('input', e => rend
 document.getElementById('img-picker-modal').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeImagePicker(false);
 });
+
+function useAsCardArt(sky) {
+  const dataUrl = window.ProfileModelViewer?.captureFrame();
+  if (!dataUrl) return;
+  try {
+    sessionStorage.setItem('nfc-card-custom-art', dataUrl);
+    sessionStorage.setItem('nfc-card-char-name', sky.name);
+    window.open('/server/skylanders/nfc-card/', '_blank');
+  } catch (e) {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = sky.name.toLowerCase().replace(/\\s+/g, '-') + '-pose.png';
+    a.click();
+  }
+}
+
+function renderProfileModelViewer(sky) {
+  const panel = document.getElementById('prof-model-panel');
+  if (!panel) return;
+  const models = sky?.models || [];
+  if (!models.length) {
+    panel.innerHTML = '<div class="prof-mv-empty">No 3D model available for this character.</div>';
+    return;
+  }
+  const wrap = document.createElement('div'); wrap.className = 'prof-mv-wrap';
+
+  const canvasWrap = document.createElement('div'); canvasWrap.className = 'prof-mv-canvas-wrap';
+  wrap.appendChild(canvasWrap);
+
+  if (models.length > 1) {
+    const variantsEl = document.createElement('div'); variantsEl.className = 'prof-mv-variants';
+    models.forEach((m, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'prof-mv-variant' + (i === 0 ? ' on' : '');
+      btn.textContent = m.name;
+      btn.addEventListener('click', () => {
+        variantsEl.querySelectorAll('.prof-mv-variant').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        window.ProfileModelViewer?.switchModel(i);
+      });
+      variantsEl.appendChild(btn);
+    });
+    wrap.appendChild(variantsEl);
+  }
+
+  const actions = document.createElement('div'); actions.className = 'prof-mv-actions';
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset pose';
+  resetBtn.addEventListener('click', () => window.ProfileModelViewer?.resetPose());
+  actions.appendChild(resetBtn);
+
+  const cardBtn = document.createElement('button');
+  cardBtn.className = 'prof-mv-card-btn';
+  cardBtn.textContent = '\\u2197 Use as card art';
+  cardBtn.addEventListener('click', () => useAsCardArt(sky));
+  actions.appendChild(cardBtn);
+  wrap.appendChild(actions);
+
+  panel.appendChild(wrap);
+  window.ProfileModelViewer?.mount(canvasWrap, models);
+}
 `;
 
 const html = `<!DOCTYPE html>
@@ -1520,6 +1581,28 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .prof-add-variant button{background:rgba(255,255,255,.06);color:var(--txt);border:1px solid var(--bd);
   border-radius:4px;padding:7px 14px;font-size:.85rem;font-family:inherit;cursor:pointer}
 .prof-add-variant button:hover{border-color:rgba(255,204,0,.4);color:var(--gold)}
+/* Profile model viewer */
+.prof-mv-wrap{margin-bottom:16px}
+.prof-mv-canvas-wrap{width:100%;aspect-ratio:1/1;background:var(--bg3);
+  border-radius:6px;overflow:hidden;border:1px solid var(--bd)}
+.prof-mv-variants{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.prof-mv-variant{background:rgba(255,255,255,.06);border:1px solid var(--bd);
+  color:var(--muted);font-size:.72rem;padding:3px 8px;border-radius:4px;cursor:pointer}
+.prof-mv-variant.on{border-color:var(--acc);color:var(--acc);background:rgba(79,122,255,.15)}
+.prof-mv-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.prof-mv-actions button{background:rgba(255,255,255,.06);color:var(--txt);
+  border:1px solid var(--bd);font-size:.8rem;padding:4px 10px;border-radius:4px;cursor:pointer}
+.prof-mv-actions button:hover{border-color:rgba(255,204,0,.4);color:var(--gold)}
+.prof-mv-card-btn{border-color:rgba(255,204,0,.4)!important;color:var(--gold)!important}
+.prof-mv-card-btn:hover{background:rgba(255,204,0,.1)!important}
+.prof-mv-bone-ui{margin-top:8px;font-size:.75rem;color:var(--muted)}
+.prof-mv-bone-ui select{background:var(--bg3);border:1px solid var(--bd);
+  color:var(--txt);border-radius:3px;padding:2px 4px;width:100%;margin-bottom:5px}
+.prof-mv-bone-ui .bone-row{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.prof-mv-bone-ui .bone-row label{width:12px;color:var(--muted);font-size:.7rem}
+.prof-mv-bone-ui .bone-row input[type=range]{flex:1}
+.prof-mv-bone-ui .bone-row span{width:28px;text-align:right;font-size:.7rem}
+.prof-mv-empty{color:var(--muted);font-size:.85rem;padding:12px 0}
 /* Image picker modal ────────────────────────────────────────────────────── */
 #img-picker-modal{display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.85);
   align-items:center;justify-content:center}
@@ -1832,6 +1915,7 @@ ${imagePickerModalHTML}
 }
 </script>
 <script type="module" src="/server/skylanders/models/model-viewer.js"></script>
+<script type="module" src="/server/skylanders/models/profile-model-viewer.js"></script>
 <script>
 const ARCHIVE_BASE = '__ARCHIVE_BASE__';
 // When true, every editing affordance below is gated off — the live site has
@@ -2696,6 +2780,7 @@ function renderCharPanel() {
 
   if (!sel.char) {
     layout.classList.remove('has-panel');
+    window.ProfileModelViewer?.destroy();
     panel.innerHTML = '';
     lastPanelChar = null;
     return;
@@ -2704,6 +2789,7 @@ function renderCharPanel() {
   // Only rebuild when the selected character changes — preserves in-progress
   // edits when render() runs again for unrelated reasons (search, etc.)
   if (sel.char === lastPanelChar) return;
+  window.ProfileModelViewer?.destroy();
   lastPanelChar = sel.char;
 
   const sky = SKYLANDERS.find(s => s.name.toLowerCase() === sel.char);
@@ -2717,7 +2803,8 @@ function renderCharPanel() {
     return;
   }
 
-  panel.innerHTML = '<div class="cp-name">' + escAttr(sky.name) + '</div>'
+  panel.innerHTML = '<div id="prof-model-panel"></div>'
+    + '<div class="cp-name">' + escAttr(sky.name) + '</div>'
     + '<div class="cp-sub">' + escAttr(sky.game) + '</div>'
     + '<div class="cp-field"><label>Element</label><select id="cp-element">'
       + ELEMENTS.map(e => '<option value="' + e + '"' + (e === sky.element ? ' selected' : '') + '>'
@@ -2752,6 +2839,7 @@ function renderCharPanel() {
 
   document.getElementById('cp-add-prop').addEventListener('click', () => addExtraRow('', ''));
   document.getElementById('cp-save').addEventListener('click', () => saveCharPanel(sky.name));
+  if (typeof renderProfileModelViewer === 'function') renderProfileModelViewer(sky);
 }
 
 async function saveCharPanel(name) {
