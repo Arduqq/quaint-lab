@@ -6,7 +6,7 @@ permalink: "/server/skylanders/nfc-card/"
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@600;700&family=Comic+Neue:wght@400;700&family=Caveat:wght@400;700&family=Orbitron:wght@400;700;900&family=Jost:wght@400;600;700&family=Cabin:wght@400;600;700&family=Fredoka:wght@400;600;700&family=Boogaloo&family=Righteous&family=Creepster&display=swap" rel="stylesheet">
 
 <style>
   @font-face {
@@ -162,6 +162,16 @@ permalink: "/server/skylanders/nfc-card/"
   }
   .toggle-row input[type="checkbox"] { accent-color: #ffcc00; width: 13px; height: 13px; cursor: pointer; }
 
+  .bg-color-row {
+    display: flex; align-items: center; gap: 9px; margin-top: 8px;
+    font-size: .78rem; color: rgba(255,255,255,.7); cursor: pointer; user-select: none;
+  }
+  .bg-color-row input[type="color"] {
+    width: 40px; height: 26px; padding: 0; border: 1px solid rgba(255,255,255,.18);
+    border-radius: 5px; background: transparent; cursor: pointer;
+  }
+  .bg-color-row input[type="range"] { accent-color: #ffcc00; cursor: pointer; }
+
   .attack-fields { margin-top: 8px; }
   .attack-fields.hidden { display: none; }
 
@@ -211,6 +221,27 @@ permalink: "/server/skylanders/nfc-card/"
   .arc-empty { font-size: .72rem; color: rgba(255,255,255,.35); line-height: 1.5; padding: 6px 0; }
   .arc-status-msg { font-size: .68rem; color: rgba(255,255,255,.3); display: block; margin-top: 3px; }
 
+  /* Card-art paging: a tight wrapper hugging the canvas's rendered box, so the
+     prev/next arrows can be anchored to the actual card edges rather than the
+     wider flex container (see pageArchiveArt). Hidden until a character with
+     multiple tagged archive images is selected. */
+  .canvas-frame { position: relative; display: inline-block; line-height: 0; }
+  .browse-arrows { display: none; }
+  .browse-arrows.show { display: block; }
+  .browse-arr {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(8,8,16,.74); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+    border: 1.5px solid rgba(255,204,0,.55); color: #ffe9a8;
+    box-shadow: 0 2px 12px rgba(0,0,0,.55), inset 0 0 0 1px rgba(0,0,0,.35);
+    font-size: 1.3rem; line-height: 1; cursor: pointer;
+    font-family: inherit; transition: background .15s, border-color .15s, color .15s, transform .15s;
+  }
+  .browse-arr:hover { background: rgba(255,204,0,.3); border-color: #ffcc00; color: #fff; transform: translateY(-50%) scale(1.08); }
+  .browse-arr.prev { left: 14px; }
+  .browse-arr.next { right: 14px; }
+
   @media (max-width: 960px) {
     .nfc-layout { grid-template-columns: 1fr 1fr; }
     .panel-preview { grid-column: span 2; order: -1; position: static; }
@@ -237,7 +268,7 @@ permalink: "/server/skylanders/nfc-card/"
       <div class="panel-body">
         <input type="text" id="char-search" class="nfc-search" placeholder="Search characters…" autocomplete="off">
         <div class="elem-filters" id="elem-filters">
-          {% set elements = ["fire","water","earth","wind","magic","nature","undead","tech"] %}
+          {% set elements = ["fire","water","earth","wind","magic","nature","undead","tech","light","dark"] %}
           {% for el in elements %}
           <button class="elem-btn" data-element="{{ el }}" title="{{ el | capitalize }}">
             <img src="/images/server/elements/{{ el }}.png" alt="{{ el }}">
@@ -256,7 +287,13 @@ permalink: "/server/skylanders/nfc-card/"
         <span style="opacity:.38;font-weight:normal;text-transform:none;letter-spacing:0"> — 54 × 85.6 mm @ 300 DPI</span>
       </div>
       <div class="canvas-outer">
-        <canvas id="card-canvas" width="638" height="1011"></canvas>
+        <div class="canvas-frame">
+          <canvas id="card-canvas" width="638" height="1011"></canvas>
+          <div class="browse-arrows" id="browse-arrows">
+            <button class="browse-arr prev" id="browse-prev" aria-label="Previous image" type="button">‹</button>
+            <button class="browse-arr next" id="browse-next" aria-label="Next image" type="button">›</button>
+          </div>
+        </div>
       </div>
       <div class="preview-actions">
         <button class="nfc-btn" id="export-btn" disabled>↓ Export PNG</button>
@@ -269,19 +306,38 @@ permalink: "/server/skylanders/nfc-card/"
       <div class="panel-title">Style &amp; Attack</div>
 
       <div class="opt-section">
+        <span class="opt-label">Card Layout</span>
+        <div class="bg-swatches cols3">
+          <button class="bg-swatch active" data-layout="half"
+            style="background:rgba(0,0,0,.35)">Half Image</button>
+          <button class="bg-swatch" data-layout="quarter"
+            style="background:rgba(0,0,0,.35)">Quarter Image</button>
+          <button class="bg-swatch" data-layout="full"
+            style="background:rgba(0,0,0,.35)">Full Image</button>
+        </div>
+      </div>
+
+      <div class="opt-section">
         <span class="opt-label">Background</span>
-        <div class="bg-swatches">
+        <div class="bg-swatches cols3">
           <button class="bg-swatch active" data-bg="element"
             style="background:linear-gradient(135deg,#220044,#8822CC)">Element</button>
-          <button class="bg-swatch" data-bg="portal"
-            style="background:linear-gradient(135deg,#001033,#002b6b)">Portal</button>
-          <button class="bg-swatch" data-bg="skylands"
-            style="background:linear-gradient(135deg,#002266,#0077CC)">Skylands</button>
-          <button class="bg-swatch" data-bg="night"
-            style="background:linear-gradient(135deg,#06050F,#101028)">Night</button>
+          <button class="bg-swatch" data-bg="custom"
+            style="background:linear-gradient(135deg,#222,#444)">Custom Color</button>
+          <button class="bg-swatch" data-bg="transparent"
+            style="background:repeating-conic-gradient(#3a3a3a 0% 25%, #232323 0% 50%) 0 0/16px 16px">Transparent</button>
         </div>
+        <label class="bg-color-row" id="bg-color-row" style="display:none">
+          <span>Color</span>
+          <input type="color" id="bg-color-input" value="#7a1ec8">
+        </label>
         <div id="arc-bg-gallery" class="arc-gallery" style="margin-top:8px"></div>
         <span id="arc-bg-status" class="arc-status-msg"></span>
+        <label class="bg-color-row" id="bg-opacity-row" style="display:none">
+          <span>Color tint</span>
+          <input type="range" id="bg-opacity-input" min="0" max="100" value="48" style="flex:1">
+          <span id="bg-opacity-value" style="min-width:32px;text-align:right">48%</span>
+        </label>
       </div>
 
       <div class="opt-section">
@@ -311,6 +367,24 @@ permalink: "/server/skylanders/nfc-card/"
             style="font-family:'Critters',serif;font-size:.9rem;background:rgba(0,0,0,.35)">Critters</button>
           <button class="bg-swatch" data-font="rajdhani"
             style="font-family:'Rajdhani',Arial;font-weight:700;font-size:.82rem;background:rgba(0,0,0,.35)">Rajdhani</button>
+          <button class="bg-swatch" data-font="comicneue"
+            style="font-family:'Comic Neue',cursive;font-weight:700;font-size:.85rem;background:rgba(0,0,0,.35)">Comic Neue</button>
+          <button class="bg-swatch" data-font="caveat"
+            style="font-family:'Caveat',cursive;font-weight:700;font-size:1.05rem;background:rgba(0,0,0,.35)">Caveat</button>
+          <button class="bg-swatch" data-font="orbitron"
+            style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:.74rem;letter-spacing:.5px;background:rgba(0,0,0,.35)">Orbitron</button>
+          <button class="bg-swatch" data-font="jost"
+            style="font-family:'Jost',sans-serif;font-weight:600;font-size:.84rem;background:rgba(0,0,0,.35)">Jost</button>
+          <button class="bg-swatch" data-font="cabin"
+            style="font-family:'Cabin',sans-serif;font-weight:700;font-size:.84rem;background:rgba(0,0,0,.35)">Cabin</button>
+          <button class="bg-swatch" data-font="fredoka"
+            style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:.84rem;background:rgba(0,0,0,.35)">Fredoka</button>
+          <button class="bg-swatch" data-font="boogaloo"
+            style="font-family:'Boogaloo',cursive;font-size:.86rem;background:rgba(0,0,0,.35)">Boogaloo</button>
+          <button class="bg-swatch" data-font="righteous"
+            style="font-family:'Righteous',sans-serif;font-size:.8rem;background:rgba(0,0,0,.35)">Righteous</button>
+          <button class="bg-swatch" data-font="creepster"
+            style="font-family:'Creepster',cursive;font-size:.86rem;background:rgba(0,0,0,.35)">Creepster</button>
         </div>
       </div>
 
@@ -331,6 +405,11 @@ permalink: "/server/skylanders/nfc-card/"
           <input type="text" id="attack-name" class="nfc-input" style="margin-top:7px" placeholder="Attack name (e.g. FIREBALL)">
           <input type="text" id="attack-damage" class="nfc-input" placeholder="Damage (e.g. 60)">
           <textarea id="attack-desc" class="nfc-input" placeholder="Attack description…"></textarea>
+          <div id="arc-attack-section" style="display:none;margin-top:10px">
+            <span class="opt-label">Attack Icon</span>
+            <div id="arc-attack-gallery" class="arc-gallery"></div>
+            <span id="arc-attack-status" class="arc-status-msg"></span>
+          </div>
         </div>
       </div>
 
@@ -351,7 +430,11 @@ permalink: "/server/skylanders/nfc-card/"
       </div>
 
       <div class="opt-section" id="arc-art-section" style="display:none">
-        <span class="opt-label">Archive Art</span>
+        <span class="opt-label">Archive Art
+          <label id="arc-show-all-label" style="font-weight:400;font-size:11px;margin-left:8px;opacity:.6;cursor:pointer">
+            <input type="checkbox" id="arc-show-all" style="vertical-align:middle;margin-right:3px">show all
+          </label>
+        </span>
         <div id="arc-art-gallery" class="arc-gallery"></div>
         <span id="arc-art-status" class="arc-status-msg"></span>
         <button class="clear-btn" id="arc-clear" style="margin-top:6px">✕ Clear archive layers</button>
@@ -364,13 +447,19 @@ permalink: "/server/skylanders/nfc-card/"
 <script>
 const SKYLANDERS_ALL = {{ skylanders | dump | safe }};
 const CHARS = SKYLANDERS_ALL.flatMap(g =>
-  (g.characters || []).map(c => ({
-    name:    c.name,
-    image:   c.image,
-    hiRes:   c.tooltip_image || '',
-    element: c.element || '',
-    game:    g.game
-  }))
+  (g.characters || []).flatMap(c => {
+    const base = {
+      name:    c.name,
+      image:   c.image,
+      element: c.element || '',
+      species: c.species || '',
+      gender:  c.gender  || '',
+      role:    c.role    || '',
+      game:    g.game
+    };
+    const variants = (c.variants || []).map(v => ({ ...base, name: v.name, image: v.image }));
+    return [base, ...variants];
+  })
 );
 </script>
 
@@ -378,16 +467,12 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   // ── Card dimensions (portrait NFC: 54mm × 85.6mm @ 300 DPI) ──────────────
   const CARD_W = 638, CARD_H = 1011, CORNER_R = 38;
 
-  const HDR_H  = 118;
   const DIV1_H = 9;
-  const ART_Y  = HDR_H + DIV1_H;   // 127
-  const DIV2_H = 9;
-  const ATK_H  = 282;
   const DIV3_H = 4;
   const FTR_H  = 127;
   const FTR_Y  = CARD_H - FTR_H;   // 884
 
-  const ELEMENTS = ['fire','water','earth','wind','magic','nature','undead','tech'];
+  const ELEMENTS = ['fire','water','earth','wind','magic','nature','undead','tech','light','dark'];
 
   const ELEMENT_PALETTES = {
     fire:   { dark: '#5c1400', mid: '#7A1800', mid2: '#C83200', accent: '#FF5500', highlight: '#FF9955', text: '#FFCC99' },
@@ -398,30 +483,81 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     nature: { dark: '#0f3200', mid: '#143800', mid2: '#2C7200', accent: '#55AA00', highlight: '#99DD44', text: '#AAEE55' },
     undead:  { dark: '#1a1a1a', mid: '#222244', mid2: '#4444AA', accent: '#6666CC', highlight: '#9999DD', text: '#BBBBEE' },
     tech:   { dark: '#452e00', mid: '#604000', mid2: '#9A7000', accent: '#DDAA00', highlight: '#FFDD55', text: '#FFEE99' },
+    light:  { dark: '#4a3a00', mid: '#7a6200', mid2: '#c8a000', accent: '#f5c800', highlight: '#fffaaa', text: '#fffff5' },
+    dark:   { dark: '#08001a', mid: '#150033', mid2: '#2e0060', accent: '#6600dd', highlight: '#aa66ff', text: '#ddbbff' },
   };
-  const BG_FIXED = {
-    portal:   { dark: '#001440', mid: '#001E55', mid2: '#002F88', accent: '#3366CC', highlight: '#6699FF', text: '#99BBFF' },
-    skylands: { dark: '#002b6e', mid: '#0060AA', mid2: '#0088DD', accent: '#55AAEE', highlight: '#99CCFF', text: '#CCE8FF' },
-    night:    { dark: '#0a0a22', mid: '#0C0C26', mid2: '#181844', accent: '#4444BB', highlight: '#8888EE', text: '#9999EE' },
-  };
+  // ── Derive a full card palette (dark/mid/mid2/accent/highlight/text) from a
+  // single user-picked color, the same shape as ELEMENT_PALETTES, by walking
+  // its hue/saturation across a fixed lightness ramp.
+  function hexToHsl(hex) {
+    const r = parseInt(hex.slice(1, 3), 16) / 255, g = parseInt(hex.slice(3, 5), 16) / 255, b = parseInt(hex.slice(5, 7), 16) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s = 0; const l = (max + min) / 2;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        default: h = (r - g) / d + 4;
+      }
+      h *= 60;
+    }
+    return [h, s * 100, l * 100];
+  }
+  function hslToHex(h, s, l) {
+    s /= 100; l /= 100;
+    const k = n => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    const toHex = x => Math.round(x * 255).toString(16).padStart(2, '0');
+    return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+  }
+  function paletteFromColor(hex) {
+    const [h, s] = hexToHsl(hex);
+    const sat = Math.max(s, 50);
+    return {
+      dark:      hslToHex(h, Math.min(sat + 10, 90), 14),
+      mid:       hslToHex(h, Math.min(sat + 5, 85), 25),
+      mid2:      hslToHex(h, sat, 40),
+      accent:    hslToHex(h, Math.min(sat + 15, 100), 53),
+      highlight: hslToHex(h, Math.max(sat - 15, 30), 75),
+      text:      hslToHex(h, Math.max(sat - 25, 20), 87),
+    };
+  }
 
   // Font definitions for the name — each is a function of font-size
   const FONT_DEFS = {
-    bebas:    fs => `${fs}px 'Bebas Neue', Impact, sans-serif`,
-    critters: fs => `${fs}px 'Critters', serif`,
-    rajdhani: fs => `700 ${fs}px 'Rajdhani', Arial, sans-serif`,
+    bebas:     fs => `${fs}px 'Bebas Neue', Impact, sans-serif`,
+    critters:  fs => `${fs}px 'Critters', serif`,
+    rajdhani:  fs => `700 ${fs}px 'Rajdhani', Arial, sans-serif`,
+    comicneue: fs => `700 ${fs}px 'Comic Neue', 'Comic Sans MS', cursive`,
+    caveat:    fs => `700 ${fs}px 'Caveat', cursive`,
+    orbitron:  fs => `700 ${fs}px 'Orbitron', sans-serif`,
+    jost:      fs => `600 ${fs}px 'Jost', sans-serif`,
+    cabin:     fs => `700 ${fs}px 'Cabin', sans-serif`,
+    fredoka:   fs => `600 ${fs}px 'Fredoka', sans-serif`,
+    boogaloo:  fs => `${fs}px 'Boogaloo', cursive`,
+    righteous: fs => `${fs}px 'Righteous', sans-serif`,
+    creepster: fs => `${fs}px 'Creepster', cursive`,
   };
 
   const state = {
     characterName: null,
     element: null,
+    species: null,
+    gender: null,
+    role: null,
     customName: '',
     attackName: '',
     attackDamage: '',
     attackDesc: '',
     background: 'element',
+    customColor: '#7a1ec8',
+    bgColorOpacity: 0.48,
     pattern: 'clouds',
     nameFont: 'bebas',
+    layout: 'half',
     showName: true,
     showAttack: true,
     showElement: true,
@@ -440,8 +576,8 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   };
 
   let charImg = null;
+  let charImgIsArt = false; // true when charImg is a painted illustration (hi-res tooltip art / custom upload), not a transparent in-game figure cutout
   let logoImg = null;
-  let skylandsImg = null;
   let usingCustomImg = false;
   const elemImgCache = {};
   const portalBgCache = {};
@@ -456,9 +592,11 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   let arcBgImg      = null; // loaded Image for background layer
   let arcDetailImg  = null; // loaded Image for detail layer
   let arcArtImg     = null; // loaded Image for character art from archive
+  let arcAttackIconImg = null; // loaded Image for chosen attack-flavour icon (from the character's "attack"-tagged ability icons)
   let arcBgUrl      = null;
   let arcDetailUrl  = null;
   let arcArtUrl     = null;
+  let arcAttackIconUrl = null;
   const arcImgCache = {};
 
   async function loadArcImg(url) {
@@ -507,8 +645,15 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     img.src = src;
   });
 
-  async function loadCharImg(name, hiResUrl) {
-    if (hiResUrl) { const i = await tryLoadCors(hiResUrl); if (i) return i; }
+  async function loadCharImg(name) {
+    // The official painted artwork already synced from the local archive
+    // ("character-art-*") is the best default — roughly 770×740 versus the
+    // ~120px in-game cutouts below, which look blurry once placed on the card.
+    const index = await fetchArchiveIndex();
+    const charImages = (index && index.byCharacter || {})[name.toLowerCase()] || [];
+    const art = charImages.find(im => im.file && im.file.startsWith('character-art-'));
+    if (art) { const i = await tryLoadCors(art.url); if (i) { charImgIsArt = true; return i; } }
+    charImgIsArt = false;
     const slug = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const base = `/images/server/characters/${slug}`;
     return (await tryLoad(`${base}.png`)) || (await tryLoad(`${base}.jpg`));
@@ -526,10 +671,9 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   ELEMENTS.forEach(loadElemImg);
   Object.keys(PORTAL_BG).forEach(loadPortalBg);
   tryLoad('/images/server/skylanders-logo.png').then(img => { logoImg = img; });
-  tryLoad('/images/server/bg/skylands.jpg').then(img => { skylandsImg = img; });
 
   function getPalette() {
-    if (state.background !== 'element') return BG_FIXED[state.background] || BG_FIXED.portal;
+    if (state.background === 'custom') return paletteFromColor(state.customColor);
     return ELEMENT_PALETTES[state.element] || ELEMENT_PALETTES.magic;
   }
 
@@ -580,6 +724,90 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
       ctx.closePath(); ctx.fill();
     }
     ctx.restore();
+  }
+
+  // ── Angular seam accent: a glowing sash that cuts diagonally across a flat
+  // horizontal divider — its centreline rises from below the seam on one side
+  // to above it on the other, so it visibly slices from one section into the
+  // next rather than just glowing along the boundary. Echoes the diagonal-
+  // stripe / corner-bracket geometry used elsewhere on the card.
+  function drawSeamCut(y, w, color, opts = {}) {
+    const { thick = 15, rise = 46, from = 0.04, to = 0.58, core = '#ffffff' } = opts;
+    const x1 = w * from, x2 = w * to;
+    const y1 = y + rise / 2, y2 = y - rise / 2;
+    const band = (col, t) => {
+      const h = t / 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1 - h);
+      ctx.lineTo(x2, y2 - h);
+      ctx.lineTo(x2, y2 + h);
+      ctx.lineTo(x1, y1 + h);
+      ctx.closePath();
+      const g = ctx.createLinearGradient(x1, y1, x2, y2);
+      g.addColorStop(0,    col + '00');
+      g.addColorStop(0.5,  col);
+      g.addColorStop(1,    col + '00');
+      ctx.fillStyle = g;
+      ctx.fill();
+    };
+    ctx.save();
+    ctx.shadowColor = color; ctx.shadowBlur = 20;
+    band(color, thick);
+    // Bright core — gives the cut a defined "edge" so it reads against any
+    // palette (a warm accent alone washes out on warm card backgrounds).
+    ctx.shadowBlur = 0;
+    band(core, thick * 0.28);
+    ctx.restore();
+  }
+
+  // ── Clean seam accent: a thin glowing accent rule with a circular badge
+  // overlapping it — the badge "punches through" the divider as a focal
+  // point, echoing TCG layouts where a cost/rarity emblem sits squarely on
+  // the illustration seam rather than tucked away inside a panel.
+  function drawAccentRule(y, w, color, opts = {}) {
+    const { thick = 3, from = 0.05, to = 0.95, glow = 16 } = opts;
+    const x1 = w * from, x2 = w * to;
+    ctx.save();
+    ctx.shadowColor = color; ctx.shadowBlur = glow;
+    const g = ctx.createLinearGradient(x1, y, x2, y);
+    g.addColorStop(0,    color + '00');
+    g.addColorStop(0.1,  color);
+    g.addColorStop(0.9,  color);
+    g.addColorStop(1,    color + '00');
+    ctx.fillStyle = g;
+    ctx.fillRect(x1, y - thick / 2, x2 - x1, thick);
+    ctx.restore();
+  }
+
+  // The element artwork is already a finished circular emblem (glyph on a
+  // coloured disc) — rather than rebuild a badge shell behind it, glow it and
+  // ring it in the card's accent colours so it reads as the card's focal
+  // point sitting *on* the seam, not just element flavour tucked in a corner.
+  function drawSeamBadge(cx, cy, r, img, color, opts = {}) {
+    const { ring = '#ffffff' } = opts;
+    ctx.save();
+    ctx.shadowColor = color; ctx.shadowBlur = 24;
+    ctx.drawImage(img, cx - r, cy - r, r * 2, r * 2);
+    ctx.shadowBlur = 0;
+    ctx.lineWidth = 3; ctx.strokeStyle = ring;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = color;
+    ctx.beginPath(); ctx.arc(cx, cy, r + 4, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
+
+  // Angle-cut corner frame: chamfers the top-left and bottom-right corners,
+  // leaving the other two square — a restrained nod to angular HUD framing
+  // without tipping into a fully-faceted, busy look.
+  function cutCornerRect(x, y, w, h, cut) {
+    ctx.beginPath();
+    ctx.moveTo(x + cut, y);
+    ctx.lineTo(x + w, y);
+    ctx.lineTo(x + w, y + h - cut);
+    ctx.lineTo(x + w - cut, y + h);
+    ctx.lineTo(x, y + h);
+    ctx.lineTo(x, y + cut);
+    ctx.closePath();
   }
 
   // ── Pattern renderer ───────────────────────────────────────────────────────
@@ -673,247 +901,526 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   }
 
   // ── Main draw ──────────────────────────────────────────────────────────────
+  // Three selectable layouts (state.layout) share the same building blocks
+  // (art panel, name plate, attack panel, footer) but arrange them differently:
+  //   half    — framed illustration on the top half, all info stacked below
+  //   quarter — small framed illustration top-right, info column on the left
+  //   full    — illustration fills the card, info overlays it on scrims
   async function drawCard() {
     const W = CARD_W, H = CARD_H;
     const pal = getPalette();
     const elemImg  = await loadElemImg(state.element);
     const portalBg = state.background === 'element' ? await loadPortalBg(state.element) : null;
-    const sklBg    = state.background === 'skylands' ? skylandsImg : null;
-
-    const artH  = state.showAttack ? 462 : FTR_Y - DIV2_H - ART_Y;
-    const div2Y = ART_Y + artH;
+    const bgBase   = arcBgImg || portalBg;
+    const srcImg   = arcArtImg || charImg;
+    const nameText = () => state.customName.trim() || state.characterName || '???';
 
     ctx.clearRect(0, 0, W, H);
     ctx.save();
     roundedRect(0, 0, W, H, CORNER_R);
     ctx.clip();
 
-    // ════ HEADER ════════════════════════════════════════════════════════
-    const hdrGrad = ctx.createLinearGradient(0, 0, W * 1.1, HDR_H);
-    hdrGrad.addColorStop(0,    pal.dark);
-    hdrGrad.addColorStop(0.25, pal.mid);
-    hdrGrad.addColorStop(0.6,  pal.accent);
-    hdrGrad.addColorStop(1,    pal.mid2);
-    ctx.fillStyle = hdrGrad;
-    ctx.fillRect(0, 0, W, HDR_H);
-
-    diagonalStripes(0, 0, W, HDR_H, 28, 10, '#000', 0.07);
-
-    const sheen = ctx.createLinearGradient(0, 0, 0, HDR_H * 0.5);
-    sheen.addColorStop(0, 'rgba(255,255,255,0.22)');
-    sheen.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = sheen;
-    ctx.fillRect(0, 0, W, HDR_H * 0.5);
-
-    // Element icon in header
-    const ESZ = 72, EX = 14, EY = (HDR_H - ESZ) / 2;
-    if (elemImg && state.showElement) {
+    // ── Building block: illustration panel (portal/archive bg + character art) ─
+    function drawArtPanel(x, y, w, h, { framed = false, cornerStyle = 'round' } = {}) {
       ctx.save();
-      const ig = ctx.createRadialGradient(EX+ESZ/2, EY+ESZ/2, 0, EX+ESZ/2, EY+ESZ/2, ESZ*0.8);
-      ig.addColorStop(0, 'rgba(255,255,255,0.30)');
-      ig.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = ig;
-      ctx.beginPath(); ctx.arc(EX+ESZ/2, EY+ESZ/2, ESZ*0.8, 0, Math.PI*2); ctx.fill();
-      ctx.shadowColor = 'rgba(255,255,255,0.4)'; ctx.shadowBlur = 12;
-      ctx.drawImage(elemImg, EX, EY, ESZ, ESZ);
+      if (framed) {
+        if (cornerStyle === 'cut') cutCornerRect(x, y, w, h, Math.min(w, h) * 0.07);
+        else roundedRect(x, y, w, h, 24);
+        ctx.clip();
+      }
+
+      const bgTransparent = state.background === 'transparent';
+
+      if (!bgTransparent) {
+        // Opaque backing fill first — the portal/archive background art has soft,
+        // semi-transparent edges (it's painted with alpha vignettes), so without
+        // a solid base beneath it those soft regions let the canvas's real
+        // transparency show through as visible "holes" in the card.
+        ctx.fillStyle = pal.dark;
+        ctx.fillRect(x, y, w, h);
+
+        if (bgBase) {
+          const iw = bgBase.naturalWidth, ih = bgBase.naturalHeight;
+          const scale = Math.max(w / iw, h / ih);
+          const dw = iw * scale, dh = ih * scale;
+          ctx.drawImage(bgBase, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+        }
+
+        const artGrad = ctx.createLinearGradient(x, y, x + w * 0.9, y + h);
+        artGrad.addColorStop(0,   pal.mid);
+        artGrad.addColorStop(0.3, pal.mid2);
+        artGrad.addColorStop(0.6, pal.accent + 'cc');
+        artGrad.addColorStop(0.85,pal.mid2);
+        artGrad.addColorStop(1,   pal.mid);
+        ctx.globalAlpha = bgBase ? state.bgColorOpacity : 1;
+        ctx.fillStyle = artGrad;
+        ctx.fillRect(x, y, w, h);
+        ctx.globalAlpha = 1;
+
+        const gcx = x + w / 2, gcy = y + h * 0.48;
+        const glow = ctx.createRadialGradient(gcx, gcy, 0, gcx, gcy, Math.max(w, h) * 0.62);
+        glow.addColorStop(0,   pal.accent + '38');
+        glow.addColorStop(0.4, pal.accent + '14');
+        glow.addColorStop(1,   'transparent');
+        ctx.fillStyle = glow;
+        ctx.fillRect(x, y, w, h);
+
+        if (elemImg && state.showElement) {
+          const wmS = Math.min(h, w) * 0.72;
+          ctx.save();
+          ctx.globalAlpha = 0.09;
+          ctx.drawImage(elemImg, x + (w - wmS) / 2, y + (h - wmS) / 2, wmS, wmS);
+          ctx.restore();
+        }
+
+        const vig = ctx.createRadialGradient(x+w/2, y+h/2, Math.min(w,h)*0.28, x+w/2, y+h/2, Math.max(w,h)*0.78);
+        vig.addColorStop(0, 'transparent');
+        vig.addColorStop(1, 'rgba(0,0,0,0.18)');
+        ctx.fillStyle = vig;
+        ctx.fillRect(x, y, w, h);
+
+        drawPattern(state.pattern, x, y, w, h);
+
+        if (arcDetailImg) {
+          const iw = arcDetailImg.naturalWidth, ih = arcDetailImg.naturalHeight;
+          const scale = Math.min(w / iw, h / ih);
+          const dw = iw * scale, dh = ih * scale;
+          ctx.drawImage(arcDetailImg, x + (w - dw) / 2, y + h - dh, dw, dh);
+        }
+      }
+
+      // Painted illustrations (hi-res character art, chosen archive art, custom
+      // uploads) are full rectangles, not transparent in-game cutouts — fill the
+      // frame edge-to-edge instead of floating them with the cutout glow, which
+      // just smears their soft painted edges into the panel's gradient.
+      const srcIsArt = srcImg && (srcImg === arcArtImg || (srcImg === charImg && charImgIsArt));
+
+      if (srcIsArt) {
+        const iw = srcImg.naturalWidth || w, ih = srcImg.naturalHeight || h;
+        const sc = Math.max(w / iw, h / ih);
+        const dw = iw * sc, dh = ih * sc;
+        ctx.drawImage(srcImg, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+      } else if (srcImg) {
+        const pad = Math.min(w, h) * 0.05;
+        let iw = srcImg.naturalWidth || 400, ih = srcImg.naturalHeight || 400;
+        const sc = Math.min((w-pad*2)/iw, (h-pad*2)/ih);
+        iw *= sc; ih *= sc;
+        const ix = x + (w-iw)/2, iy = y + (h-ih)/2;
+        ctx.save(); ctx.shadowColor = pal.accent; ctx.shadowBlur = 70; ctx.globalAlpha = 0.5; ctx.drawImage(srcImg,ix,iy,iw,ih); ctx.restore();
+        ctx.drawImage(srcImg, ix, iy, iw, ih);
+      } else {
+        const fs1 = Math.max(15, Math.min(w, h) * 0.072);
+        ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.font = `bold ${fs1}px Arial`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('Select a character', x + w/2, y + h/2 - fs1*0.7);
+        if (w > 280) {
+          ctx.font = `${fs1*0.65}px Arial`; ctx.fillStyle = 'rgba(255,255,255,0.1)';
+          ctx.fillText('← Choose from the left panel', x + w/2, y + h/2 + fs1*0.85);
+        }
+        ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      }
+
       ctx.restore();
+
+      const BP = Math.min(w,h) * 0.022, BL = Math.min(w,h) * 0.075;
+      ctx.save(); ctx.shadowColor = pal.accent; ctx.shadowBlur = 14;
+      cornerBrackets(x+BP, y+BP, w-BP*2, h-BP*2, BL, 6, pal.accent); ctx.restore();
+      cornerBrackets(x+BP, y+BP, w-BP*2, h-BP*2, BL, 2, pal.highlight || '#fff');
     }
 
-    if (state.showName) {
-      const txt = state.customName.trim() || state.characterName || '???';
-      const nameX = EX + ESZ + 14, maxW = W - nameX - 14;
-      let fs = 68;
-      const fontFn = FONT_DEFS[state.nameFont] || FONT_DEFS.bebas;
-      ctx.font = fontFn(fs);
-      while (ctx.measureText(txt).width > maxW && fs > 26) { fs -= 2; ctx.font = fontFn(fs); }
-      ctx.save();
-      // Element-tinted glow shadow (character name pops in element color)
-      ctx.shadowColor = pal.accent;
-      ctx.shadowBlur = 18;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-      ctx.fillStyle = '#fff';
-      ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-      ctx.fillText(txt, nameX, HDR_H * 0.64);
-      ctx.restore();
+    // ── Building block: name + element ribbon (used by half/quarter layouts) ──
+    function drawNamePlate(x, y, w, h, opts = {}) {
+      const { badgeGutter = 0 } = opts;
+      const grad = ctx.createLinearGradient(x, y, x + w * 1.1, y + h);
+      grad.addColorStop(0,    pal.dark);
+      grad.addColorStop(0.25, pal.mid);
+      grad.addColorStop(0.6,  pal.accent);
+      grad.addColorStop(1,    pal.mid2);
+      ctx.fillStyle = grad; ctx.fillRect(x, y, w, h);
+      diagonalStripes(x, y, w, h, 28, 10, '#000', 0.07);
+      const sheen = ctx.createLinearGradient(x, y, x, y + h * 0.55);
+      sheen.addColorStop(0, 'rgba(255,255,255,0.20)'); sheen.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = sheen; ctx.fillRect(x, y, w, h * 0.55);
 
-      if (state.element) {
-        ctx.font = `600 21px 'Rajdhani', Arial, sans-serif`;
-        ctx.fillStyle = pal.highlight || 'rgba(255,255,255,0.65)';
-        ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-        ctx.fillText(state.element.toUpperCase(), nameX, HDR_H * 0.90);
+      // When a seam badge straddles the divider above this plate, it already
+      // carries the element mark — skip the in-plate icon and start the name
+      // clear of the badge's footprint instead of layering a second one.
+      let nameX = x + 18;
+      if (badgeGutter > 0) {
+        nameX = x + badgeGutter;
+      } else if (elemImg && state.showElement) {
+        const ESZ = Math.min(h * 0.62, 72), EX = x + 14, EY = y + (h - ESZ) / 2;
+        ctx.save();
+        const ig = ctx.createRadialGradient(EX+ESZ/2, EY+ESZ/2, 0, EX+ESZ/2, EY+ESZ/2, ESZ*0.8);
+        ig.addColorStop(0, 'rgba(255,255,255,0.30)'); ig.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = ig; ctx.beginPath(); ctx.arc(EX+ESZ/2, EY+ESZ/2, ESZ*0.8, 0, Math.PI*2); ctx.fill();
+        ctx.shadowColor = 'rgba(255,255,255,0.4)'; ctx.shadowBlur = 12;
+        ctx.drawImage(elemImg, EX, EY, ESZ, ESZ);
+        ctx.restore();
+        nameX = EX + ESZ + 14;
+      }
+
+      if (state.showName) {
+        const txt = nameText();
+        const maxW = x + w - nameX - 14;
+        let fs = Math.min(64, h * 0.5);
+        const fontFn = FONT_DEFS[state.nameFont] || FONT_DEFS.bebas;
+        ctx.font = fontFn(fs);
+        while (ctx.measureText(txt).width > maxW && fs > 22) { fs -= 2; ctx.font = fontFn(fs); }
+        ctx.save();
+        ctx.shadowColor = pal.accent; ctx.shadowBlur = 18;
+        ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+        ctx.fillText(txt, nameX, y + h * 0.6);
+        ctx.restore();
+
+        if (state.element) {
+          ctx.font = `600 ${Math.max(16, h * 0.165)}px 'Rajdhani', Arial, sans-serif`;
+          ctx.fillStyle = pal.highlight || 'rgba(255,255,255,0.65)';
+          ctx.fillText(state.element.toUpperCase(), nameX, y + h * 0.86);
+        }
+        const metaLine = [state.species, state.gender, state.role].filter(Boolean).join('  ·  ');
+        if (metaLine) {
+          ctx.save();
+          ctx.font = `600 ${Math.max(13, h * 0.13)}px 'Rajdhani', Arial, sans-serif`;
+          ctx.shadowColor = 'rgba(0,0,0,0.75)'; ctx.shadowBlur = 7; ctx.shadowOffsetY = 1;
+          ctx.fillStyle = 'rgba(255,255,255,0.88)';
+          ctx.textAlign = 'right';
+          ctx.fillText(metaLine, x + w - 16, y + h * 0.86);
+          ctx.restore();
+          ctx.textAlign = 'left';
+        }
       }
     }
 
-    ctx.fillStyle = '#000'; ctx.fillRect(0, HDR_H, W, DIV1_H);
-
-    // ════ ART AREA ═══════════════════════════════════════════════════════
-    // Layer 1: portal/skylands preset OR archive background image
-    const archiveBg = portalBg || sklBg;
-    const bgBase = arcBgImg || archiveBg;
-    if (bgBase) {
-      const iw = bgBase.naturalWidth, ih = bgBase.naturalHeight;
-      const scale = Math.max(W / iw, artH / ih);
-      const dw = iw * scale, dh = ih * scale;
-      ctx.drawImage(bgBase, (W - dw) / 2, ART_Y + (artH - dh) / 2, dw, dh);
-    }
-
-    // Layer 2: element gradient (semi-transparent when a bg image is present)
-    const artGrad = ctx.createLinearGradient(0, ART_Y, W * 0.9, ART_Y + artH);
-    artGrad.addColorStop(0,   pal.mid);
-    artGrad.addColorStop(0.3, pal.mid2);
-    artGrad.addColorStop(0.6, pal.accent + 'cc');
-    artGrad.addColorStop(0.85,pal.mid2);
-    artGrad.addColorStop(1,   pal.mid);
-    ctx.globalAlpha = bgBase ? 0.48 : 1;
-    ctx.fillStyle = artGrad;
-    ctx.fillRect(0, ART_Y, W, artH);
-    ctx.globalAlpha = 1;
-
-    // Centre accent glow
-    const gcx = W/2, gcy = ART_Y + artH * 0.48;
-    const glow = ctx.createRadialGradient(gcx, gcy, 0, gcx, gcy, artH * 0.62);
-    glow.addColorStop(0,   pal.accent + '38');
-    glow.addColorStop(0.4, pal.accent + '14');
-    glow.addColorStop(1,   'transparent');
-    ctx.fillStyle = glow;
-    ctx.fillRect(0, ART_Y, W, artH);
-
-    // Element watermark — large faded icon centred behind the character
-    if (elemImg && state.showElement) {
-      const wmS = Math.min(artH, W) * 0.72;
-      ctx.save();
-      ctx.globalAlpha = 0.09;
-      ctx.drawImage(elemImg, (W - wmS) / 2, ART_Y + (artH - wmS) / 2, wmS, wmS);
-      ctx.restore();
-    }
-
-    // Vignette — light, just to push edges slightly inward
-    const vig = ctx.createRadialGradient(W/2, ART_Y+artH/2, artH*0.28, W/2, ART_Y+artH/2, artH*0.85);
-    vig.addColorStop(0, 'transparent');
-    vig.addColorStop(1, 'rgba(0,0,0,0.18)');
-    ctx.fillStyle = vig;
-    ctx.fillRect(0, ART_Y, W, artH);
-
-    // Pattern drawn AFTER vignette so it reads as a bright overlay
-    drawPattern(state.pattern, 0, ART_Y, W, artH);
-
-    // Layer 3: archive detail image — between pattern and character
-    if (arcDetailImg) {
-      const iw = arcDetailImg.naturalWidth, ih = arcDetailImg.naturalHeight;
-      const scale = Math.min(W / iw, artH / ih);
-      const dw = iw * scale, dh = ih * scale;
-      ctx.drawImage(arcDetailImg, (W - dw) / 2, ART_Y + artH - dh, dw, dh);
-    }
-
-    // Layer 4: character art — archive art overrides static figure when selected
-    const srcImg = arcArtImg || charImg;
-    if (srcImg) {
-      const pad = 20;
-      let iw = srcImg.naturalWidth || 400, ih = srcImg.naturalHeight || 400;
-      const sc = Math.min((W-pad*2)/iw, (artH-pad*2)/ih);
-      iw *= sc; ih *= sc;
-      const ix = (W-iw)/2, iy = ART_Y + (artH-ih)/2;
-      ctx.save(); ctx.shadowColor = pal.accent; ctx.shadowBlur = 70; ctx.globalAlpha = 0.5; ctx.drawImage(srcImg,ix,iy,iw,ih); ctx.restore();
-      ctx.drawImage(srcImg, ix, iy, iw, ih);
-    } else {
-      ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.font = 'bold 27px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('Select a character', W/2, ART_Y + artH/2 - 18);
-      ctx.font = '18px Arial'; ctx.fillStyle = 'rgba(255,255,255,0.1)';
-      ctx.fillText('← Choose from the left panel', W/2, ART_Y + artH/2 + 22);
-      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-    }
-
-    // Corner brackets
-    const BP = 14, BL = 46;
-    ctx.save(); ctx.shadowColor = pal.accent; ctx.shadowBlur = 14;
-    cornerBrackets(BP, ART_Y+BP, W-BP*2, artH-BP*2, BL, 6, pal.accent); ctx.restore();
-    cornerBrackets(BP, ART_Y+BP, W-BP*2, artH-BP*2, BL, 2, pal.highlight || '#fff');
-
-    ctx.fillStyle = '#000'; ctx.fillRect(0, div2Y, W, DIV2_H);
-
-    // ════ ATTACK SECTION ══════════════════════════════════════════════════
-    if (state.showAttack) {
-      const atkY0 = div2Y + DIV2_H;
-      ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, atkY0, W, ATK_H);
-
-      const sg = ctx.createLinearGradient(0, atkY0, 0, atkY0+ATK_H);
-      sg.addColorStop(0, pal.accent); sg.addColorStop(0.5, pal.highlight||pal.accent); sg.addColorStop(1, pal.accent);
-      ctx.fillStyle = sg; ctx.globalAlpha = 0.8; ctx.fillRect(0, atkY0, 5, ATK_H); ctx.globalAlpha = 1;
+    // ── Building block: opaque attack info panel (half/quarter layouts) ───────
+    function drawAttackPanel(x, y, w, h) {
+      ctx.fillStyle = '#0a0a0a'; ctx.fillRect(x, y, w, h);
+      const sg = ctx.createLinearGradient(0, y, 0, y + h);
+      sg.addColorStop(0, pal.accent); sg.addColorStop(0.5, pal.highlight || pal.accent); sg.addColorStop(1, pal.accent);
+      ctx.fillStyle = sg; ctx.globalAlpha = 0.8; ctx.fillRect(x, y, 5, h); ctx.globalAlpha = 1;
 
       const PAD = 20;
-      let ay = atkY0 + PAD;
+      let ay = y + PAD;
       const an = state.attackName.trim(), ad = state.attackDesc.trim(), adm = state.attackDamage.trim();
 
       if (an || ad) {
-        const ICON = 38, banH = ICON + 16;
-        const bg2 = ctx.createLinearGradient(0, ay, W, ay);
+        const ICON = 52, banH = ICON + 16;
+        const bg2 = ctx.createLinearGradient(x, ay, x + w, ay);
         bg2.addColorStop(0, pal.accent + '2E'); bg2.addColorStop(0.6, pal.accent + '16'); bg2.addColorStop(1, 'transparent');
-        ctx.fillStyle = bg2; ctx.fillRect(0, ay-6, W, banH);
+        ctx.fillStyle = bg2; ctx.fillRect(x, ay - 6, w, banH);
 
-        if (elemImg && state.showElement) ctx.drawImage(elemImg, PAD+4, ay, ICON, ICON);
-        const anx = (elemImg && state.showElement) ? PAD+ICON+16 : PAD+4;
+        // A chosen archive attack icon (the Skylander's own ability artwork)
+        // takes precedence as the flavour icon; otherwise fall back to the
+        // generic element badge, as before.
+        const attackIcon = arcAttackIconImg || (state.showElement ? elemImg : null);
+        if (attackIcon) ctx.drawImage(attackIcon, x + PAD + 4, ay, ICON, ICON);
+        const anx = attackIcon ? x + PAD + ICON + 16 : x + PAD + 4;
 
         ctx.font = `40px 'Bebas Neue', Impact, sans-serif`; ctx.fillStyle = pal.accent; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
-        ctx.fillText((an || 'ATTACK').toUpperCase(), anx, ay + ICON/2);
+        ctx.fillText((an || 'ATTACK').toUpperCase(), anx, ay + ICON / 2);
 
         if (adm) {
           ctx.font = `700 60px 'Rajdhani', Arial, sans-serif`; ctx.fillStyle = '#fff'; ctx.textAlign = 'right';
-          ctx.fillText(adm, W-PAD, ay + ICON/2 + 13); ctx.textAlign = 'left';
+          ctx.fillText(adm, x + w - PAD, ay + ICON / 2 + 13); ctx.textAlign = 'left';
         }
         ay += banH + 2;
 
-        const sep = ctx.createLinearGradient(PAD, 0, W-PAD, 0);
+        const sep = ctx.createLinearGradient(x + PAD, 0, x + w - PAD, 0);
         sep.addColorStop(0, 'transparent'); sep.addColorStop(0.12, pal.accent); sep.addColorStop(0.88, pal.accent); sep.addColorStop(1, 'transparent');
-        ctx.fillStyle = sep; ctx.globalAlpha = 0.40; ctx.fillRect(PAD, ay, W-PAD*2, 2); ctx.globalAlpha = 1;
+        ctx.fillStyle = sep; ctx.globalAlpha = 0.40; ctx.fillRect(x + PAD, ay, w - PAD * 2, 2); ctx.globalAlpha = 1;
         ay += 14;
 
         if (ad) {
           ctx.font = `21px 'Atkinson Hyperlegible', Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.82)';
           ctx.textBaseline = 'top'; ctx.textAlign = 'left';
-          wrapText(ad, PAD+8, ay, W-PAD*2-8, 30, Math.floor((atkY0+ATK_H-20-ay)/30));
+          wrapText(ad, x + PAD + 8, ay, w - PAD * 2 - 8, 30, Math.floor((y + h - 20 - ay) / 30));
         }
       } else {
         ctx.font = `19px 'Atkinson Hyperlegible', Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.16)';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.fillText('Fill in the Attack fields above →', W/2, atkY0 + ATK_H/2);
+        ctx.fillText('Fill in the Attack fields above →', x + w / 2, y + h / 2);
+      }
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    }
+
+    // ── Building block: footer band with logo + flanking element icons ────────
+    function drawFooterBand(y, h) {
+      const fg = ctx.createLinearGradient(0, y, 0, y + h);
+      fg.addColorStop(0, pal.mid); fg.addColorStop(1, pal.dark);
+      ctx.fillStyle = fg; ctx.fillRect(0, y, W, h);
+
+      const dl = ctx.createLinearGradient(0, y, W, y);
+      dl.addColorStop(0,    'transparent');
+      dl.addColorStop(0.12, pal.accent);
+      dl.addColorStop(0.88, pal.accent);
+      dl.addColorStop(1,    'transparent');
+      ctx.fillStyle = dl; ctx.fillRect(0, y, W, 3);
+
+      const fcy = y + h / 2;
+      if (state.showLogo && logoImg) {
+        const lh = 76, lw = lh * (logoImg.naturalWidth / (logoImg.naturalHeight || 1));
+        ctx.save(); ctx.globalAlpha = 0.82; ctx.drawImage(logoImg, (W - lw) / 2, fcy - lh / 2, lw, lh); ctx.restore();
+      } else {
+        ctx.font = `bold 17px 'Atkinson Hyperlegible', Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.25)';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('SKYLANDERS', W / 2, fcy);
+      }
+      if (elemImg && state.showElement) {
+        const FI = 52;
+        ctx.save(); ctx.globalAlpha = 0.62;
+        ctx.drawImage(elemImg, 18, fcy - FI / 2, FI, FI);
+        ctx.drawImage(elemImg, W - FI - 18, fcy - FI / 2, FI, FI);
+        ctx.restore();
+      }
+    }
+
+    // ── Building block: vertically-centred name/element column (quarter layout)
+    function drawInfoColumn(x, y, w, h) {
+      const hasIcon = !!(elemImg && state.showElement);
+      const ESZ = Math.min(w * 0.4, 88);
+      const fontFn = FONT_DEFS[state.nameFont] || FONT_DEFS.bebas;
+      const txt = nameText();
+      let fs = 56;
+      ctx.font = fontFn(fs);
+      while (ctx.measureText(txt).width > w && fs > 24) { fs -= 2; ctx.font = fontFn(fs); }
+      const efs = 21, GAP = 20;
+      const ruleW = Math.min(w * 0.55, 120);
+
+      let contentH = 4;
+      if (hasIcon) contentH += ESZ + GAP;
+      if (state.showName) {
+        contentH += fs + GAP;
+        if (state.element) contentH += efs + GAP;
       }
 
+      let cy = y + Math.max(22, (h - contentH) / 2);
+
+      if (hasIcon) {
+        ctx.save();
+        const ig = ctx.createRadialGradient(x+ESZ/2, cy+ESZ/2, 0, x+ESZ/2, cy+ESZ/2, ESZ*0.8);
+        ig.addColorStop(0, 'rgba(255,255,255,0.30)'); ig.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = ig; ctx.beginPath(); ctx.arc(x+ESZ/2, cy+ESZ/2, ESZ*0.8, 0, Math.PI*2); ctx.fill();
+        ctx.shadowColor = 'rgba(255,255,255,0.4)'; ctx.shadowBlur = 12;
+        ctx.drawImage(elemImg, x, cy, ESZ, ESZ);
+        ctx.restore();
+        cy += ESZ + GAP;
+      }
+
+      if (state.showName) {
+        ctx.save();
+        ctx.shadowColor = pal.accent; ctx.shadowBlur = 18;
+        ctx.fillStyle = '#fff'; ctx.font = fontFn(fs); ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+        ctx.fillText(txt, x, cy + fs * 0.78);
+        ctx.restore();
+        cy += fs + GAP;
+
+        if (state.element) {
+          ctx.font = `600 ${efs}px 'Rajdhani', Arial, sans-serif`;
+          ctx.fillStyle = pal.highlight || 'rgba(255,255,255,0.65)';
+          ctx.fillText(state.element.toUpperCase(), x, cy + efs * 0.8);
+          cy += efs + GAP;
+        }
+        const metaLine = [state.species, state.gender, state.role].filter(Boolean).join('  ·  ');
+        if (metaLine) {
+          const mfs = 14;
+          ctx.save();
+          ctx.font = `600 ${mfs}px 'Rajdhani', Arial, sans-serif`;
+          ctx.shadowColor = 'rgba(0,0,0,0.75)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 1;
+          ctx.fillStyle = 'rgba(255,255,255,0.88)';
+          ctx.fillText(metaLine, x, cy + mfs * 0.8);
+          ctx.restore();
+          cy += mfs + GAP;
+        }
+      }
+
+      const rg = ctx.createLinearGradient(x, 0, x + ruleW, 0);
+      rg.addColorStop(0, pal.highlight || pal.accent); rg.addColorStop(1, 'transparent');
+      ctx.fillStyle = rg; ctx.globalAlpha = 0.7; ctx.fillRect(x, cy, ruleW, 3); ctx.globalAlpha = 1;
+    }
+
+    // ── Building blocks: name + attack overlays drawn directly on art (full) ──
+    function drawNameOverlay(x, y, w) {
+      if (!state.showName && !(elemImg && state.showElement)) return;
+      const ESZ = 64;
+      let nameX = x;
+      if (elemImg && state.showElement) {
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = 14;
+        ctx.drawImage(elemImg, x, y, ESZ, ESZ);
+        ctx.restore();
+        nameX = x + ESZ + 16;
+      }
+      if (state.showName) {
+        const txt = nameText();
+        const fontFn = FONT_DEFS[state.nameFont] || FONT_DEFS.bebas;
+        let fs = 60;
+        const maxW = x + w - nameX;
+        ctx.font = fontFn(fs);
+        while (ctx.measureText(txt).width > maxW && fs > 26) { fs -= 2; ctx.font = fontFn(fs); }
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 2;
+        ctx.fillStyle = '#fff'; ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+        ctx.fillText(txt, nameX, y + ESZ * 0.62);
+        ctx.restore();
+
+        if (state.element) {
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 8;
+          ctx.font = `600 21px 'Rajdhani', Arial, sans-serif`;
+          ctx.fillStyle = pal.highlight || 'rgba(255,255,255,0.8)';
+          ctx.fillText(state.element.toUpperCase(), nameX, y + ESZ * 0.62 + 26);
+          ctx.restore();
+        }
+        const metaLine = [state.species, state.gender, state.role].filter(Boolean).join('  ·  ');
+        if (metaLine) {
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.85)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 1;
+          ctx.font = `600 14px 'Rajdhani', Arial, sans-serif`;
+          ctx.fillStyle = 'rgba(255,255,255,0.90)';
+          ctx.fillText(metaLine, nameX, y + ESZ * 0.62 + 46);
+          ctx.restore();
+        }
+      }
+    }
+
+    function drawAttackOverlay(x, y, w, h) {
+      const PAD = 28;
+      let ay = y + PAD;
+      const an = state.attackName.trim(), ad = state.attackDesc.trim(), adm = state.attackDamage.trim();
+      if (an || ad) {
+        const ICON = 50;
+        const attackIcon = arcAttackIconImg || (state.showElement ? elemImg : null);
+        if (attackIcon) {
+          ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 8;
+          ctx.drawImage(attackIcon, x + PAD, ay, ICON, ICON);
+          ctx.restore();
+        }
+        const anx = attackIcon ? x + PAD + ICON + 14 : x + PAD;
+        ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.65)'; ctx.shadowBlur = 10;
+        ctx.font = `40px 'Bebas Neue', Impact, sans-serif`; ctx.fillStyle = pal.highlight || '#fff';
+        ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+        ctx.fillText((an || 'ATTACK').toUpperCase(), anx, ay + ICON / 2);
+        if (adm) {
+          ctx.font = `700 56px 'Rajdhani', Arial, sans-serif`; ctx.fillStyle = '#fff'; ctx.textAlign = 'right';
+          ctx.fillText(adm, x + w - PAD, ay + ICON / 2 + 12); ctx.textAlign = 'left';
+        }
+        ctx.restore();
+        ay += ICON + 24;
+
+        if (ad) {
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.65)'; ctx.shadowBlur = 8;
+          ctx.font = `21px 'Atkinson Hyperlegible', Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.92)';
+          ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+          wrapText(ad, x + PAD, ay, w - PAD * 2, 30, Math.floor((y + h - 20 - ay) / 30));
+          ctx.restore();
+        }
+      }
       ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-      ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, atkY0+ATK_H, W, DIV3_H);
     }
 
-    // ════ FOOTER ══════════════════════════════════════════════════════════
-    const fg = ctx.createLinearGradient(0, FTR_Y, 0, H);
-    fg.addColorStop(0, pal.mid); fg.addColorStop(1, pal.dark);
-    ctx.fillStyle = fg; ctx.fillRect(0, FTR_Y, W, FTR_H);
+    // ════ LAYOUT 1: Half Image — framed illustration on top, info stacked below
+    function layoutHalf() {
+      const PAD = 24, GAP = 6;
+      const nameRowH = 100, attackH = 246;
+      const frameX = PAD, frameY = PAD, frameW = W - PAD * 2;
+      const frameH = FTR_Y - frameY - GAP - nameRowH - (state.showAttack ? attackH + DIV3_H : 0);
 
-    // Element-colored top divider line
-    const dl = ctx.createLinearGradient(0, FTR_Y, W, FTR_Y);
-    dl.addColorStop(0,    'transparent');
-    dl.addColorStop(0.12, pal.accent);
-    dl.addColorStop(0.88, pal.accent);
-    dl.addColorStop(1,    'transparent');
-    ctx.fillStyle = dl; ctx.fillRect(0, FTR_Y, W, 3);
+      drawArtPanel(frameX, frameY, frameW, frameH, { framed: true, cornerStyle: 'cut' });
 
-    const fcy = FTR_Y + FTR_H / 2;
+      const nameY = frameY + frameH + GAP;
 
-    if (state.showLogo && logoImg) {
-      const lh = 76, lw = lh * (logoImg.naturalWidth / (logoImg.naturalHeight || 1));
-      ctx.save(); ctx.globalAlpha = 0.82; ctx.drawImage(logoImg, (W-lw)/2, fcy-lh/2, lw, lh); ctx.restore();
-    } else {
-      ctx.font = `bold 17px 'Atkinson Hyperlegible', Arial, sans-serif`; ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('SKYLANDERS', W/2, fcy);
+      // Seam badge: the element icon, re-cast as a tinted emblem that punches
+      // through a single glowing rule along the illustration→plate divider —
+      // the card's focal accent, in place of the old diagonal energy-cut.
+      const showBadge = !!(elemImg && state.showElement);
+      const badgeR = Math.min(nameRowH * 0.62, 58);
+      const badgeCx = frameX + badgeR + 24;
+      const badgeGutter = showBadge ? (badgeCx + badgeR + 18) : 0;
+
+      drawNamePlate(0, nameY, W, nameRowH, { badgeGutter });
+      drawAccentRule(nameY, W, pal.accent, { from: 0.05, to: 0.96, thick: 3 });
+      if (showBadge) {
+        drawSeamBadge(badgeCx, nameY, badgeR, elemImg, pal.accent, { ring: pal.highlight || '#ffffff' });
+      }
+
+      if (state.showAttack) {
+        const atkY = nameY + nameRowH;
+        drawAttackPanel(0, atkY, W, attackH);
+        drawAccentRule(atkY, W, pal.highlight || pal.accent, { from: 0.4, to: 0.97, thick: 2.5, glow: 12 });
+        ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, atkY + attackH, W, DIV3_H);
+      }
+
+      drawFooterBand(FTR_Y, FTR_H);
     }
 
-    // Element icons flanking the logo on both sides
-    if (elemImg && state.showElement) {
-      const FI = 52;
-      ctx.save(); ctx.globalAlpha = 0.62;
-      ctx.drawImage(elemImg, 18,      fcy - FI/2, FI, FI);
-      ctx.drawImage(elemImg, W-FI-18, fcy - FI/2, FI, FI);
-      ctx.restore();
+    // ════ LAYOUT 2: Quarter Image — small framed art top-right, info column left
+    function layoutQuarter() {
+      const PAD = 24, GAP = 20;
+      const artW = 272, artH2 = Math.round(artW * 1.35);
+      const topH = state.showAttack ? Math.max(artH2 + PAD * 2, 440) : (FTR_Y - PAD);
+
+      const bgGrad = ctx.createLinearGradient(0, 0, W * 1.05, topH);
+      bgGrad.addColorStop(0,    pal.dark);
+      bgGrad.addColorStop(0.35, pal.mid);
+      bgGrad.addColorStop(0.7,  pal.accent);
+      bgGrad.addColorStop(1,    pal.mid2);
+      ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, topH);
+      diagonalStripes(0, 0, W, topH, 28, 10, '#000', 0.06);
+      const sheen = ctx.createLinearGradient(0, 0, 0, topH * 0.42);
+      sheen.addColorStop(0, 'rgba(255,255,255,0.16)'); sheen.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = sheen; ctx.fillRect(0, 0, W, topH * 0.42);
+
+      const artX = W - PAD - artW, artY = (topH - artH2) / 2;
+      const infoX = PAD, infoW = artX - GAP - infoX;
+
+      drawInfoColumn(infoX, 0, infoW, topH);
+      drawArtPanel(artX, artY, artW, artH2, { framed: true });
+
+      ctx.fillStyle = '#000'; ctx.fillRect(0, topH, W, DIV1_H);
+
+      if (state.showAttack) {
+        const atkY = topH + DIV1_H;
+        const attackH = FTR_Y - atkY - DIV3_H;
+        drawAttackPanel(0, atkY, W, attackH);
+        drawSeamCut(topH + DIV1_H / 2, W, pal.accent, { from: 0.06, to: 0.6, thick: 13, rise: 42 });
+        ctx.fillStyle = '#1a1a1a'; ctx.fillRect(0, atkY + attackH, W, DIV3_H);
+      }
+
+      drawFooterBand(FTR_Y, FTR_H);
     }
+
+    // ════ LAYOUT 3: Full Image — illustration fills the card, info overlays it
+    function layoutFull() {
+      drawArtPanel(0, 0, W, H);
+
+      const topScrimH = 196;
+      const topScrim = ctx.createLinearGradient(0, 0, 0, topScrimH);
+      topScrim.addColorStop(0, 'rgba(0,0,0,0.6)');
+      topScrim.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = topScrim; ctx.fillRect(0, 0, W, topScrimH);
+      drawNameOverlay(30, 28, W - 60);
+
+      if (state.showAttack) {
+        const atkH = 320, atkY = H - atkH;
+        const botScrim = ctx.createLinearGradient(0, atkY - 70, 0, H);
+        botScrim.addColorStop(0,    'rgba(0,0,0,0)');
+        botScrim.addColorStop(0.32, 'rgba(0,0,0,0.58)');
+        botScrim.addColorStop(1,    'rgba(0,0,0,0.86)');
+        ctx.fillStyle = botScrim; ctx.fillRect(0, atkY - 70, W, atkH + 70);
+        drawAttackOverlay(0, atkY, W, atkH);
+      }
+
+      if (state.showLogo && logoImg) {
+        const lh = 50, lw = lh * (logoImg.naturalWidth / (logoImg.naturalHeight || 1));
+        ctx.save();
+        ctx.globalAlpha = 0.8; ctx.shadowColor = 'rgba(0,0,0,0.65)'; ctx.shadowBlur = 12;
+        ctx.drawImage(logoImg, (W - lw) / 2, H - lh - 24, lw, lh);
+        ctx.restore();
+      }
+    }
+
+    if (state.layout === 'quarter')      layoutQuarter();
+    else if (state.layout === 'full')    layoutFull();
+    else                                 layoutHalf();
 
     // ════ TRIPLE-LAYER BORDER ════════════════════════════════════════════
     ctx.save();
@@ -928,17 +1435,21 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   // ── Character selection ────────────────────────────────────────────────────
   async function selectCharacter(char) {
     state.characterName = char.name;
-    state.element = char.element || null;
+    state.element  = char.element  || null;
+    state.species  = char.species  || null;
+    state.gender   = char.gender   || null;
+    state.role     = char.role     || null;
     if (!state.customName) document.getElementById('name-input').placeholder = char.name;
     usingCustomImg = false;
     document.getElementById('custom-indicator').style.display = 'none';
     document.getElementById('custom-img').value = '';
     // Reset archive selections on new character
-    arcBgImg = null; arcDetailImg = null; arcArtImg = null;
-    arcBgUrl = null; arcDetailUrl = null; arcArtUrl = null;
+    arcBgImg = null; arcDetailImg = null; arcArtImg = null; arcAttackIconImg = null;
+    arcBgUrl = null; arcDetailUrl = null; arcArtUrl = null; arcAttackIconUrl = null;
+    updateBgOpacityRow();
     document.querySelectorAll('.char-thumb').forEach(el => el.classList.toggle('selected', el.dataset.name === char.name));
     document.getElementById('export-btn').disabled = false;
-    charImg = await loadCharImg(char.name, char.hiRes);
+    charImg = await loadCharImg(char.name);
     drawCard();
     loadArchivePickers(char.name);
   }
@@ -980,27 +1491,59 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     const artSection    = document.getElementById('arc-art-section');
     const artGallery    = document.getElementById('arc-art-gallery');
     const artStatus     = document.getElementById('arc-art-status');
+    const attackSection = document.getElementById('arc-attack-section');
+    const attackGallery = document.getElementById('arc-attack-gallery');
+    const attackStatus  = document.getElementById('arc-attack-status');
 
     if (!index) {
       bgStatus.textContent = detailStatus.textContent = 'Archive index not found — run `npm run publish-archive`';
       bgGallery.style.display = detailGallery.style.display = 'none';
-      artSection.style.display = 'none';
+      artSection.style.display = attackSection.style.display = 'none';
       return;
     }
 
     // Background picker — all background-annotated images globally
     buildArcGallery(bgGallery, bgStatus, index.backgrounds || [], arcBgUrl,
-      (url, img) => { arcBgUrl = url; arcBgImg = img; });
+      (url, img) => { arcBgUrl = url; arcBgImg = img; updateBgOpacityRow(); });
 
     // Detail picker — all detail-annotated images globally
     buildArcGallery(detailGallery, detailStatus, index.details || [], arcDetailUrl,
       (url, img) => { arcDetailUrl = url; arcDetailImg = img; });
 
-    // Archive art — character-specific tagged images
-    const charImages = (index.byCharacter || {})[charName.toLowerCase()] || [];
-    artSection.style.display = charImages.length ? '' : 'none';
-    buildArcGallery(artGallery, artStatus, charImages, arcArtUrl,
+    // Character-specific tagged images, split into portrait art (selectable as
+    // the card's character image) and ability/attack icons (selectable only as
+    // a small flavour icon on the attack panel — never as the character image).
+    const charImages   = (index.byCharacter || {})[charName.toLowerCase()] || [];
+    const isAttackIcon = im => (im.anns || []).includes('attack');
+    const allArtImages  = charImages.filter(im => !isAttackIcon(im));
+    const attackImages  = charImages.filter(isAttackIcon);
+
+    const showAllEl = document.getElementById('arc-show-all');
+    const showAll   = showAllEl?.checked ?? false;
+    const artImages = showAll
+      ? allArtImages
+      : allArtImages.filter(im => im.featured !== false);
+
+    // Re-bind toggle so switching "show all" refreshes gallery for current char
+    if (showAllEl) {
+      showAllEl.onchange = () => loadArchivePickers(charName);
+    }
+
+    // Show the section if there are any art images at all (even unfeatured)
+    artSection.style.display = allArtImages.length ? '' : 'none';
+    buildArcGallery(artGallery, artStatus, artImages, arcArtUrl,
       (url, img) => { arcArtUrl = url; arcArtImg = img; });
+
+    attackSection.style.display = attackImages.length ? '' : 'none';
+    buildArcGallery(attackGallery, attackStatus, attackImages, arcAttackIconUrl,
+      (url, img) => { arcAttackIconUrl = url; arcAttackIconImg = img; });
+
+    // Preload every tagged image up front — same eager-load approach as the
+    // base charImg on selection — so the prev/next arrows (and attack-icon
+    // picks) page instantly from arcImgCache instead of showing a load flicker.
+    browseArrowsEl.classList.toggle('show', artImages.length > 1);
+    if (artImages.length > 1) Promise.all(artImages.map(img => loadArcImg(img.url)));
+    if (attackImages.length) Promise.all(attackImages.map(img => loadArcImg(img.url)));
   }
 
   // ── Build character grid ───────────────────────────────────────────────────
@@ -1016,7 +1559,14 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
       const btn = document.createElement('button');
       btn.className = 'char-thumb'; btn.dataset.name = char.name; btn.title = char.name;
       if (char.name === state.characterName) btn.classList.add('selected');
-      const img = document.createElement('img'); img.src = char.image; img.alt = char.name; img.loading = 'lazy';
+      // char.image points at the wiki's CDN, which now blocks hotlinking
+      // (HTTP 401) — use the small local cutouts synced for exactly this
+      // purpose instead. Try .png first, fall back to .jpg once on error.
+      const img = document.createElement('img');
+      const slug = char.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      img.src = `/images/server/characters/${slug}.png`;
+      img.onerror = () => { img.onerror = null; img.src = `/images/server/characters/${slug}.jpg`; };
+      img.alt = char.name; img.loading = 'lazy';
       btn.appendChild(img); btn.addEventListener('click', () => selectCharacter(char)); grid.appendChild(btn);
     });
   }
@@ -1038,11 +1588,38 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     buildGrid(document.getElementById('char-search').value, null);
   });
 
+  document.querySelectorAll('.bg-swatch[data-layout]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bg-swatch[data-layout]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); state.layout = btn.dataset.layout; drawCard();
+    });
+  });
+
+  const bgColorRow   = document.getElementById('bg-color-row');
+  const bgColorInput = document.getElementById('bg-color-input');
   document.querySelectorAll('.bg-swatch[data-bg]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.bg-swatch[data-bg]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active'); state.background = btn.dataset.bg; drawCard();
+      btn.classList.add('active'); state.background = btn.dataset.bg;
+      bgColorRow.style.display = state.background === 'custom' ? 'flex' : 'none';
+      drawCard();
     });
+  });
+  bgColorInput.addEventListener('input', e => { state.customColor = e.target.value; drawCard(); });
+
+  // Color tint slider — only meaningful once an archive background image is
+  // loaded (it controls the element-color gradient drawn on top of it).
+  const bgOpacityRow   = document.getElementById('bg-opacity-row');
+  const bgOpacityInput = document.getElementById('bg-opacity-input');
+  const bgOpacityValue = document.getElementById('bg-opacity-value');
+  function updateBgOpacityRow() {
+    bgOpacityRow.style.display = arcBgImg ? 'flex' : 'none';
+  }
+  bgOpacityInput.addEventListener('input', e => {
+    const pct = parseInt(e.target.value, 10);
+    state.bgColorOpacity = pct / 100;
+    bgOpacityValue.textContent = pct + '%';
+    drawCard();
   });
 
   document.querySelectorAll('.bg-swatch[data-pattern]').forEach(btn => {
@@ -1077,21 +1654,23 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     const reader = new FileReader();
     reader.onload = async ev => {
       charImg = await tryLoad(ev.target.result);
+      charImgIsArt = true;
       if (charImg) { usingCustomImg = true; document.getElementById('custom-indicator').style.display = 'block'; document.getElementById('export-btn').disabled = false; drawCard(); }
     };
     reader.readAsDataURL(file);
   });
 
   document.getElementById('arc-clear').addEventListener('click', () => {
-    arcBgImg = null; arcDetailImg = null; arcArtImg = null;
-    arcBgUrl = null; arcDetailUrl = null; arcArtUrl = null;
+    arcBgImg = null; arcDetailImg = null; arcArtImg = null; arcAttackIconImg = null;
+    arcBgUrl = null; arcDetailUrl = null; arcArtUrl = null; arcAttackIconUrl = null;
+    updateBgOpacityRow();
     document.querySelectorAll('.arc-thumb').forEach(t => t.classList.remove('selected'));
     drawCard();
   });
 
   document.getElementById('clear-custom').addEventListener('click', async () => {
     document.getElementById('custom-img').value = ''; document.getElementById('custom-indicator').style.display = 'none'; usingCustomImg = false;
-    if (state.characterName) { const c = CHARS.find(c => c.name === state.characterName); if (c) charImg = await loadCharImg(c.name, c.hiRes); }
+    if (state.characterName) { const c = CHARS.find(c => c.name === state.characterName); if (c) charImg = await loadCharImg(c.name); }
     else charImg = null;
     drawCard();
   });
@@ -1101,22 +1680,82 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     const a = document.createElement('a'); a.download = `skylanders-nfc-${slug}.png`; a.href = canvas.toDataURL('image/png'); a.click();
   });
 
+  // ── Archive art paging: left/right arrows overlaid on the card preview step
+  // straight through the character's tagged archive images, applying each one
+  // as the active card art immediately (paging *is* selecting — no separate
+  // "open" step or lightbox). loadArchivePickers() preloads every tagged image
+  // into arcImgCache up front (mirroring how the base charImg loads on
+  // selection) so each step renders instantly from cache.
+  function charArchiveImages() {
+    if (!archiveIndex || !state.characterName) return [];
+    const all = (archiveIndex.byCharacter || {})[state.characterName.toLowerCase()] || [];
+    const showAll = document.getElementById('arc-show-all')?.checked ?? false;
+    return all.filter(im =>
+      !(im.anns || []).includes('attack') && (showAll || im.featured !== false)
+    );
+  }
+
+  const browseArrowsEl = document.getElementById('browse-arrows');
+  const browsePrevBtn  = document.getElementById('browse-prev');
+  const browseNextBtn  = document.getElementById('browse-next');
+
+  function pageArchiveArt(delta) {
+    const images = charArchiveImages();
+    if (images.length < 2) return;
+    let idx = images.findIndex(img => img.url === arcArtUrl);
+    idx = idx < 0 ? 0 : (idx + delta + images.length) % images.length;
+    document.querySelectorAll('#arc-art-gallery .arc-thumb')[idx]?.click();
+  }
+  browsePrevBtn.addEventListener('click', () => pageArchiveArt(-1));
+  browseNextBtn.addEventListener('click', () => pageArchiveArt(1));
+
   // ── Init: wait for fonts before first draw ─────────────────────────────────
   (async () => {
     await Promise.allSettled([
       document.fonts.load("68px 'Bebas Neue'"),
       document.fonts.load("700 60px 'Rajdhani'"),
       document.fonts.load("68px 'Critters'"),
+      document.fonts.load("700 68px 'Comic Neue'"),
+      document.fonts.load("700 68px 'Caveat'"),
+      document.fonts.load("700 68px 'Orbitron'"),
+      document.fonts.load("600 68px 'Jost'"),
+      document.fonts.load("700 68px 'Cabin'"),
+      document.fonts.load("600 68px 'Fredoka'"),
+      document.fonts.load("68px 'Boogaloo'"),
+      document.fonts.load("68px 'Righteous'"),
+      document.fonts.load("68px 'Creepster'"),
     ]);
     buildGrid();
     drawCard();
+
+    // Pre-load a posed 3D model snapshot from the archive character profile viewer
+    {
+      const artData  = sessionStorage.getItem('nfc-card-custom-art');
+      const charName = sessionStorage.getItem('nfc-card-char-name');
+      sessionStorage.removeItem('nfc-card-custom-art');
+      sessionStorage.removeItem('nfc-card-char-name');
+      if (artData && charName) {
+        const match = CHARS.find(c => c.name === charName);
+        if (match) await selectCharacter(match);
+        const img = await tryLoad(artData);
+        if (img) {
+          charImg = img;
+          charImgIsArt = true;
+          usingCustomImg = true;
+          document.getElementById('custom-indicator').style.display = 'block';
+          document.getElementById('export-btn').disabled = false;
+          drawCard();
+        }
+      }
+    }
+
     // Pre-load background/detail pickers immediately (no character needed)
     fetchArchiveIndex().then(index => {
       if (!index) return;
       const bgGallery = document.getElementById('arc-bg-gallery');
       const detailGallery = document.getElementById('arc-detail-gallery');
       buildArcGallery(bgGallery, document.getElementById('arc-bg-status'), index.backgrounds || [], null,
-        (url, img) => { arcBgUrl = url; arcBgImg = img; });
+        (url, img) => { arcBgUrl = url; arcBgImg = img; updateBgOpacityRow(); });
       buildArcGallery(detailGallery, document.getElementById('arc-detail-status'), index.details || [], null,
         (url, img) => { arcDetailUrl = url; arcDetailImg = img; });
     });
