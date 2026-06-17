@@ -133,23 +133,30 @@ function onBoneRotChange() {
 function clearScene() {
   if (!_s?.charBuild) return;
   _s.scene.remove(_s.charBuild.group);
-  _s.charBuild.meshes.forEach(m => { m.geometry.dispose(); m.material.dispose?.(); });
+  _s.charBuild.meshes.forEach(m => {
+    m.material.map?.dispose();
+    m.geometry.dispose();
+    m.material.dispose?.();
+  });
   _s.charBuild.skeleton.dispose();
   _s.charBuild = null;
 }
 
 async function loadIntoScene(entry) {
+  const s = _s;
   clearScene();
-  const res  = await fetch(entry.json);
+  const res = await fetch(entry.json);
+  if (!_s || _s !== s) return;
   if (!res.ok) throw new Error('Failed to load model: ' + res.status + ' ' + entry.json);
   const data = await res.json();
+  if (!_s || _s !== s) return;
   const build = buildCharacterObject(data);
-  applyMaterial(build.group, entry.texture, _s.textureLoader);
-  _s.scene.add(build.group);
-  _s.charBuild = build;
+  applyMaterial(build.group, entry.texture, s.textureLoader);
+  s.scene.add(build.group);
+  s.charBuild = build;
   frameObject(build.group);
-  if (_s.boneUiEl) {
-    _s.boneUiEl.style.display = '';
+  if (s.boneUiEl) {
+    s.boneUiEl.style.display = '';
     populateBoneSelect(build.boneDefs);
   }
 }
