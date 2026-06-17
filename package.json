@@ -13,7 +13,7 @@
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:js": "eslint \"src/**/*.js\" || true",
     "lint": "npm run lint:css && npm run lint:js",
-    "publish-archive": "node scripts/reclassify-tumblr.mjs ~/Desktop/skylanders-archive --publish",
+    "publish-archive": "node scripts/publish-archive.mjs",
     "studio": "node studio/server.js"
   },
   "keywords": [],
