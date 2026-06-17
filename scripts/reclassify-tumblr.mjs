@@ -1283,71 +1283,6 @@ document.getElementById('img-picker-search').addEventListener('input', e => rend
 document.getElementById('img-picker-modal').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeImagePicker(false);
 });
-
-function useAsCardArt(sky) {
-  const dataUrl = window.ProfileModelViewer?.captureFrame();
-  if (!dataUrl) return;
-  try {
-    sessionStorage.setItem('nfc-card-custom-art', dataUrl);
-    sessionStorage.setItem('nfc-card-char-name', sky.name);
-  } catch (e) {
-    const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = sky.name.toLowerCase().replace(/\\s+/g, '-') + '-pose.png';
-    a.click();
-    return;
-  }
-  const win = window.open('/server/skylanders/nfc-card/', '_blank');
-  if (!win) {
-    alert('Popup blocked. Open /server/skylanders/nfc-card/ manually — the image is ready.');
-  }
-}
-
-function renderProfileModelViewer(sky) {
-  const panel = document.getElementById('prof-model-panel');
-  if (!panel) return;
-  const models = sky?.models || [];
-  if (!models.length) {
-    panel.innerHTML = '<div class="prof-mv-empty">No 3D model available for this character.</div>';
-    return;
-  }
-  const wrap = document.createElement('div'); wrap.className = 'prof-mv-wrap';
-
-  const canvasWrap = document.createElement('div'); canvasWrap.className = 'prof-mv-canvas-wrap';
-  wrap.appendChild(canvasWrap);
-
-  if (models.length > 1) {
-    const variantsEl = document.createElement('div'); variantsEl.className = 'prof-mv-variants';
-    models.forEach((m, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'prof-mv-variant' + (i === 0 ? ' on' : '');
-      btn.textContent = m.name;
-      btn.addEventListener('click', () => {
-        variantsEl.querySelectorAll('.prof-mv-variant').forEach(b => b.classList.remove('on'));
-        btn.classList.add('on');
-        window.ProfileModelViewer?.switchModel(i);
-      });
-      variantsEl.appendChild(btn);
-    });
-    wrap.appendChild(variantsEl);
-  }
-
-  const actions = document.createElement('div'); actions.className = 'prof-mv-actions';
-  const resetBtn = document.createElement('button');
-  resetBtn.textContent = 'Reset pose';
-  resetBtn.addEventListener('click', () => window.ProfileModelViewer?.resetPose());
-  actions.appendChild(resetBtn);
-
-  const cardBtn = document.createElement('button');
-  cardBtn.className = 'prof-mv-card-btn';
-  cardBtn.textContent = '\\u2197 Use as card art';
-  cardBtn.addEventListener('click', () => useAsCardArt(sky));
-  actions.appendChild(cardBtn);
-  wrap.appendChild(actions);
-
-  panel.appendChild(wrap);
-  window.ProfileModelViewer?.mount(canvasWrap, models);
-}
 `;
 
 const html = `<!DOCTYPE html>
@@ -2873,7 +2808,7 @@ function renderCharPanel() {
     document.getElementById('cp-add-prop').addEventListener('click', () => addExtraRow('', ''));
     document.getElementById('cp-save').addEventListener('click', () => saveCharPanel(sky.name));
   }
-  if (typeof renderProfileModelViewer === 'function') renderProfileModelViewer(sky);
+  renderProfileModelViewer(sky);
 }
 
 async function saveCharPanel(name) {
@@ -2914,6 +2849,73 @@ async function saveCharPanel(name) {
   } catch (e) {
     status.className = 'err'; status.textContent = 'Error: ' + e.message;
   }
+}
+
+// Not curation-only — captureFrame/mount are purely client-side (no server
+// dependency), so this stays in the published build alongside the viewer.
+function useAsCardArt(sky) {
+  const dataUrl = window.ProfileModelViewer?.captureFrame();
+  if (!dataUrl) return;
+  try {
+    sessionStorage.setItem('nfc-card-custom-art', dataUrl);
+    sessionStorage.setItem('nfc-card-char-name', sky.name);
+  } catch (e) {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = sky.name.toLowerCase().replace(/\\s+/g, '-') + '-pose.png';
+    a.click();
+    return;
+  }
+  const win = window.open('/server/skylanders/nfc-card/', '_blank');
+  if (!win) {
+    alert('Popup blocked. Open /server/skylanders/nfc-card/ manually — the image is ready.');
+  }
+}
+
+function renderProfileModelViewer(sky) {
+  const panel = document.getElementById('prof-model-panel');
+  if (!panel) return;
+  const models = sky?.models || [];
+  if (!models.length) {
+    panel.innerHTML = '<div class="prof-mv-empty">No 3D model available for this character.</div>';
+    return;
+  }
+  const wrap = document.createElement('div'); wrap.className = 'prof-mv-wrap';
+
+  const canvasWrap = document.createElement('div'); canvasWrap.className = 'prof-mv-canvas-wrap';
+  wrap.appendChild(canvasWrap);
+
+  if (models.length > 1) {
+    const variantsEl = document.createElement('div'); variantsEl.className = 'prof-mv-variants';
+    models.forEach((m, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'prof-mv-variant' + (i === 0 ? ' on' : '');
+      btn.textContent = m.name;
+      btn.addEventListener('click', () => {
+        variantsEl.querySelectorAll('.prof-mv-variant').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        window.ProfileModelViewer?.switchModel(i);
+      });
+      variantsEl.appendChild(btn);
+    });
+    wrap.appendChild(variantsEl);
+  }
+
+  const actions = document.createElement('div'); actions.className = 'prof-mv-actions';
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset pose';
+  resetBtn.addEventListener('click', () => window.ProfileModelViewer?.resetPose());
+  actions.appendChild(resetBtn);
+
+  const cardBtn = document.createElement('button');
+  cardBtn.className = 'prof-mv-card-btn';
+  cardBtn.textContent = '\\u2197 Use as card art';
+  cardBtn.addEventListener('click', () => useAsCardArt(sky));
+  actions.appendChild(cardBtn);
+  wrap.appendChild(actions);
+
+  panel.appendChild(wrap);
+  window.ProfileModelViewer?.mount(canvasWrap, models);
 }
 
 function render() { renderSidebar(); renderGrid(); renderCharPanel(); if (tagModeOn) refreshTagOverlays(); }
