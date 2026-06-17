@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { isClick } from './pose-utils.js';
 
-// Single active viewer state — only one profile viewer exists at a time
+// Single active viewer state — only one ProfileModelViewer instance exists
+// at a time (the small profile panel and the pose detail view never mount
+// simultaneously; opening one always destroys the other first).
 let _s = null;
 
-// ── Three.js helpers (same logic as model-viewer.js) ────────────────────
 function buildCharacterObject(data) {
   const boneDefs = data.bones;
   const bones = boneDefs.map(() => new THREE.Bone());
@@ -71,12 +73,13 @@ function frameObject(root) {
   _s.controls.update();
 }
 
-// ── Bone UI ──────────────────────────────────────────────────────────────
-function buildBoneUi(containerEl) {
+// ── Posable-mode bone UI: sliders only — bone selection now comes from
+// clicking a joint sphere in 3D, not a dropdown. ───────────────────────────
+function buildBoneUi(hostEl) {
   const div = document.createElement('div');
   div.className = 'prof-mv-bone-ui';
   div.innerHTML =
-    '<select id="pmv-bone-select"></select>' +
+    '<div id="pmv-bone-label">Click a joint to select it</div>' +
     ['X', 'Y', 'Z'].map(ax =>
       '<div class="bone-row">' +
         '<label>' + ax + '</label>' +
@@ -84,27 +87,13 @@ function buildBoneUi(containerEl) {
         '<span id="pmv-bone-' + ax.toLowerCase() + '-val">0</span>' +
       '</div>'
     ).join('');
-  containerEl.appendChild(div);
+  hostEl.appendChild(div);
   return div;
 }
 
-function populateBoneSelect(boneDefs) {
-  const sel = document.getElementById('pmv-bone-select');
-  if (!sel) return;
-  sel.innerHTML = '';
-  boneDefs.forEach((b, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = 'bone ' + i + ' (parent ' + b.parent + ')';
-    sel.appendChild(opt);
-  });
-  syncSlidersFromBone();
-}
-
 function syncSlidersFromBone() {
-  if (!_s?.charBuild) return;
-  const idx  = parseInt(document.getElementById('pmv-bone-select')?.value ?? '0', 10);
-  const bone = _s.charBuild.skeleton.bones[idx];
+  if (!_s?.charBuild || _s.selectedBoneIdx == null) return;
+  const bone = _s.charBuild.skeleton.bones[_s.selectedBoneIdx];
   if (!bone) return;
   ['x', 'y', 'z'].forEach(ax => {
     const deg = Math.round(THREE.MathUtils.radToDeg(bone.rotation[ax]));
@@ -116,9 +105,8 @@ function syncSlidersFromBone() {
 }
 
 function onBoneRotChange() {
-  if (!_s?.charBuild) return;
-  const idx  = parseInt(document.getElementById('pmv-bone-select')?.value ?? '0', 10);
-  const bone = _s.charBuild.skeleton.bones[idx];
+  if (!_s?.charBuild || _s.selectedBoneIdx == null) return;
+  const bone = _s.charBuild.skeleton.bones[_s.selectedBoneIdx];
   if (!bone) return;
   ['x', 'y', 'z'].forEach(ax => {
     const inp = document.getElementById('pmv-bone-' + ax);
@@ -129,7 +117,59 @@ function onBoneRotChange() {
   });
 }
 
-// ── Scene helpers ─────────────────────────────────────────────────────────
+// Selects bone `idx`: updates the label, syncs sliders to its current
+// rotation, and highlights the matching joint sphere.
+function selectBone(idx) {
+  if (!_s) return;
+  _s.selectedBoneIdx = idx;
+  const label = document.getElementById('pmv-bone-label');
+  if (label) label.textContent = 'Selected: bone ' + idx;
+  syncSlidersFromBone();
+  (_s.jointMeshes || []).forEach((mesh, i) => {
+    mesh.material.color.set(i === idx ? 0x00ff88 : 0xffcc00);
+  });
+}
+
+// ── Skeleton overlay + clickable joints (posable mode only) ────────────────
+function buildJointMeshes(build) {
+  const box = new THREE.Box3().setFromObject(build.group);
+  const size = new THREE.Vector3();
+  box.getSize(size);
+  const radius = Math.max(size.x, size.y, size.z, 1e-6) * 0.025;
+  const geo = new THREE.SphereGeometry(radius, 12, 8);
+  return build.skeleton.bones.map(() => {
+    const mat = new THREE.MeshBasicMaterial({ color: 0xffcc00, depthTest: false });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.renderOrder = 999;
+    return mesh;
+  });
+}
+
+function onPointerDown(e) {
+  if (!_s) return;
+  _s.pointerDown = { x: e.clientX, y: e.clientY };
+}
+
+function onPointerUp(e) {
+  if (!_s || !_s.pointerDown) return;
+  const down = _s.pointerDown;
+  _s.pointerDown = null;
+  if (!isClick(down.x, down.y, e.clientX, e.clientY)) return; // camera-orbit drag, not a selection click
+
+  const rect = _s.renderer.domElement.getBoundingClientRect();
+  const ndc = new THREE.Vector2(
+    ((e.clientX - rect.left) / rect.width) * 2 - 1,
+    -((e.clientY - rect.top) / rect.height) * 2 + 1
+  );
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(ndc, _s.camera);
+  const hits = raycaster.intersectObjects(_s.jointMeshes || []);
+  if (hits.length) {
+    const idx = _s.jointMeshes.indexOf(hits[0].object);
+    if (idx !== -1) selectBone(idx);
+  }
+}
+
 function clearScene() {
   if (!_s?.charBuild) return;
   _s.scene.remove(_s.charBuild.group);
@@ -140,6 +180,21 @@ function clearScene() {
   });
   _s.charBuild.skeleton.dispose();
   _s.charBuild = null;
+
+  if (_s.skeletonHelper) {
+    _s.scene.remove(_s.skeletonHelper);
+    _s.skeletonHelper.geometry.dispose();
+    _s.skeletonHelper.material.dispose();
+    _s.skeletonHelper = null;
+  }
+  if (_s.jointGroup) {
+    _s.jointGroup.children.forEach(m => m.material.dispose());
+    _s.jointGroup.children[0]?.geometry.dispose();
+    _s.scene.remove(_s.jointGroup);
+    _s.jointGroup = null;
+    _s.jointMeshes = null;
+  }
+  _s.selectedBoneIdx = null;
 }
 
 async function loadIntoScene(entry) {
@@ -155,18 +210,32 @@ async function loadIntoScene(entry) {
   s.scene.add(build.group);
   s.charBuild = build;
   frameObject(build.group);
-  if (s.boneUiEl) {
-    s.boneUiEl.style.display = '';
-    populateBoneSelect(build.boneDefs);
+
+  if (s.posable) {
+    const skeletonHelper = new THREE.SkeletonHelper(build.group);
+    s.scene.add(skeletonHelper);
+    s.skeletonHelper = skeletonHelper;
+
+    const jointMeshes = buildJointMeshes(build);
+    const jointGroup = new THREE.Group();
+    jointMeshes.forEach(m => jointGroup.add(m));
+    s.scene.add(jointGroup);
+    s.jointGroup = jointGroup;
+    s.jointMeshes = jointMeshes;
+
+    selectBone(0);
   }
 }
 
-// ── Public API ────────────────────────────────────────────────────────────
 window.ProfileModelViewer = {
-
-  // containerEl is the .prof-mv-canvas-wrap div created by renderProfileModelViewer.
-  // The canvas is appended directly to it; bone UI is appended to its parent (.prof-mv-wrap).
-  async mount(containerEl, models) {
+  // containerEl is the .prof-mv-canvas-wrap div the caller creates; the
+  // canvas is appended directly to it. opts.posable (default false) enables
+  // the skeleton overlay, clickable joint spheres, and the bone-rotation
+  // slider UI — appended to opts.boneUiHost (defaults to containerEl's
+  // parent) so callers can place it wherever fits their layout.
+  async mount(containerEl, models, opts = {}) {
+    const posable    = !!opts.posable;
+    const boneUiHost = opts.boneUiHost || containerEl.parentElement || containerEl;
     const w      = containerEl.clientWidth || 280;
     const scene  = new THREE.Scene();
     scene.background = new THREE.Color(0x111116);
@@ -187,27 +256,36 @@ window.ProfileModelViewer = {
 
     const textureLoader = new THREE.TextureLoader();
 
-    _s = { containerEl, models, currentIdx: 0, scene, camera, renderer, controls,
-           charBuild: null, textureLoader, boneUiEl: null, rafId: null, ro: null, io: null, visible: true };
+    _s = { containerEl, models, currentIdx: 0, scene, camera, renderer, controls, posable,
+           charBuild: null, textureLoader, boneUiEl: null, rafId: null, ro: null, io: null, visible: true,
+           skeletonHelper: null, jointGroup: null, jointMeshes: null, selectedBoneIdx: null, pointerDown: null };
 
     const boneAc = new AbortController();
     _s.boneAc = boneAc;
 
-    // Bone UI appended to the parent .prof-mv-wrap so it sits outside the overflow:hidden canvas box
-    const boneUiEl = buildBoneUi(containerEl.parentElement || containerEl);
-    boneUiEl.style.display = 'none';
-    _s.boneUiEl = boneUiEl;
+    if (posable) {
+      const boneUiEl = buildBoneUi(boneUiHost);
+      _s.boneUiEl = boneUiEl;
 
-    document.getElementById('pmv-bone-select')?.addEventListener('change', syncSlidersFromBone, { signal: boneAc.signal });
-    ['x', 'y', 'z'].forEach(ax =>
-      document.getElementById('pmv-bone-' + ax)?.addEventListener('input', onBoneRotChange, { signal: boneAc.signal })
-    );
+      ['x', 'y', 'z'].forEach(ax =>
+        document.getElementById('pmv-bone-' + ax)?.addEventListener('input', onBoneRotChange, { signal: boneAc.signal })
+      );
+      renderer.domElement.addEventListener('pointerdown', onPointerDown, { signal: boneAc.signal });
+      renderer.domElement.addEventListener('pointerup', onPointerUp, { signal: boneAc.signal });
+    }
 
+    const tmpVec = new THREE.Vector3();
     function loop() {
       if (!_s) return;
       _s.rafId = requestAnimationFrame(loop);
       if (!_s.visible) return;
       controls.update();
+      if (_s.jointMeshes && _s.charBuild) {
+        _s.charBuild.skeleton.bones.forEach((bone, i) => {
+          bone.getWorldPosition(tmpVec);
+          _s.jointMeshes[i].position.copy(tmpVec);
+        });
+      }
       renderer.render(scene, camera);
     }
     loop();
