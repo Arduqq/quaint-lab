@@ -1770,6 +1770,15 @@ body.tag-mode .card.tagged-sel::after{content:'\\2713';position:absolute;
   text-shadow:0 1px 5px rgba(0,0,0,.9);pointer-events:none}
 
 </style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+    "fflate": "https://unpkg.com/fflate@0.8.2/esm/browser.js"
+  }
+}
+</script>
 </head>
 <body>
 <div id="hdr">
@@ -1847,15 +1856,6 @@ ${imagePickerModalHTML}
   </div>${editPanelHTML}
 </div>
 
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
-    "fflate": "https://unpkg.com/fflate@0.8.2/esm/browser.js"
-  }
-}
-</script>
 <script type="module" src="/server/skylanders/models/model-viewer.js"></script>
 <script type="module" src="/server/skylanders/models/profile-model-viewer.js"></script>
 <script>
