@@ -1290,12 +1290,16 @@ function useAsCardArt(sky) {
   try {
     sessionStorage.setItem('nfc-card-custom-art', dataUrl);
     sessionStorage.setItem('nfc-card-char-name', sky.name);
-    window.open('/server/skylanders/nfc-card/', '_blank');
   } catch (e) {
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = sky.name.toLowerCase().replace(/\\s+/g, '-') + '-pose.png';
     a.click();
+    return;
+  }
+  const win = window.open('/server/skylanders/nfc-card/', '_blank');
+  if (!win) {
+    alert('Popup blocked. Open /server/skylanders/nfc-card/ manually — the image is ready.');
   }
 }
 
