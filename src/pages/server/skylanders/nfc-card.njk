@@ -1740,7 +1740,10 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
         const img = await tryLoad(artData);
         if (img) {
           charImg = img;
-          charImgIsArt = true;
+          // Transparent character cutout (posed 3D render), not a full-bleed
+          // painted illustration — gets the contain-fit + glow treatment
+          // drawArtPanel uses for in-game cutouts, not the cover-fit one.
+          charImgIsArt = false;
           usingCustomImg = true;
           document.getElementById('custom-indicator').style.display = 'block';
           document.getElementById('export-btn').disabled = false;

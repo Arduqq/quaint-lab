@@ -241,7 +241,8 @@ window.ProfileModelViewer = {
     scene.background = new THREE.Color(0x111116);
 
     const camera   = new THREE.PerspectiveCamera(45, 1, 0.01, 10000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+    renderer.setClearAlpha(0);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(w, w);
     containerEl.appendChild(renderer.domElement);
@@ -319,14 +320,18 @@ window.ProfileModelViewer = {
 
   captureFrame() {
     if (!_s) return null;
-    // The skeleton overlay and joint spheres are a posing aid, not part of
-    // the exported art — hide them for this one render, then restore.
+    // The skeleton overlay, joint spheres, and the dark scene background are
+    // posing aids, not part of the exported art — hide/clear them for this
+    // one render (transparent canvas, alpha:true renderer), then restore.
     if (_s.skeletonHelper) _s.skeletonHelper.visible = false;
     if (_s.jointGroup) _s.jointGroup.visible = false;
+    const prevBackground = _s.scene.background;
+    _s.scene.background = null;
     _s.renderer.render(_s.scene, _s.camera);
     const dataUrl = _s.renderer.domElement.toDataURL('image/png');
     if (_s.skeletonHelper) _s.skeletonHelper.visible = true;
     if (_s.jointGroup) _s.jointGroup.visible = true;
+    _s.scene.background = prevBackground;
     return dataUrl;
   },
 
