@@ -440,6 +440,11 @@ permalink: "/server/skylanders/nfc-card/"
         <span id="arc-art-status" class="arc-status-msg"></span>
         <button class="clear-btn" id="arc-clear" style="margin-top:6px">✕ Clear archive layers</button>
       </div>
+
+      <div class="opt-section" id="pose-link-section" style="display:none">
+        <span class="opt-label">3D Model Art</span>
+        <a id="pose-link" class="clear-btn" style="display:block;text-align:center;text-decoration:none" target="_blank" rel="noopener">↗ Pose a 3D model for this character</a>
+      </div>
     </div>
 
   </div>
@@ -458,7 +463,7 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
       role:    c.role    || '',
       game:    g.game
     };
-    const variants = (c.variants || []).map(v => ({ ...base, name: v.name, image: v.image }));
+    const variants = (c.variants || []).map(v => ({ ...base, name: v.name, image: v.image, baseName: base.name }));
     return [base, ...variants];
   })
 );
@@ -1443,6 +1448,9 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   }
 
   // ── Character selection ────────────────────────────────────────────────────
+  const poseLinkSection = document.getElementById('pose-link-section');
+  const poseLink = document.getElementById('pose-link');
+
   async function selectCharacter(char) {
     state.characterName = char.name;
     state.element  = char.element  || null;
@@ -1460,6 +1468,8 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     updateBgOpacityRow();
     document.querySelectorAll('.char-thumb').forEach(el => el.classList.toggle('selected', el.dataset.name === char.name));
     document.getElementById('export-btn').disabled = false;
+    poseLinkSection.style.display = '';
+    poseLink.href = '/server/skylanders/archive/#pose=' + encodeURIComponent(char.baseName || char.name);
     charImg = await loadCharImg(char.name);
     drawCard();
     loadArchivePickers(char.name);
