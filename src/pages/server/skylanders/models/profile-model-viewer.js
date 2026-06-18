@@ -319,8 +319,15 @@ window.ProfileModelViewer = {
 
   captureFrame() {
     if (!_s) return null;
+    // The skeleton overlay and joint spheres are a posing aid, not part of
+    // the exported art — hide them for this one render, then restore.
+    if (_s.skeletonHelper) _s.skeletonHelper.visible = false;
+    if (_s.jointGroup) _s.jointGroup.visible = false;
     _s.renderer.render(_s.scene, _s.camera);
-    return _s.renderer.domElement.toDataURL('image/png');
+    const dataUrl = _s.renderer.domElement.toDataURL('image/png');
+    if (_s.skeletonHelper) _s.skeletonHelper.visible = true;
+    if (_s.jointGroup) _s.jointGroup.visible = true;
+    return dataUrl;
   },
 
   destroy() {
