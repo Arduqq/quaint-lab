@@ -296,6 +296,7 @@ permalink: "/server/skylanders/nfc-card/"
         </div>
       </div>
       <div class="preview-actions">
+        <button class="clear-btn" id="reset-art-btn" style="max-width:260px">↺ Reset position</button>
         <button class="nfc-btn" id="export-btn" disabled>↓ Export PNG</button>
         <span class="size-note">638 × 1011 px · transparent rounded corners · Cricut-ready</span>
       </div>
@@ -1455,6 +1456,7 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     // Reset archive selections on new character
     arcBgImg = null; arcDetailImg = null; arcArtImg = null; arcAttackIconImg = null;
     arcBgUrl = null; arcDetailUrl = null; arcArtUrl = null; arcAttackIconUrl = null;
+    resetArtTransform();
     updateBgOpacityRow();
     document.querySelectorAll('.char-thumb').forEach(el => el.classList.toggle('selected', el.dataset.name === char.name));
     document.getElementById('export-btn').disabled = false;
@@ -1541,7 +1543,7 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     // Show the section if there are any art images at all (even unfeatured)
     artSection.style.display = allArtImages.length ? '' : 'none';
     buildArcGallery(artGallery, artStatus, artImages, arcArtUrl,
-      (url, img) => { arcArtUrl = url; arcArtImg = img; });
+      (url, img) => { arcArtUrl = url; arcArtImg = img; resetArtTransform(); });
 
     attackSection.style.display = attackImages.length ? '' : 'none';
     buildArcGallery(attackGallery, attackStatus, attackImages, arcAttackIconUrl,
@@ -1664,7 +1666,7 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     reader.onload = async ev => {
       charImg = await tryLoad(ev.target.result);
       charImgIsArt = true;
-      if (charImg) { usingCustomImg = true; document.getElementById('custom-indicator').style.display = 'block'; document.getElementById('export-btn').disabled = false; drawCard(); }
+      if (charImg) { usingCustomImg = true; resetArtTransform(); document.getElementById('custom-indicator').style.display = 'block'; document.getElementById('export-btn').disabled = false; drawCard(); }
     };
     reader.readAsDataURL(file);
   });
@@ -1672,6 +1674,7 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   document.getElementById('arc-clear').addEventListener('click', () => {
     arcBgImg = null; arcDetailImg = null; arcArtImg = null; arcAttackIconImg = null;
     arcBgUrl = null; arcDetailUrl = null; arcArtUrl = null; arcAttackIconUrl = null;
+    resetArtTransform();
     updateBgOpacityRow();
     document.querySelectorAll('.arc-thumb').forEach(t => t.classList.remove('selected'));
     drawCard();
@@ -1679,6 +1682,7 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
 
   document.getElementById('clear-custom').addEventListener('click', async () => {
     document.getElementById('custom-img').value = ''; document.getElementById('custom-indicator').style.display = 'none'; usingCustomImg = false;
+    resetArtTransform();
     if (state.characterName) { const c = CHARS.find(c => c.name === state.characterName); if (c) charImg = await loadCharImg(c.name); }
     else charImg = null;
     drawCard();
@@ -1688,6 +1692,16 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     const slug = (state.customName.trim() || state.characterName || 'skylander').toLowerCase().replace(/[^a-z0-9]+/g, '-');
     const a = document.createElement('a'); a.download = `skylanders-nfc-${slug}.png`; a.href = canvas.toDataURL('image/png'); a.click();
   });
+
+  // Zeroes the user's pan/zoom on the character art back to centered/
+  // default fit. Does not redraw — every call site below already calls
+  // drawCard() right after, whether directly or via an existing chain.
+  function resetArtTransform() {
+    state.artOffsetX = 0;
+    state.artOffsetY = 0;
+    state.artZoom = 1;
+  }
+  document.getElementById('reset-art-btn').addEventListener('click', () => { resetArtTransform(); drawCard(); });
 
   // ── Archive art paging: left/right arrows overlaid on the card preview step
   // straight through the character's tagged archive images, applying each one
@@ -1811,6 +1825,7 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
           // drawArtPanel uses for in-game cutouts, not the cover-fit one.
           charImgIsArt = false;
           usingCustomImg = true;
+          resetArtTransform();
           document.getElementById('custom-indicator').style.display = 'block';
           document.getElementById('export-btn').disabled = false;
           drawCard();
