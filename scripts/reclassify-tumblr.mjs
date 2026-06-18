@@ -2940,16 +2940,11 @@ function renderProfileModelViewer(sky) {
   }
 
   const actions = document.createElement('div'); actions.className = 'prof-mv-actions';
-  const resetBtn = document.createElement('button');
-  resetBtn.textContent = 'Reset pose';
-  resetBtn.addEventListener('click', () => window.ProfileModelViewer?.resetPose());
-  actions.appendChild(resetBtn);
-
-  const cardBtn = document.createElement('button');
-  cardBtn.className = 'prof-mv-card-btn';
-  cardBtn.textContent = '\\u2197 Use as card art';
-  cardBtn.addEventListener('click', () => useAsCardArt(sky));
-  actions.appendChild(cardBtn);
+  const poseBtn = document.createElement('button');
+  poseBtn.className = 'prof-mv-card-btn';
+  poseBtn.textContent = 'Pose & send to card \\u2192';
+  poseBtn.addEventListener('click', () => openPoseDetail(sky));
+  actions.appendChild(poseBtn);
   wrap.appendChild(actions);
 
   panel.appendChild(wrap);
