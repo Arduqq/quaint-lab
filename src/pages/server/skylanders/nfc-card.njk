@@ -116,7 +116,7 @@ permalink: "/server/skylanders/nfc-card/"
     background: rgba(0,0,0,.25);
     border-bottom: 1px solid rgba(255,204,0,.1);
   }
-  #card-canvas { width: auto; height: auto; max-width: 100%; display: block; border-radius: 4px; }
+  #card-canvas { width: auto; height: auto; max-width: 100%; display: block; border-radius: 4px; touch-action: none; }
 
   .preview-actions {
     padding: 11px; display: flex; flex-direction: column; align-items: center; gap: 7px;
@@ -562,6 +562,9 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
     showAttack: true,
     showElement: true,
     showLogo: true,
+    artOffsetX: 0, // px, in card-canvas (638×1011) space — user pan on top of drawArtPanel's auto-fit
+    artOffsetY: 0,
+    artZoom: 1,    // multiplier on top of drawArtPanel's auto-fit scale
   };
 
   // Portal background images — drawn beneath the element gradient overlay
@@ -579,6 +582,11 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   let charImgIsArt = false; // true when charImg is a painted illustration (hi-res tooltip art / custom upload), not a transparent in-game figure cutout
   let logoImg = null;
   let usingCustomImg = false;
+  // {x, y, w, h} of the currently-active layout's art panel, in canvas-
+  // internal (638×1011) space — set by drawArtPanel every redraw, read by
+  // the pointer/wheel handlers below to hit-test where dragging/zooming is
+  // allowed to start. Only one layout's drawArtPanel call runs per redraw.
+  let lastArtPanelRect = null;
   const elemImgCache = {};
   const portalBgCache = {};
 
@@ -922,6 +930,7 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
 
     // ── Building block: illustration panel (portal/archive bg + character art) ─
     function drawArtPanel(x, y, w, h, { framed = false, cornerStyle = 'round' } = {}) {
+      lastArtPanelRect = { x, y, w, h };
       ctx.save();
       if (framed) {
         if (cornerStyle === 'cut') cutCornerRect(x, y, w, h, Math.min(w, h) * 0.07);
@@ -997,15 +1006,15 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
 
       if (srcIsArt) {
         const iw = srcImg.naturalWidth || w, ih = srcImg.naturalHeight || h;
-        const sc = Math.max(w / iw, h / ih);
+        const sc = Math.max(w / iw, h / ih) * state.artZoom;
         const dw = iw * sc, dh = ih * sc;
-        ctx.drawImage(srcImg, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+        ctx.drawImage(srcImg, x + (w - dw) / 2 + state.artOffsetX, y + (h - dh) / 2 + state.artOffsetY, dw, dh);
       } else if (srcImg) {
         const pad = Math.min(w, h) * 0.05;
         let iw = srcImg.naturalWidth || 400, ih = srcImg.naturalHeight || 400;
-        const sc = Math.min((w-pad*2)/iw, (h-pad*2)/ih);
+        const sc = Math.min((w-pad*2)/iw, (h-pad*2)/ih) * state.artZoom;
         iw *= sc; ih *= sc;
-        const ix = x + (w-iw)/2, iy = y + (h-ih)/2;
+        const ix = x + (w-iw)/2 + state.artOffsetX, iy = y + (h-ih)/2 + state.artOffsetY;
         ctx.save(); ctx.shadowColor = pal.accent; ctx.shadowBlur = 70; ctx.globalAlpha = 0.5; ctx.drawImage(srcImg,ix,iy,iw,ih); ctx.restore();
         ctx.drawImage(srcImg, ix, iy, iw, ih);
       } else {
@@ -1708,6 +1717,63 @@ const CHARS = SKYLANDERS_ALL.flatMap(g =>
   }
   browsePrevBtn.addEventListener('click', () => pageArchiveArt(-1));
   browseNextBtn.addEventListener('click', () => pageArchiveArt(1));
+
+  // ── Art pan & zoom: drag to move, scroll wheel to scale ───────────────────
+  // Only active when the pointer is within the currently active layout's
+  // art panel (tracked by drawArtPanel into lastArtPanelRect every redraw).
+  // Free dragging/zooming needs no bounds-checking — the panel (and the
+  // card itself) are already clipped, so overflow is cropped for free.
+  function clientToCardSpace(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (clientX - rect.left) * (CARD_W / rect.width),
+      y: (clientY - rect.top)  * (CARD_H / rect.height),
+    };
+  }
+  function insideArtPanel(cardX, cardY) {
+    if (!lastArtPanelRect) return false;
+    const { x, y, w, h } = lastArtPanelRect;
+    return cardX >= x && cardX <= x + w && cardY >= y && cardY <= y + h;
+  }
+
+  let artDrag = null; // { pointerId, startClientX, startClientY, startOffsetX, startOffsetY }
+  let artDragRaf = null;
+
+  canvas.addEventListener('pointerdown', e => {
+    const p = clientToCardSpace(e.clientX, e.clientY);
+    if (!insideArtPanel(p.x, p.y)) return;
+    artDrag = {
+      pointerId: e.pointerId,
+      startClientX: e.clientX, startClientY: e.clientY,
+      startOffsetX: state.artOffsetX, startOffsetY: state.artOffsetY,
+    };
+    canvas.setPointerCapture(e.pointerId);
+  });
+
+  canvas.addEventListener('pointermove', e => {
+    if (!artDrag || e.pointerId !== artDrag.pointerId) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = CARD_W / rect.width, scaleY = CARD_H / rect.height;
+    state.artOffsetX = artDrag.startOffsetX + (e.clientX - artDrag.startClientX) * scaleX;
+    state.artOffsetY = artDrag.startOffsetY + (e.clientY - artDrag.startClientY) * scaleY;
+    if (!artDragRaf) artDragRaf = requestAnimationFrame(() => { artDragRaf = null; drawCard(); });
+  });
+
+  function endArtDrag(e) {
+    if (artDrag && e.pointerId === artDrag.pointerId) artDrag = null;
+  }
+  canvas.addEventListener('pointerup', endArtDrag);
+  canvas.addEventListener('pointercancel', endArtDrag);
+
+  const ART_ZOOM_MIN = 0.3, ART_ZOOM_MAX = 4, ART_ZOOM_STEP = 1.08;
+  canvas.addEventListener('wheel', e => {
+    const p = clientToCardSpace(e.clientX, e.clientY);
+    if (!insideArtPanel(p.x, p.y)) return;
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? ART_ZOOM_STEP : 1 / ART_ZOOM_STEP;
+    state.artZoom = Math.min(ART_ZOOM_MAX, Math.max(ART_ZOOM_MIN, state.artZoom * factor));
+    drawCard();
+  }, { passive: false });
 
   // ── Init: wait for fonts before first draw ─────────────────────────────────
   (async () => {
