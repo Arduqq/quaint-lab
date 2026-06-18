@@ -1545,6 +1545,22 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .prof-mv-bone-ui .bone-row input[type=range]{flex:1}
 .prof-mv-bone-ui .bone-row span{width:28px;text-align:right;font-size:.7rem}
 .prof-mv-empty{color:var(--muted);font-size:.85rem;padding:12px 0}
+/* Pose detail view (full-page bone posing) ──────────────────────────────── */
+#pose-detail-root{display:none;height:100%;min-height:0;flex-direction:column}
+.pose-detail-toolbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:8px 14px;
+  border-bottom:1px solid var(--bd);background:var(--bg2)}
+.pose-detail-back{flex-shrink:0;padding:4px 10px;background:rgba(255,204,0,.07);
+  border:1.5px solid rgba(255,204,0,.22);color:var(--muted);border-radius:4px;cursor:pointer;
+  font-size:.72rem;font-family:inherit;transition:all .12s}
+.pose-detail-back:hover{background:rgba(255,204,0,.17);border-color:rgba(255,204,0,.5);color:var(--gold)}
+.pose-detail-body{flex:1;display:flex;min-height:0}
+.pose-detail-canvas-host{flex:1;min-width:0;background:var(--bg3)}
+.pose-detail-canvas-host .prof-mv-canvas-wrap{width:100%;height:100%;aspect-ratio:auto;border-radius:0;border:none}
+.pose-detail-side{flex-shrink:0;width:260px;border-left:1px solid var(--bd);
+  background:var(--bg2);padding:14px;overflow-y:auto;box-sizing:border-box}
+.pose-detail-side .prof-mv-variants{margin-bottom:14px}
+.pose-detail-side .prof-mv-actions{flex-direction:column}
+.pose-detail-side .prof-mv-actions button{width:100%}
 /* Image picker modal ────────────────────────────────────────────────────── */
 #img-picker-modal{display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.85);
   align-items:center;justify-content:center}
@@ -1839,6 +1855,7 @@ ${aboutModalHTML}
       <div id="mv-tex-grid" class="mv-tex-grid"></div>
     </aside>
   </div>
+  <div id="pose-detail-root"></div>
   <aside id="char-panel"></aside>
 </div>
 ${addModalHTML}
@@ -1910,6 +1927,8 @@ let query   = '';
 let tagModeOn = false;
 // Embedded 3D model archive view (Lost Islands dashboard hero card)
 let mvActive = false;
+let poseDetailChar = null;     // Skylander name, or null — full-page bone-posing detail view
+let lastPoseDetailChar = null; // tracks which character renderPoseDetail last built for (distinct from lastPanelChar)
 // Dashboard builder — per-game edit-mode flag and working-copy layout draft
 let dashEditMode = {};
 let dashDraft    = {};
@@ -2627,6 +2646,23 @@ function renderDashboard(g) {
 function renderGrid() {
   const main = document.getElementById('main');
   const mvRoot = document.getElementById('mv-root');
+  const poseDetailRoot = document.getElementById('pose-detail-root');
+
+  if (poseDetailChar) {
+    // #layout is a CSS grid (\`var(--sb) 1fr\` / \`var(--sb) 1fr var(--cp)\` via
+    // .has-panel) — display:none fully removes an item from grid flow, but
+    // renderCharPanel() (called right after this inside render()) early-
+    // returns while poseDetailChar is set and never touches has-panel
+    // itself, so it has to be cleared here or the stale #char-panel column
+    // would keep reserving width next to the detail view.
+    document.getElementById('layout').classList.remove('has-panel');
+    main.style.display = 'none';
+    mvRoot.style.display = 'none';
+    poseDetailRoot.style.display = 'flex';
+    renderPoseDetail(poseDetailChar);
+    return;
+  }
+  poseDetailRoot.style.display = 'none';
 
   if (mvActive) {
     main.style.display = 'none';
@@ -2719,6 +2755,8 @@ function renderGrid() {
 function renderCharPanel() {
   const panel  = document.getElementById('char-panel');
   const layout = document.getElementById('layout');
+
+  if (poseDetailChar) return; // detail view owns ProfileModelViewer's single instance while open
 
   if (!sel.char) {
     layout.classList.remove('has-panel');
@@ -2916,6 +2954,82 @@ function renderProfileModelViewer(sky) {
 
   panel.appendChild(wrap);
   window.ProfileModelViewer?.mount(canvasWrap, models);
+}
+
+function openPoseDetail(sky) {
+  poseDetailChar = sky.name;
+  render();
+}
+
+function closePoseDetail() {
+  window.ProfileModelViewer?.destroy();
+  poseDetailChar = null;
+  lastPoseDetailChar = null;
+  lastPanelChar = null; // forces renderCharPanel to remount the small viewer it destroyed
+  render();
+}
+
+function renderPoseDetail(charName) {
+  const root = document.getElementById('pose-detail-root');
+  if (charName === lastPoseDetailChar) return;
+  window.ProfileModelViewer?.destroy();
+  lastPoseDetailChar = charName;
+
+  const sky = SKYLANDERS.find(s => s.name === charName);
+  const models = sky?.models || [];
+
+  root.innerHTML = '<div class="pose-detail-toolbar">'
+    + '<button class="pose-detail-back" type="button">\\u2039 Back to ' + escAttr(charName) + '</button>'
+    + '</div>'
+    + '<div class="pose-detail-body">'
+      + '<div class="pose-detail-canvas-host"></div>'
+      + '<div class="pose-detail-side"></div>'
+    + '</div>';
+
+  root.querySelector('.pose-detail-back').addEventListener('click', closePoseDetail);
+
+  const canvasHost = root.querySelector('.pose-detail-canvas-host');
+  const sideEl     = root.querySelector('.pose-detail-side');
+
+  if (!models.length) {
+    canvasHost.innerHTML = '<div class="prof-mv-empty">No 3D model available for this character.</div>';
+    return;
+  }
+
+  const canvasWrap = document.createElement('div');
+  canvasWrap.className = 'prof-mv-canvas-wrap';
+  canvasHost.appendChild(canvasWrap);
+
+  if (models.length > 1) {
+    const variantsEl = document.createElement('div'); variantsEl.className = 'prof-mv-variants';
+    models.forEach((m, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'prof-mv-variant' + (i === 0 ? ' on' : '');
+      btn.textContent = m.name;
+      btn.addEventListener('click', () => {
+        variantsEl.querySelectorAll('.prof-mv-variant').forEach(b => b.classList.remove('on'));
+        btn.classList.add('on');
+        window.ProfileModelViewer?.switchModel(i);
+      });
+      variantsEl.appendChild(btn);
+    });
+    sideEl.appendChild(variantsEl);
+  }
+
+  const actions = document.createElement('div'); actions.className = 'prof-mv-actions';
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset pose';
+  resetBtn.addEventListener('click', () => window.ProfileModelViewer?.resetPose());
+  actions.appendChild(resetBtn);
+
+  const sendBtn = document.createElement('button');
+  sendBtn.className = 'prof-mv-card-btn';
+  sendBtn.textContent = '\\u2197 Send to NFC';
+  sendBtn.addEventListener('click', () => useAsCardArt(sky));
+  actions.appendChild(sendBtn);
+  sideEl.appendChild(actions);
+
+  window.ProfileModelViewer?.mount(canvasWrap, models, { posable: true, boneUiHost: sideEl });
 }
 
 function render() { renderSidebar(); renderGrid(); renderCharPanel(); if (tagModeOn) refreshTagOverlays(); }
