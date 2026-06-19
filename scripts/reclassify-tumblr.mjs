@@ -3117,6 +3117,16 @@ window.addEventListener('skylander-model-viewer-close', () => {
   render();
 });
 
+// Pose-editor deep link from the NFC card builder: #pose=<character name>
+// opens straight into that character's pose-detail view. Mirrors the
+// #model=/#texture= deep-link pattern above (model-viewer.js), including
+// its same harmless double-render shape (openPoseDetail calls render()
+// itself; the unconditional render() below runs again right after).
+{
+  const m = location.hash.match(/^#pose=(.+)$/);
+  const sky = m && SKYLANDERS.find(s => s.name === decodeURIComponent(m[1]));
+  if (sky) openPoseDetail(sky);
+}
 render();
 </script>
 </body>
