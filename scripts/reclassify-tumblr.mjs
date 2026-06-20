@@ -1496,6 +1496,11 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .prof-gallery{margin-bottom:10px}
 .prof-gallery-item{cursor:default}
 .prof-gallery-item:hover{transform:none;box-shadow:none;border-color:var(--bd)}
+/* Figurine/render/ability photos are rarely square — .card img's cover crop
+   (sized for the dashboard's uniform photo-tile grid) cuts off enough of
+   these to make them hard to identify. contain + a visible backing fill
+   shows the whole image instead. */
+.prof-gallery-item img{object-fit:contain;background:#0d0d14}
 .prof-gallery-rm{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.65);color:#fff;
   border:none;width:24px;height:24px;line-height:24px;border-radius:4px;font-size:.9rem;
   cursor:pointer;font-family:inherit;padding:0}
@@ -1575,7 +1580,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 #img-picker-search:focus{outline:none;border-color:var(--acc)}
 #img-picker-search::placeholder{color:var(--muted)}
 #img-picker-grid{overflow-y:auto;flex:1;margin-bottom:12px;min-height:120px}
-.prof-picker-item img{opacity:.85}
+.prof-picker-item img{opacity:.85;object-fit:contain;background:#0d0d14}
 .prof-picker-item:hover img{opacity:1}
 .prof-picker-item.selected{border-color:var(--acc);box-shadow:0 0 0 2px rgba(79,122,255,.4)}
 /* Embedded 3D model viewer ──────────────────────────────────────────────── */
