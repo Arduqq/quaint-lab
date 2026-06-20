@@ -439,6 +439,10 @@ const publishBtnHTML = `
   <button id="publish-btn" onclick="publishArchive()" title="Re-sort, regenerate the site's archive page, and sync images into src/images/skylanders-archive/">Publish</button>
   <span id="publish-status"></span>`;
 
+const autoFillAllBtnHTML = `
+  <button id="autofill-all-btn" onclick="autoFillAllCharacters()" title="Fill in missing renders and add any newly-tagged figures/ability icons, across every character">Auto-fill All</button>
+  <span id="autofill-all-status"></span>`;
+
 const addModalHTML = `
 <div id="add-modal">
   <div id="add-modal-box">
@@ -1136,6 +1140,40 @@ async function publishArchive() {
     btn.disabled = false;
   }
 }
+
+async function autoFillAllCharacters() {
+  if (!confirm('Auto-fill every character?\\n\\nFills in renders only for characters that have none, and adds any newly-tagged figures/ability icons to every character. Existing renders are never overwritten.')) return;
+
+  const btn = document.getElementById('autofill-all-btn');
+  const statusEl = document.getElementById('autofill-all-status');
+  btn.disabled = true;
+  statusEl.className = '';
+
+  let updated = 0, failed = 0;
+  const total = SKYLANDERS.length;
+  for (let i = 0; i < total; i++) {
+    const sky = SKYLANDERS[i];
+    statusEl.textContent = 'Auto-filling\\u2026 ' + (i + 1) + '/' + total;
+    const patch = {};
+    for (const field of ['render', 'figures', 'abilityIcons']) {
+      const fieldPatch = computeAutoFillPatch(sky, field, { onlyIfMissing: field === 'render' });
+      if (fieldPatch) Object.assign(patch, fieldPatch);
+    }
+    if (Object.keys(patch).length) {
+      try {
+        await saveCharFieldRaw(sky.name, patch);
+        updated++;
+      } catch (e) {
+        failed++;
+      }
+    }
+  }
+
+  render();
+  statusEl.className = failed ? 'err' : 'ok';
+  statusEl.textContent = (failed ? '\\u26a0 ' : '\\u2713 ') + 'Auto-filled ' + updated + '/' + total + ' characters' + (failed ? ' \\u2014 ' + failed + ' failed' : '');
+  btn.disabled = false;
+}
 `;
 
 const charProfileJS = `
@@ -1815,7 +1853,7 @@ body.tag-mode .card.tagged-sel::after{content:'\\2713';position:absolute;
 <div id="hdr">
   <h1>Skylanders Archive</h1>
   <button id="about-btn" onclick="openAboutModal()">About</button>
-  <input id="q" type="search" placeholder="Search…" autocomplete="off">${tagModeBtnHTML}${addImageBtnHTML}${publishBtnHTML}
+  <input id="q" type="search" placeholder="Search…" autocomplete="off">${tagModeBtnHTML}${addImageBtnHTML}${publishBtnHTML}${autoFillAllBtnHTML}
 </div>${tagBarHTML}
 ${aboutModalHTML}
 <div id="layout">
@@ -3176,6 +3214,7 @@ const htmlPublish = html
   .replace(addModalHTML, '')
   .replace(imagePickerModalHTML, '')
   .replace(publishBtnHTML, '')
+  .replace(autoFillAllBtnHTML, '')
   .replace(tagModeJS, '')
   .replace(editPanelJS, '')
   .replace(addModalJS, '')
