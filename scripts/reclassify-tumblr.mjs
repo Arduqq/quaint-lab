@@ -3122,10 +3122,26 @@ window.addEventListener('skylander-model-viewer-close', () => {
 // #model=/#texture= deep-link pattern above (model-viewer.js), including
 // its same harmless double-render shape (openPoseDetail calls render()
 // itself; the unconditional render() below runs again right after).
+//
+// openPoseDetail() can't fire until window.ProfileModelViewer exists.
+// That global is assigned by a <script type="module"> tag, which (per the
+// HTML spec) always defers its execution until after the document finishes
+// parsing, regardless of where the tag sits in the markup — while this
+// script is a plain, non-deferred classic <script> that runs synchronously
+// the moment the parser reaches it. So at this exact point in execution,
+// the module has not run yet and window.ProfileModelViewer is still
+// undefined; calling openPoseDetail() here makes its mount() call silently
+// no-op via optional chaining, leaving an empty canvas with no error. The
+// existing #model=/#texture= deep link above doesn't hit this because it's
+// triggered by a CustomEvent dispatched from *inside* model-viewer.js's own
+// module-evaluation — i.e. only after that module has already loaded.
 {
   const m = location.hash.match(/^#pose=(.+)$/);
   const sky = m && SKYLANDERS.find(s => s.name === decodeURIComponent(m[1]));
-  if (sky) openPoseDetail(sky);
+  if (sky) {
+    if (window.ProfileModelViewer) openPoseDetail(sky);
+    else window.addEventListener('DOMContentLoaded', () => openPoseDetail(sky), { once: true });
+  }
 }
 render();
 </script>
