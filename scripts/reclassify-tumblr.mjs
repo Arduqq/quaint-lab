@@ -1173,17 +1173,18 @@ function imagesByCategory(lname) {
   return byCat;
 }
 
-function autoFillCharField(sky, field) {
+function computeAutoFillPatch(sky, field, { onlyIfMissing = false } = {}) {
   const lname = sky.name.toLowerCase();
   const byCat = imagesByCategory(lname);
   const cats  = field === 'render' ? RENDER_CATS : field === 'figures' ? FIGURE_CATS : ABILITY_CATS;
 
   if (field === 'render') {
+    if (onlyIfMissing && sky.render) return null;
     for (const c of cats) {
       const pick = (byCat[c] || [])[0];
-      if (pick) { saveCharField(sky.name, { render: pick.path }); return; }
+      if (pick) return { render: pick.path };
     }
-    return;
+    return null;
   }
 
   const existing = new Set(sky[field] || []);
@@ -1193,7 +1194,12 @@ function autoFillCharField(sky, field) {
       if (!existing.has(img.path) && !additions.includes(img.path)) additions.push(img.path);
     }
   }
-  if (additions.length) saveCharField(sky.name, { [field]: [...(sky[field] || []), ...additions] });
+  return additions.length ? { [field]: [...(sky[field] || []), ...additions] } : null;
+}
+
+function autoFillCharField(sky, field) {
+  const patch = computeAutoFillPatch(sky, field);
+  if (patch) saveCharField(sky.name, patch);
 }
 
 async function saveCharField(name, patch) {
