@@ -1202,14 +1202,18 @@ function autoFillCharField(sky, field) {
   if (patch) saveCharField(sky.name, patch);
 }
 
-async function saveCharField(name, patch) {
+async function saveCharFieldRaw(name, patch) {
   const sky = SKYLANDERS.find(s => s.name === name);
+  const res = await fetch('/api/update-character', {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name, ...patch })
+  });
+  if (!res.ok) throw new Error((await res.json()).error || res.statusText);
+  if (sky) Object.assign(sky, patch);
+}
+
+async function saveCharField(name, patch) {
   try {
-    const res = await fetch('/api/update-character', {
-      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name, ...patch })
-    });
-    if (!res.ok) throw new Error((await res.json()).error || res.statusText);
-    if (sky) Object.assign(sky, patch);
+    await saveCharFieldRaw(name, patch);
     render();
   } catch (e) {
     alert('Error saving: ' + e.message);
