@@ -1415,14 +1415,19 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 #char-profile-rebuild{display:contents}
 #char-meta-strip{order:2}
 #char-meta-model{order:6}
-.cp-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px}
-.cp-sub{font-size:.65rem;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
-.cp-field{margin-bottom:10px}
-.cp-field label{display:block;font-size:.62rem;color:var(--muted);
-  text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px}
+#char-meta-strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;
+  margin-bottom:24px;padding:10px 16px;background:rgba(255,255,255,.03);
+  border:1px solid var(--bd);border-radius:8px;font-size:.74rem}
+.cp-sub{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;
+  flex:1 0 100%}
+.cp-pill{display:inline-flex;align-items:center;gap:5px;color:var(--txt)}
+.cp-pill .k{color:var(--muted);text-transform:uppercase;font-size:.62rem;letter-spacing:.05em}
+.cp-field{display:flex;align-items:center;gap:5px}
+.cp-field label{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
 .cp-field input[type=text],.cp-field input[type=number],.cp-field select{
-  width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
-  color:#fff;padding:5px 7px;border-radius:4px;font-size:.74rem;font-family:inherit}
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
+  color:#fff;padding:4px 6px;border-radius:4px;font-size:.74rem;font-family:inherit}
+.cp-field input[type=text]{width:110px}
 .cp-field input:focus,.cp-field select:focus{outline:none;border-color:var(--acc)}
 .cp-field select option{background:#1a1a2a;color:#fff}
 .cp-checks{display:flex;gap:14px;align-items:center;font-size:.72rem;color:#ccc}
@@ -1431,29 +1436,28 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .cp-checks input[type=number]{width:48px;background:rgba(255,255,255,.07);
   border:1px solid rgba(255,255,255,.15);color:#fff;padding:3px 5px;border-radius:4px;
   font-size:.72rem;font-family:inherit}
-.cp-hr{border:none;border-top:1px solid var(--bd);margin:14px 0}
-.cp-extra-row{display:flex;gap:5px;margin-bottom:6px}
-.cp-extra-row input{flex:1;min-width:0;background:rgba(255,255,255,.07);
+.cp-extra-row{display:flex;gap:5px;align-items:center}
+.cp-extra-row input{min-width:0;background:rgba(255,255,255,.07);
   border:1px solid rgba(255,255,255,.15);color:#fff;padding:4px 6px;border-radius:4px;
-  font-size:.7rem;font-family:inherit}
+  font-size:.7rem;font-family:inherit;width:90px}
 .cp-extra-row input:focus{outline:none;border-color:var(--acc)}
 .cp-extra-rm{flex-shrink:0;background:none;border:1px solid rgba(255,255,255,.15);
-  color:var(--muted);border-radius:4px;width:24px;cursor:pointer;font-size:.8rem;
+  color:var(--muted);border-radius:4px;width:22px;cursor:pointer;font-size:.78rem;
   font-family:inherit;line-height:1}
 .cp-extra-rm:hover{color:#ff6b6b;border-color:rgba(255,107,107,.4)}
-#cp-add-prop{margin-top:2px;background:none;border:1px dashed rgba(255,255,255,.2);
+#cp-add-prop{background:none;border:1px dashed rgba(255,255,255,.2);
   color:var(--muted);border-radius:4px;padding:4px 10px;font-size:.68rem;cursor:pointer;
-  font-family:inherit;width:100%}
+  font-family:inherit}
 #cp-add-prop:hover{color:#fff;border-color:rgba(255,255,255,.4)}
-#cp-save{margin-top:14px;width:100%;padding:7px;background:rgba(80,220,100,.13);
+#cp-save{flex:1 0 100%;margin-top:6px;padding:7px;background:rgba(80,220,100,.13);
   border:1.5px solid rgba(80,220,100,.4);color:#5fdc6f;border-radius:5px;cursor:pointer;
   font-size:.74rem;font-weight:700;font-family:inherit}
 #cp-save:hover{background:rgba(80,220,100,.23)}
-#cp-status{display:block;margin-top:8px;font-size:.68rem;text-align:center;min-height:1.2em}
+#cp-status{flex:1 0 100%;font-size:.68rem;text-align:center;min-height:1.2em}
 #cp-status.ok{color:#5fdc6f}
 #cp-status.err{color:#ff6b6b}
-.cp-ro{font-size:.74rem;color:#fff;padding:5px 0}
-.cp-extra-ro{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;color:#ccc;padding:3px 0}
+.cp-ro{font-size:.74rem;color:#fff}
+.cp-extra-ro{display:inline-flex;gap:5px;font-size:.72rem;color:#ccc}
 .cp-extra-ro-key{color:var(--muted)}
 .sec{margin-bottom:26px}
 .sec-hd{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--gold);
@@ -2382,6 +2386,22 @@ function renderCharProfile(lname, sky) {
     actions.appendChild(profBtn('Auto-fill', () => autoFillCharField(sky, 'render')));
     if (sky.render) actions.appendChild(profBtn('Remove', () => saveCharField(sky.name, { render: null }), 'prof-danger'));
     info.appendChild(actions);
+
+    const editStats = document.createElement('div'); editStats.className = 'prof-actions';
+    const elementSelect = document.createElement('select');
+    elementSelect.id = 'cp-element-hero';
+    elementSelect.innerHTML = ELEMENTS.map(e => '<option value="' + e + '"' + (e === sky.element ? ' selected' : '') + '>'
+      + e.charAt(0).toUpperCase() + e.slice(1) + '</option>').join('');
+    const speciesInput = document.createElement('input');
+    speciesInput.id = 'cp-species-hero'; speciesInput.type = 'text'; speciesInput.placeholder = 'Species';
+    speciesInput.value = sky.species || '';
+    const roleInput = document.createElement('input');
+    roleInput.id = 'cp-role-hero'; roleInput.type = 'text'; roleInput.placeholder = 'Role';
+    roleInput.value = sky.role || '';
+    editStats.appendChild(elementSelect);
+    editStats.appendChild(speciesInput);
+    editStats.appendChild(roleInput);
+    info.appendChild(editStats);
   }
 
   hero.appendChild(info);
@@ -2884,42 +2904,30 @@ function renderCharPanel() {
   }
 
   const hasExtra = Object.keys(sky.extra || {}).length > 0;
-  const elLabel  = sky.element ? sky.element.charAt(0).toUpperCase() + sky.element.slice(1) : '\\u2014';
 
   // Published builds show metadata read-only — there's no server on the live
   // site to receive edits, so the editable form + Save button (which posts
   // to /api/update-character) only get built in curation mode.
   const metaHTML = PUBLISH
-    ? '<div class="cp-field"><label>Element</label><div class="cp-ro">' + escAttr(elLabel) + '</div></div>'
-      + '<div class="cp-field"><label>Species</label><div class="cp-ro">' + escAttr(sky.species || '\\u2014') + '</div></div>'
-      + '<div class="cp-field"><label>Gender</label><div class="cp-ro">' + escAttr(sky.gender || '\\u2014') + '</div></div>'
-      + '<div class="cp-field"><label>Role</label><div class="cp-ro">' + escAttr(sky.role || '\\u2014') + '</div></div>'
-      + '<div class="cp-field cp-checks">'
-        + '<span>' + (sky.owned ? '\\u2713 Owned' : '\\u2715 Not owned') + '</span>'
-        + (sky.favorite ? '<span>\\u2605 Favorite</span>' : '')
-        + (sky.level != null ? '<span>Lvl ' + escAttr(sky.level) + '</span>' : '')
-      + '</div>'
+    ? '<span class="cp-pill"><span class="k">Gender</span>' + escAttr(sky.gender || '\\u2014') + '</span>'
+      + '<span class="cp-pill">' + (sky.owned ? '\\u2713 Owned' : '\\u2715 Not owned') + '</span>'
+      + (sky.favorite ? '<span class="cp-pill">\\u2605 Favorite</span>' : '')
+      + (sky.level != null ? '<span class="cp-pill"><span class="k">Lvl</span>' + escAttr(sky.level) + '</span>' : '')
       + (hasExtra
-        ? '<hr class="cp-hr">'
-          + '<div class="cp-sub" style="margin-bottom:8px">Custom Properties</div>'
-          + '<div id="cp-extra">' + Object.entries(sky.extra).map(([k, v]) =>
-              '<div class="cp-extra-ro"><span class="cp-extra-ro-key">' + escAttr(k) + '</span><span>' + escAttr(v) + '</span></div>'
-            ).join('') + '</div>'
+        ? '<span id="cp-extra">' + Object.entries(sky.extra).map(([k, v]) =>
+              '<span class="cp-extra-ro"><span class="cp-extra-ro-key">' + escAttr(k) + '</span>' + escAttr(v) + '</span>'
+            ).join('') + '</span>'
         : '')
-    : '<div class="cp-field"><label>Element</label><select id="cp-element">'
-        + ELEMENTS.map(e => '<option value="' + e + '"' + (e === sky.element ? ' selected' : '') + '>'
-          + e.charAt(0).toUpperCase() + e.slice(1) + '</option>').join('')
-        + '</select></div>'
-      + '<div class="cp-field"><label>Species</label><input id="cp-species" type="text" value="' + escAttr(sky.species) + '"></div>'
+      // Element select is curation-only input, but the element value itself
+      // is already shown on the hero badge — no read-only duplicate needed.
+    : '<input id="cp-element" type="hidden" value="' + escAttr(sky.element || '') + '">'
+      + '<input id="cp-species" type="hidden" value="' + escAttr(sky.species || '') + '">'
       + '<div class="cp-field"><label>Gender</label><input id="cp-gender" type="text" value="' + escAttr(sky.gender) + '"></div>'
-      + '<div class="cp-field"><label>Role</label><input id="cp-role" type="text" value="' + escAttr(sky.role) + '"></div>'
       + '<div class="cp-field cp-checks">'
         + '<label><input id="cp-owned" type="checkbox"' + (sky.owned ? ' checked' : '') + '> Owned</label>'
         + '<label><input id="cp-favorite" type="checkbox"' + (sky.favorite ? ' checked' : '') + '> Favorite</label>'
         + '<label>Lvl <input id="cp-level" type="number" min="0" max="20" value="' + escAttr(sky.level ?? '') + '"></label>'
       + '</div>'
-      + '<hr class="cp-hr">'
-      + '<div class="cp-sub" style="margin-bottom:8px">Custom Properties</div>'
       + '<div id="cp-extra"></div>'
       + '<button id="cp-add-prop" type="button">+ Add property</button>'
       + '<button id="cp-save" type="button">Save Character</button>'
@@ -2960,10 +2968,10 @@ async function saveCharPanel(name) {
 
   const payload = {
     name,
-    element:  document.getElementById('cp-element').value,
-    species:  document.getElementById('cp-species').value.trim(),
+    element:  document.getElementById('cp-element-hero').value,
+    species:  document.getElementById('cp-species-hero').value.trim(),
     gender:   document.getElementById('cp-gender').value.trim(),
-    role:     document.getElementById('cp-role').value.trim(),
+    role:     document.getElementById('cp-role-hero').value.trim(),
     owned:    document.getElementById('cp-owned').checked,
     favorite: document.getElementById('cp-favorite').checked,
     level:    document.getElementById('cp-level').value === '' ? null : Number(document.getElementById('cp-level').value),
