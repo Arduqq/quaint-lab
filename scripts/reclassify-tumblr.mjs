@@ -1457,7 +1457,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 #cp-status{flex:1 0 100%;font-size:.68rem;text-align:center;min-height:1.2em}
 #cp-status.ok{color:#5fdc6f}
 #cp-status.err{color:#ff6b6b}
-.cp-ro{font-size:.74rem;color:#fff}
 .cp-extra-ro{display:inline-flex;gap:5px;font-size:.72rem;color:#ccc}
 .cp-extra-ro-key{color:var(--muted)}
 .sec{margin-bottom:26px}
@@ -2870,6 +2869,7 @@ function renderGrid() {
 
   if (!shown) {
     const m = document.createElement('div'); m.id = 'empty';
+    m.style.order = 8;
     m.textContent = query
       ? (VOCAB.empty?.noSearchResultsPrefix || 'No images match "') + query + (VOCAB.empty?.noSearchResultsSuffix || '".')
       : (VOCAB.empty?.noImages || 'No images here.');
@@ -2922,9 +2922,7 @@ function renderCharPanel() {
         : '')
       // Element select is curation-only input, but the element value itself
       // is already shown on the hero badge — no read-only duplicate needed.
-    : '<input id="cp-element" type="hidden" value="' + escAttr(sky.element || '') + '">'
-      + '<input id="cp-species" type="hidden" value="' + escAttr(sky.species || '') + '">'
-      + '<div class="cp-field"><label>Gender</label><input id="cp-gender" type="text" value="' + escAttr(sky.gender) + '"></div>'
+    : '<div class="cp-field"><label>Gender</label><input id="cp-gender" type="text" value="' + escAttr(sky.gender) + '"></div>'
       + '<div class="cp-field cp-checks">'
         + '<label><input id="cp-owned" type="checkbox"' + (sky.owned ? ' checked' : '') + '> Owned</label>'
         + '<label><input id="cp-favorite" type="checkbox"' + (sky.favorite ? ' checked' : '') + '> Favorite</label>'
