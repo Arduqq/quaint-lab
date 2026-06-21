@@ -1525,21 +1525,27 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
   border-radius:4px;padding:7px 14px;font-size:.85rem;font-family:inherit;cursor:pointer}
 .dash-add-form-actions button:first-child{border-color:rgba(80,220,100,.4);color:#5fdc6f}
 /* Character profile ─────────────────────────────────────────────────────── */
-.prof-header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.prof-hero{display:flex;gap:0;margin-bottom:18px;background:rgba(255,255,255,.03);
+  border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.prof-hero-art{flex:0 0 42%;min-height:220px;display:flex;align-items:center;justify-content:center;
+  background:#0d0d14;padding:14px;box-sizing:border-box}
+.prof-hero-art img{max-width:100%;max-height:320px;object-fit:contain}
+.prof-render-empty{color:var(--muted);font-size:.95rem;padding:40px;text-align:center}
+.prof-hero-info{flex:1;min-width:0;padding:20px 22px;display:flex;flex-direction:column;
+  justify-content:center;gap:14px;background:var(--bg2)}
 .prof-name{font-size:1.5rem;color:#fff;letter-spacing:.3px;text-transform:uppercase}
-.prof-badge{font-size:.85rem;text-transform:uppercase;letter-spacing:1px;
-  border:1.5px solid;border-radius:4px;padding:3px 10px}
+.prof-badge{display:inline-block;font-size:.78rem;text-transform:uppercase;letter-spacing:1px;
+  border:1.5px solid;border-radius:20px;padding:3px 12px;margin-top:6px}
+.prof-hero-stats{display:flex;flex-direction:column;gap:10px}
+.prof-hero-stat .k{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted);margin-bottom:2px}
+.prof-hero-stat .v{font-size:.88rem;color:var(--txt);font-weight:600}
 .prof-section{margin-bottom:28px}
 .prof-section-hd{font-size:1.05rem;color:var(--gold);letter-spacing:.5px;
   margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(255,204,0,.15);
   display:flex;align-items:baseline;gap:8px}
 .prof-section-hd .cnt{color:var(--muted);font-size:.8rem;font-weight:normal;letter-spacing:0;text-transform:none}
 .prof-empty{color:var(--muted);font-size:.85rem;margin-bottom:10px}
-.prof-render{display:flex;justify-content:center;align-items:center;min-height:160px;
-  background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:8px;
-  padding:14px;margin-bottom:10px}
-.prof-render img{max-width:100%;max-height:340px;object-fit:contain}
-.prof-render-empty{color:var(--muted);font-size:.95rem;padding:40px}
 .prof-actions{display:flex;flex-wrap:wrap;gap:8px}
 .prof-actions button{background:rgba(255,255,255,.06);color:var(--txt);border:1px solid var(--bd);
   border-radius:4px;padding:7px 14px;font-size:.85rem;font-family:inherit;cursor:pointer;transition:all .12s}
@@ -2327,36 +2333,47 @@ function renderCharProfile(lname, sky) {
   const main = document.getElementById('char-profile-rebuild');
   main.innerHTML = '';
 
-  const header = document.createElement('div'); header.className = 'prof-header';
-  header.style.order = 1;
+  if (!sky) {
+    const nameEl = document.createElement('h2'); nameEl.className = 'prof-name';
+    nameEl.style.order = 1;
+    nameEl.textContent = lname.replace(/\\b\\w/g, c => c.toUpperCase());
+    main.appendChild(nameEl);
+    return;
+  }
+
+  const hero = document.createElement('div'); hero.className = 'prof-hero';
+  hero.style.order = 1;
+
+  const art = document.createElement('div'); art.className = 'prof-hero-art';
+  art.innerHTML = sky.render
+    ? '<img src="' + ARCHIVE_BASE + sky.render + '" alt="">'
+    : '<div class="prof-render-empty">No render assigned</div>';
+  hero.appendChild(art);
+
+  const info = document.createElement('div'); info.className = 'prof-hero-info';
+
   const nameEl = document.createElement('h2'); nameEl.className = 'prof-name';
-  nameEl.textContent = sky ? sky.name : lname.replace(/\\b\\w/g, c => c.toUpperCase());
-  header.appendChild(nameEl);
-  if (sky && sky.element) {
+  nameEl.textContent = sky.name;
+  info.appendChild(nameEl);
+
+  if (sky.element) {
     const col = EL_COL[sky.element] || '#888';
     const badge = document.createElement('span'); badge.className = 'prof-badge';
     badge.textContent = sky.element;
     badge.style.borderColor = col;
     badge.style.color = col;
     badge.style.background = col + '22';
-    header.appendChild(badge);
+    info.appendChild(badge);
   }
-  main.appendChild(header);
 
-  if (!sky) return;
-
-  // Render
-  const renderSec = document.createElement('div'); renderSec.className = 'prof-section';
-  renderSec.style.order = 1;
-  const renderHd = document.createElement('div'); renderHd.className = 'prof-section-hd';
-  renderHd.textContent = 'Render';
-  renderSec.appendChild(renderHd);
-
-  const renderBox = document.createElement('div'); renderBox.className = 'prof-render';
-  renderBox.innerHTML = sky.render
-    ? '<img src="' + ARCHIVE_BASE + sky.render + '" alt="">'
-    : '<div class="prof-render-empty">No render assigned</div>';
-  renderSec.appendChild(renderBox);
+  const stats = document.createElement('div'); stats.className = 'prof-hero-stats';
+  [['Species', sky.species], ['Role', sky.role]].forEach(([label, value]) => {
+    if (!value) return;
+    const stat = document.createElement('div'); stat.className = 'prof-hero-stat';
+    stat.innerHTML = '<span class="k">' + label + '</span><span class="v">' + escAttr(value) + '</span>';
+    stats.appendChild(stat);
+  });
+  if (stats.children.length) info.appendChild(stats);
 
   if (!PUBLISH) {
     const actions = document.createElement('div'); actions.className = 'prof-actions';
@@ -2364,9 +2381,11 @@ function renderCharProfile(lname, sky) {
       openImagePicker(lname, { field: 'render' })));
     actions.appendChild(profBtn('Auto-fill', () => autoFillCharField(sky, 'render')));
     if (sky.render) actions.appendChild(profBtn('Remove', () => saveCharField(sky.name, { render: null }), 'prof-danger'));
-    renderSec.appendChild(actions);
+    info.appendChild(actions);
   }
-  main.appendChild(renderSec);
+
+  hero.appendChild(info);
+  main.appendChild(hero);
 
   const figuresSec = profGallery(lname, sky, 'figures', 'Figures');
   figuresSec.style.order = 3;
