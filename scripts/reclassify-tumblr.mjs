@@ -1418,6 +1418,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 #char-meta-strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;
   margin-bottom:24px;padding:10px 16px;background:rgba(255,255,255,.03);
   border:1px solid var(--bd);border-radius:8px;font-size:.74rem}
+.cp-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px}
 .cp-sub{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;
   flex:1 0 100%}
 .cp-pill{display:inline-flex;align-items:center;gap:5px;color:var(--txt)}
