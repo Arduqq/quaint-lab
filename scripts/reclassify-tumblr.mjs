@@ -1593,9 +1593,10 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
   border-radius:4px;padding:7px 14px;font-size:.85rem;font-family:inherit;cursor:pointer}
 .prof-add-variant button:hover{border-color:rgba(255,204,0,.4);color:var(--gold)}
 /* Profile model viewer */
-.prof-mv-wrap{margin-bottom:16px}
-.prof-mv-canvas-wrap{width:100%;aspect-ratio:1/1;background:var(--bg3);
-  border-radius:6px;overflow:hidden;border:1px solid var(--bd)}
+#char-meta-model{margin-bottom:28px}
+.prof-mv-wrap{margin-bottom:0}
+.prof-mv-canvas-wrap{width:100%;max-width:480px;aspect-ratio:1/1;background:var(--bg3);
+  border-radius:8px;overflow:hidden;border:1px solid var(--bd);margin:0 auto}
 .prof-mv-variants{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
 .prof-mv-variant{background:rgba(255,255,255,.06);border:1px solid var(--bd);
   color:var(--muted);font-size:.72rem;padding:3px 8px;border-radius:4px;cursor:pointer}
