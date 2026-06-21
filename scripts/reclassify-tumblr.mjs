@@ -1531,13 +1531,13 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .dash-add-form-actions button:first-child{border-color:rgba(80,220,100,.4);color:#5fdc6f}
 /* Character profile ─────────────────────────────────────────────────────── */
 .prof-hero{display:flex;gap:0;margin-bottom:18px;background:rgba(255,255,255,.03);
-  border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+  border:1px solid var(--bd);border-radius:10px}
 .prof-hero-art{flex:0 0 42%;min-height:220px;display:flex;align-items:center;justify-content:center;
-  background:#0d0d14;padding:14px;box-sizing:border-box}
+  background:#0d0d14;padding:14px;box-sizing:border-box;border-radius:10px 0 0 10px}
 .prof-hero-art img{max-width:100%;max-height:320px;object-fit:contain}
 .prof-render-empty{color:var(--muted);font-size:.95rem;padding:40px;text-align:center}
 .prof-hero-info{flex:1;min-width:0;padding:20px 22px;display:flex;flex-direction:column;
-  justify-content:center;gap:14px;background:var(--bg2)}
+  justify-content:center;gap:14px;background:var(--bg2);border-radius:0 10px 10px 0}
 .prof-name{font-size:1.5rem;color:#fff;letter-spacing:.3px;text-transform:uppercase}
 .prof-badge{display:inline-block;font-size:.78rem;text-transform:uppercase;letter-spacing:1px;
   border:1.5px solid;border-radius:20px;padding:3px 12px;margin-top:6px}
