@@ -1342,7 +1342,7 @@ const html = `<!DOCTYPE html>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{--bg:#0e0e14;--bg2:#14142a;--bg3:#111120;--bd:rgba(255,255,255,.08);
-  --txt:#ddd;--muted:rgba(255,255,255,.6);--gold:#ffcc00;--acc:#4f7aff;--sb:234px;--cp:280px}
+  --txt:#ddd;--muted:rgba(255,255,255,.6);--gold:#ffcc00;--acc:#4f7aff;--sb:234px}
 html,body{height:100%;overflow:hidden}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);
   display:flex;flex-direction:column}
@@ -1355,7 +1355,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 #q::placeholder{color:var(--muted)}
 #q:focus{outline:none;border-color:rgba(255,204,0,.5)}
 #layout{flex:1 1 0;min-height:0;display:grid;grid-template-columns:var(--sb) 1fr}
-#layout.has-panel{grid-template-columns:var(--sb) 1fr var(--cp)}
 #sb{overflow-y:auto;background:var(--bg2);border-right:1px solid var(--bd);padding:6px 0}
 .sb-all{display:flex;align-items:center;justify-content:space-between;
   padding:8px 14px;cursor:pointer;font-size:.72rem;color:var(--muted);
@@ -1406,10 +1405,16 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .sb-char-cnt{display:block;font-size:.55rem;color:rgba(255,255,255,.35)}
 .sb-char-item.on .sb-char-cnt{color:rgba(79,122,255,.6)}
 #main{overflow-y:auto;padding:14px 18px}
-/* Character profile panel ─────────────────────────────────────────────── */
-#char-panel{display:none;overflow-y:auto;background:var(--bg2);
-  border-left:1px solid var(--bd);padding:14px}
-#layout.has-panel #char-panel{display:block}
+/* Character profile (consolidated pane) ───────────────────────────────── */
+/* When viewing a character, #main becomes a flex column so the always-
+   rebuilt content (hero/galleries/variants/feed, inside #char-profile-
+   rebuild) and the memoized content (metadata strip, 3D model viewer)
+   can be visually interleaved via CSS \`order\`, while staying separate DOM
+   subtrees with independent rebuild lifecycles — see renderGrid(). */
+#main.char-mode{display:flex;flex-direction:column}
+#char-profile-rebuild{display:contents}
+#char-meta-strip{order:2}
+#char-meta-model{order:6}
 .cp-name{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:2px}
 .cp-sub{font-size:.65rem;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
 .cp-field{margin-bottom:10px}
@@ -1909,7 +1914,6 @@ ${aboutModalHTML}
     </aside>
   </div>
   <div id="pose-detail-root"></div>
-  <aside id="char-panel"></aside>
 </div>
 ${addModalHTML}
 ${imagePickerModalHTML}
@@ -1967,7 +1971,8 @@ const escAttr = s => String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;'
 const MAINLINE_GAMES = new Set(['spyros-adventure','giants','swap-force','trap-team','superchargers','imaginators']);
 
 let sel     = {game: null, cat: null, char: null};
-let lastPanelChar = null; // tracks which character the #char-panel form was built for
+let lastPanelChar = null; // tracks which character the metadata strip/3D viewer were built for
+let lastProfileChar = null; // tracks which character #char-profile-rebuild's containers exist for
 let annFilter = null; // null | 'background' | 'detail' — cross-cutting annotation filter
 // Per-game category lists start collapsed; clicking a game's title expands
 // it (and shows its dashboard). Keeps the sidebar short with ~10 games.
@@ -2319,9 +2324,11 @@ function profVariants(lname, sky) {
 }
 
 function renderCharProfile(lname, sky) {
-  const main = document.getElementById('main');
+  const main = document.getElementById('char-profile-rebuild');
+  main.innerHTML = '';
 
   const header = document.createElement('div'); header.className = 'prof-header';
+  header.style.order = 1;
   const nameEl = document.createElement('h2'); nameEl.className = 'prof-name';
   nameEl.textContent = sky ? sky.name : lname.replace(/\\b\\w/g, c => c.toUpperCase());
   header.appendChild(nameEl);
@@ -2340,6 +2347,7 @@ function renderCharProfile(lname, sky) {
 
   // Render
   const renderSec = document.createElement('div'); renderSec.className = 'prof-section';
+  renderSec.style.order = 1;
   const renderHd = document.createElement('div'); renderHd.className = 'prof-section-hd';
   renderHd.textContent = 'Render';
   renderSec.appendChild(renderHd);
@@ -2360,9 +2368,17 @@ function renderCharProfile(lname, sky) {
   }
   main.appendChild(renderSec);
 
-  main.appendChild(profGallery(lname, sky, 'figures', 'Figures'));
-  main.appendChild(profGallery(lname, sky, 'abilityIcons', 'Ability Icons'));
-  main.appendChild(profVariants(lname, sky));
+  const figuresSec = profGallery(lname, sky, 'figures', 'Figures');
+  figuresSec.style.order = 3;
+  main.appendChild(figuresSec);
+
+  const abilitySec = profGallery(lname, sky, 'abilityIcons', 'Ability Icons');
+  abilitySec.style.order = 4;
+  main.appendChild(abilitySec);
+
+  const variantsSec = profVariants(lname, sky);
+  variantsSec.style.order = 5;
+  main.appendChild(variantsSec);
 }
 
 // ── Dashboard builder ───────────────────────────────────────────────────
@@ -2702,13 +2718,6 @@ function renderGrid() {
   const poseDetailRoot = document.getElementById('pose-detail-root');
 
   if (poseDetailChar) {
-    // #layout is a CSS grid (\`var(--sb) 1fr\` / \`var(--sb) 1fr var(--cp)\` via
-    // .has-panel) — display:none fully removes an item from grid flow, but
-    // renderCharPanel() (called right after this inside render()) early-
-    // returns while poseDetailChar is set and never touches has-panel
-    // itself, so it has to be cleared here or the stale #char-panel column
-    // would keep reserving width next to the detail view.
-    document.getElementById('layout').classList.remove('has-panel');
     main.style.display = 'none';
     mvRoot.style.display = 'none';
     poseDetailRoot.style.display = 'flex';
@@ -2728,21 +2737,23 @@ function renderGrid() {
   if (window.SkylanderModelViewer) window.SkylanderModelViewer.hide();
 
   if (sel.game && sel.cat === null && !sel.char && !annFilter && !query) {
+    lastProfileChar = null;
+    main.classList.remove('char-mode');
     renderDashboard(sel.game);
     return;
   }
 
-  main.innerHTML = '';
   lbImgs = [];
   let shown = 0;
 
-  function addSection(title, imgs) {
+  function addSection(target, title, imgs, order) {
     if (!imgs.length) return;
     const startIdx = lbImgs.length;
     imgs.forEach(i => lbImgs.push(i));
     shown += imgs.length;
 
     const sec = document.createElement('div'); sec.className = 'sec';
+    if (order != null) sec.style.order = order;
     const hd  = document.createElement('div'); hd.className = 'sec-hd';
     hd.innerHTML = title + ' <span class="cnt">' + imgs.length + '</span>';
     sec.appendChild(hd);
@@ -2750,10 +2761,13 @@ function renderGrid() {
     const grid = document.createElement('div'); grid.className = 'grid';
     imgs.forEach((img, li) => grid.appendChild(makeCard(img, startIdx + li)));
     sec.appendChild(grid);
-    main.appendChild(sec);
+    target.appendChild(sec);
   }
 
   if (annFilter) {
+    lastProfileChar = null;
+    main.classList.remove('char-mode');
+    main.innerHTML = '';
     const imgs = [];
     for (const g of GO) {
       for (const [, rawImgs] of catsSorted(g)) {
@@ -2762,12 +2776,26 @@ function renderGrid() {
         }
       }
     }
-    addSection(annFilter === 'background' ? 'Backgrounds' : 'Details', imgs);
+    addSection(main, annFilter === 'background' ? 'Backgrounds' : 'Details', imgs);
   } else if (sel.char) {
     const lname = sel.char;
     const sky = SKYLANDERS.find(s => s.name.toLowerCase() === lname);
     const dispName = sky?.name || lname;
+
+    if (lname !== lastProfileChar) {
+      // Switching characters (or entering the profile view fresh): the
+      // metadata strip/3D viewer must rebuild too, so destroy the old
+      // viewer instance before the container holding it is replaced.
+      window.ProfileModelViewer?.destroy();
+      main.classList.add('char-mode');
+      main.innerHTML = '<div id="char-profile-rebuild" style="display:contents"></div>'
+        + '<div id="char-meta-strip"></div>'
+        + '<div id="char-meta-model"></div>';
+      lastProfileChar = lname;
+      lastPanelChar = null;
+    }
     renderCharProfile(lname, sky);
+    const profileRoot = document.getElementById('char-profile-rebuild');
     const featured = [], hidden = [];
     for (const g of GO) {
       for (const [, rawImgs] of catsSorted(g)) {
@@ -2778,9 +2806,12 @@ function renderGrid() {
         }
       }
     }
-    addSection(dispName + ' \\u2014 Featured', featured);
-    addSection(dispName + ' \\u2014 Not Featured', hidden);
+    addSection(profileRoot, dispName + ' \\u2014 Featured', featured, 7);
+    addSection(profileRoot, dispName + ' \\u2014 Not Featured', hidden, 7);
   } else {
+    lastProfileChar = null;
+    main.classList.remove('char-mode');
+    main.innerHTML = '';
     const games = sel.game ? [sel.game] : GO;
     for (const g of games) {
       if (!TREE[g]) continue;
@@ -2791,7 +2822,7 @@ function renderGrid() {
       for (const [c, rawImgs] of cats) {
         const imgs = query ? rawImgs.filter(i => searchMatch(i, query)) : rawImgs;
         const title = sel.game ? CAT_LBL(c) : (GAME_LBL[g]??g) + ' / ' + CAT_LBL(c);
-        addSection(title, imgs);
+        addSection(main, title, imgs);
       }
     }
   }
@@ -2806,33 +2837,30 @@ function renderGrid() {
 }
 
 function renderCharPanel() {
-  const panel  = document.getElementById('char-panel');
-  const layout = document.getElementById('layout');
-
   if (poseDetailChar) return; // detail view owns ProfileModelViewer's single instance while open
 
   if (!sel.char) {
-    layout.classList.remove('has-panel');
     window.ProfileModelViewer?.destroy();
-    panel.innerHTML = '';
     lastPanelChar = null;
     return;
   }
-  layout.classList.add('has-panel');
   // Only rebuild when the selected character changes — preserves in-progress
-  // edits when render() runs again for unrelated reasons (search, etc.)
+  // edits when render() runs again for unrelated reasons (search, etc.), and
+  // avoids destroying/remounting the 3D viewer on every incidental re-render.
   if (sel.char === lastPanelChar) return;
-  window.ProfileModelViewer?.destroy();
   lastPanelChar = sel.char;
 
+  const stripPanel = document.getElementById('char-meta-strip');
+  const modelPanel = document.getElementById('char-meta-model');
   const sky = SKYLANDERS.find(s => s.name.toLowerCase() === sel.char);
 
   if (!sky) {
     const dispName = sel.char.replace(/\\b\\w/g, c => c.toUpperCase());
-    panel.innerHTML = '<div class="cp-name">' + escAttr(dispName) + '</div>'
+    stripPanel.innerHTML = '<div class="cp-name">' + escAttr(dispName) + '</div>'
       + '<div class="cp-sub">Not in roster</div>'
       + '<p style="font-size:.7rem;color:var(--muted);line-height:1.5">'
       + 'This character isn\\u2019t part of the tracked roster, so there\\u2019s nothing to edit here yet.</p>';
+    modelPanel.innerHTML = '';
     return;
   }
 
@@ -2878,10 +2906,8 @@ function renderCharPanel() {
       + '<button id="cp-save" type="button">Save Character</button>'
       + '<span id="cp-status"></span>';
 
-  panel.innerHTML = '<div id="prof-model-panel"></div>'
-    + '<div class="cp-name">' + escAttr(sky.name) + '</div>'
-    + '<div class="cp-sub">' + escAttr(sky.game) + '</div>'
-    + metaHTML;
+  stripPanel.innerHTML = '<div class="cp-sub">' + escAttr(sky.game) + '</div>' + metaHTML;
+  modelPanel.innerHTML = '<div id="prof-model-panel"></div>';
 
   if (!PUBLISH) {
     const extraWrap = document.getElementById('cp-extra');
