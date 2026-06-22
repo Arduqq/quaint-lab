@@ -1,0 +1,311 @@
+---
+title: "Skylanders Collection Builder"
+layout: blank.njk
+permalink: "/server/skylanders-builder/"
+---
+
+<style>
+  body {
+    background: url(/images/ui/clouds.png) repeat;
+    background-color: #004a99;
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    color: #fff;
+  }
+  .wrapper { max-width: none !important; padding: 0 !important; }
+  #main-content { padding: 0 !important; }
+
+  /* ── Layout ── */
+  .bl-wrap { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  /* ── Header ── */
+  .bl-header {
+    text-align: center; padding: 32px 24px 28px;
+    background: rgba(0, 20, 60, 0.7);
+    border: 1px solid rgba(255, 204, 0, 0.25);
+    border-radius: 12px;
+    margin-bottom: 18px;
+  }
+  .bl-header h1 { color: #ffcc00; font-size: 2rem; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 2px; }
+  .bl-header p  { opacity: .7; max-width: 560px; margin: 0 auto 20px; font-size: .95rem; line-height: 1.5; }
+
+  .bl-toolbar {
+    display: inline-flex; align-items: center; gap: 16px;
+    background: rgba(0,20,70,.85); border: 2px solid #ffcc00;
+    border-radius: 10px; padding: 10px 20px;
+  }
+  .bl-count { color: #ffcc00; font-weight: bold; font-size: 1rem; }
+  .bl-btn {
+    background: #ffcc00; color: #001a40; border: none;
+    padding: 8px 18px; border-radius: 6px; font-weight: bold;
+    font-size: .9rem; cursor: pointer; transition: background .15s;
+  }
+  .bl-btn:hover { background: #ffe066; }
+  .bl-btn:disabled { opacity: .4; cursor: default; }
+  .bl-back { display: block; margin-top: 10px; color: #99ccff; font-size: .85rem; text-decoration: none; }
+  .bl-back:hover { color: #fff; }
+
+  /* ── Game sections ── */
+  .bl-game {
+    background: rgba(0,20,60,.7); border: 1px solid rgba(255,204,0,.25);
+    border-radius: 12px; padding: 16px; margin-bottom: 18px;
+  }
+  .bl-game-header {
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid rgba(255,204,0,.2);
+    padding-bottom: 10px; margin-bottom: 14px;
+  }
+  .bl-game-cover { width: 56px; height: 56px; object-fit: contain; flex-shrink: 0; border-radius: 4px; }
+  .bl-game h2 { color: #ffcc00; margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+  .bl-game-count { color: rgba(255,204,0,.55); font-size: .75rem; font-weight: normal; font-family: sans-serif; letter-spacing: 0; text-transform: none; }
+  .bl-game-actions { margin-left: auto; display: flex; gap: 6px; }
+  .bl-game-btn { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 4px; color: rgba(255,255,255,.6); font-size: .7rem; padding: 3px 8px; cursor: pointer; transition: background .15s, color .15s; }
+  .bl-game-btn:hover { background: rgba(255,255,255,.18); color: #fff; }
+
+  /* ── Character cards ── */
+  .bl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+
+  .bl-card {
+    background: rgba(0,0,0,.25); border: 1px solid rgba(80,120,180,.3);
+    border-radius: 8px; padding: 8px 4px 6px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; position: relative;
+    transition: border-color .15s, background .15s;
+  }
+  .bl-card:hover  { border-color: rgba(255,255,255,.35); background: rgba(0,60,140,.4); }
+  .bl-card.owned  { background: linear-gradient(160deg,#004080,#001f4d); border-color: #ffcc00; }
+
+  .bl-card img.char-img {
+    max-width: 76px; height: auto; display: block;
+    filter: grayscale(80%) opacity(.45); transition: filter .2s;
+  }
+  .bl-card.owned img.char-img { filter: none; }
+
+  .bl-card-name {
+    font-size: .6rem; font-weight: 700; color: #9ab0cc;
+    margin-top: 5px; line-height: 1.2;
+  }
+  .bl-card.owned .bl-card-name { color: #fff; }
+
+  /* Element badge */
+  .bl-card-elem {
+    position: absolute; top: 4px; right: 4px;
+    width: 18px; height: 18px; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.4);
+  }
+  .bl-card-elem img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+
+  /* Checkmark */
+  .bl-check {
+    position: absolute; top: 4px; left: 4px;
+    width: 16px; height: 16px; background: #ffcc00;
+    border-radius: 3px; display: none;
+    align-items: center; justify-content: center;
+    font-size: 10px; color: #001a40; font-weight: bold;
+  }
+  .bl-card.owned .bl-check { display: flex; }
+</style>
+
+<div class="bl-wrap">
+  <header class="bl-header">
+    <h1>Build Your Collection</h1>
+    <p>Click the Skylanders you own. Download a self-contained HTML snippet and JSON file you can paste straight onto your Neocities site.</p>
+    <div class="bl-toolbar">
+      <span class="bl-count"><span id="sel-count">0</span> / 167 selected</span>
+      <button class="bl-btn" id="gen-btn" disabled>↓ Download files</button>
+    </div>
+    <div id="preview-wrap" style="display:none;margin-top:20px;width:100%;max-width:800px;">
+      <p style="margin:0 0 6px;font-size:.8rem;opacity:.6;">Preview</p>
+      <iframe id="preview-frame" style="width:100%;height:500px;border:1px solid rgba(255,204,0,.3);border-radius:8px;background:#fff;" title="Collection preview"></iframe>
+    </div>
+    <a href="/server/skylanders/" class="bl-back">← Back to collection</a>
+  </header>
+
+  {% for entry in skylanders %}
+  <section class="bl-game">
+    <div class="bl-game-header">
+      {% if entry.cover %}
+      <img class="bl-game-cover" src="/images/server/{{ entry.cover }}" alt="">
+      {% endif %}
+      <h2>{{ entry.game }} <span class="bl-game-count">— <span class="game-sel">0</span> / {{ entry.characters | length }}</span></h2>
+      <div class="bl-game-actions">
+        <button class="bl-game-btn sel-all">All</button>
+        <button class="bl-game-btn sel-none">None</button>
+      </div>
+    </div>
+    <div class="bl-grid">
+      {% for c in entry.characters %}
+      <button class="bl-card"
+              data-name="{{ c.name }}"
+              data-game="{{ entry.game }}"
+              data-image="{{ c.image }}"
+              data-cover="{{ entry.cover }}"
+              data-element="{{ c.element }}">
+        <span class="bl-check">✓</span>
+        <img class="char-img" src="{{ c.image }}" alt="{{ c.name }}" loading="lazy">
+        {% if c.element %}
+        <span class="bl-card-elem">
+          <img src="/images/server/{{ c.element }}.png" alt="{{ c.element }}">
+        </span>
+        {% endif %}
+        <span class="bl-card-name">{{ c.name }}</span>
+      </button>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+</div>
+
+<script>
+(function () {
+  var selCount = 0;
+
+  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function $$(sel, ctx) { return (ctx || document).querySelectorAll(sel); }
+
+  function updateCount(delta) {
+    selCount += delta;
+    $('#sel-count').textContent = selCount;
+    $('#gen-btn').disabled = selCount === 0;
+  }
+
+  function updateGameCount(section) {
+    var sel = section.querySelectorAll('.bl-card.owned').length;
+    var total = section.querySelectorAll('.bl-card').length;
+    $('.game-sel', section).textContent = sel;
+  }
+
+  $$('.bl-card').forEach(function (card) {
+    card.addEventListener('click', function () {
+      var owned = this.classList.toggle('owned');
+      var section = this.closest('.bl-game');
+      updateCount(owned ? 1 : -1);
+      updateGameCount(section);
+    });
+  });
+
+  /* ── Select all / none per game ── */
+  $$('.bl-game').forEach(function (section) {
+    $('.sel-all', section).addEventListener('click', function () {
+      var cards = $$('.bl-card:not(.owned)', section);
+      cards.forEach(function (c) { c.classList.add('owned'); });
+      updateCount(cards.length);
+      updateGameCount(section);
+    });
+    $('.sel-none', section).addEventListener('click', function () {
+      var cards = $$('.bl-card.owned', section);
+      cards.forEach(function (c) { c.classList.remove('owned'); });
+      updateCount(-cards.length);
+      updateGameCount(section);
+    });
+  });
+
+  $('#gen-btn').addEventListener('click', function () {
+    var games = [];
+    $$('.bl-game').forEach(function (section) {
+      var owned = $$('.bl-card.owned', section);
+      if (!owned.length) return;
+      var first = owned[0];
+      var chars = Array.from(owned).map(function (c) {
+        return {
+          name:    c.dataset.name,
+          image:   c.dataset.image,
+          element: c.dataset.element || null
+        };
+      });
+      games.push({ game: first.dataset.game, cover: first.dataset.cover, chars: chars });
+    });
+
+    var html = buildHTML(games);
+    downloadJSON(games);
+    downloadRaw(html);
+    showPreview(html);
+  });
+
+  /* ── JSON output ── */
+  function downloadJSON(games) {
+    var out = games.map(function (g) {
+      return {
+        game: g.game,
+        cover: g.cover,
+        characters: g.chars.map(function (c) {
+          return { name: c.name, image: c.image, element: c.element,
+                   owned: true, level: 1, favorite: false, is_card: false };
+        })
+      };
+    });
+    dl('skylanders-collection.json', JSON.stringify(out, null, 2), 'application/json');
+  }
+
+  /* ── Preview ── */
+  function showPreview(html) {
+    var wrap = $('#preview-wrap');
+    var frame = $('#preview-frame');
+    wrap.style.display = '';
+    frame.srcdoc = html;
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ── HTML output ── */
+  function downloadRaw(html) {
+    dl('skylanders-collection.html', html, 'text/html');
+  }
+
+  function buildHTML(games) {
+    var total = games.reduce(function (s, g) { return s + g.chars.length; }, 0);
+
+    var elemColor = {
+      fire:'#b43200', water:'#0050b4', earth:'#6b4400', wind:'#4a9e5c',
+      magic:'#8800b8', nature:'#1a881a', undead:'#4a0070', tech:'#9e7800'
+    };
+
+    var sections = games.map(function (g) {
+      var cards = g.chars.map(function (c) {
+        var dot = c.element && elemColor[c.element]
+          ? '<span class="sl-elem" style="background:' + elemColor[c.element] + '" title="' + esc(c.element) + '"></span>'
+          : '';
+        return '<div class="sl-char"><img src="' + esc(c.image) + '" alt="' + esc(c.name) + '" loading="lazy" width="90"><span class="sl-name">' + esc(c.name) + '</span>' + dot + '</div>';
+      }).join('');
+      return '<section class="sl-game"><h3>' + esc(g.game) + ' <small>(' + g.chars.length + ')</small></h3><div class="sl-chars">' + cards + '</div></section>';
+    }).join('\n');
+
+    var html = '<!-- Skylanders Collection — made with quaint-lab/skylanders-builder -->\n'
+      + '<div id="my-skylanders">\n'
+      + '<style>\n'
+      + '#my-skylanders{font-family:"Segoe UI",sans-serif;background:linear-gradient(135deg,#001433,#002b6b);color:#fff;padding:24px;border-radius:14px;border:2px solid #ffcc00;box-shadow:0 0 30px rgba(0,0,0,.6)}\n'
+      + '#my-skylanders h2.sl-title{color:#ffcc00;text-align:center;font-size:1.6rem;margin:0 0 4px;text-transform:uppercase;letter-spacing:2px}\n'
+      + '.sl-subtitle{text-align:center;opacity:.55;font-size:.8rem;margin:0 0 22px}\n'
+      + '.sl-game{margin-bottom:28px}\n'
+      + '.sl-game h3{color:#ffcc00;font-size:.95rem;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,204,0,.25);padding-bottom:6px;margin:0 0 12px}\n'
+      + '.sl-game h3 small{color:rgba(255,204,0,.45);font-weight:normal;font-size:.8em;text-transform:none;letter-spacing:0}\n'
+      + '.sl-chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}\n'
+      + '.sl-char{display:flex;flex-direction:column;align-items:center;text-align:center;background:linear-gradient(160deg,#004080,#001f4d);border-radius:8px;padding:10px 6px 8px;border:1px solid rgba(80,160,255,.35)}\n'
+      + '.sl-char img{max-width:80px;height:auto;display:block}\n'
+      + '.sl-name{font-size:.6rem;font-weight:700;color:#cce4ff;margin-top:5px;line-height:1.2}\n'
+      + '.sl-elem{display:inline-block;width:10px;height:10px;border-radius:50%;margin-top:4px}\n'
+      + '</style>\n'
+      + '<h2 class="sl-title">My Skylanders</h2>\n'
+      + '<p class="sl-subtitle">' + total + ' of 167 owned</p>\n'
+      + sections + '\n'
+      + '</div>';
+
+    return html;
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function dl(name, content, mime) {
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([content], { type: mime }));
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  }
+})();
+</script>

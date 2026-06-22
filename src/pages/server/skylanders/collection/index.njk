@@ -1,0 +1,171 @@
+---
+title: Skylanders Collection
+layout: blank.njk
+permalink: "/server/skylanders/collection/"
+---
+
+<link href="/css/skylanders.css" rel="stylesheet" type="text/css" media="all">
+
+<div class="skylanders-page-wrapper">
+    <style>
+        body {
+            background: url(/images/ui/clouds.png) repeat !important;
+            background-color: #004a99 !important;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            max-width: none !important;
+            padding: 0 !important;
+        }
+
+        #main-content {
+            padding: 0 !important;
+        }
+    </style>
+
+    <div class="skylanders-container">
+        <header class="skylanders-header">
+            <img class="skylanders-logo" src="/images/server/skylanders-logo.png" alt="Skylanders">
+            <div class="element-legend" id="element-filter">
+                {% set elements = ["fire","water","earth","wind","magic","nature","undead","tech","light","dark"] %}
+                {% for el in elements %}
+                <button class="element-badge element-{{ el }} filter-btn" data-filter="{{ el }}" title="{{ el | capitalize }}">
+                    <img src="/images/server/{{ el }}.png" alt="{{ el }}">
+                </button>
+                {% endfor %}
+                <button class="filter-reset" id="filter-reset" title="Show all">✕</button>
+            </div>
+            <p class="collection-stats" id="collection-stats"></p>
+            <button class="meta-toggle" id="meta-toggle" title="Show or hide species / gender / role on each card"></button>
+            <div class="skylanders-header-links">
+                <a href="/server/skylanders/">[ ← Skylanders Hub ]</a>
+                <a href="/server/skylanders-builder/">[ Make your own collection ]</a>
+                <a href="/server/skylanders/nfc-card/">[ NFC Card Maker ]</a>
+            </div>
+        </header>
+
+        {% for entry in skylanders %}
+        {% set game_owned = entry.characters | selectattr("owned") | list | length %}
+        <section class="game-section">
+            <div class="game-section-header">
+                {% if entry.cover %}
+                <img class="game-cover" src="/images/server/{{ entry.cover }}" alt="{{ entry.game }} cover">
+                {% endif %}
+                <div>
+                    <h2>{{ entry.game }}</h2>
+                    <span class="game-count">{{ game_owned }} / {{ entry.characters | length }}</span>
+                </div>
+            </div>
+            <div class="game-progress">
+                <div class="game-progress-bar" style="width: {{ (game_owned / (entry.characters | length) * 100) | round }}%"></div>
+            </div>
+            <div class="skylanders-grid">
+                {% for character in entry.characters %}
+                <div class="skylander-item {{ 'collected' if character.owned }}{{ ' favorite' if character.favorite }}{{ ' is-card' if character.is_card }}" data-element="{{ character.element }}">
+                    {% if character.element %}
+                    <span class="element-badge element-{{ character.element }}" title="{{ character.element | capitalize }}">
+                        <img src="/images/server/{{ character.element }}.png" alt="{{ character.element }}">
+                    </span>
+                    {% endif %}
+                    {% if character.owned and character.favorite %}
+                    <span class="fav-heart">❤</span>
+                    {% endif %}
+                    <img src="{{ character.image }}" alt="{{ character.name }}" loading="lazy">
+                    <span class="skylander-name">{{ character.name }}</span>
+                    {% set metaText = "" %}
+                    {% if character.species %}{% set metaText = character.species %}{% endif %}
+                    {% if character.gender %}{% set metaText = metaText + (' · ' if metaText else '') + character.gender %}{% endif %}
+                    {% if character.role %}{% set metaText = metaText + (' · ' if metaText else '') + character.role %}{% endif %}
+                    {% if metaText %}
+                    <span class="skylander-meta">{{ metaText }}</span>
+                    {% endif %}
+                    {% if character.variants %}
+                    <span class="skylander-variants">{% for variant in character.variants %}{{ variant.name }}{% if not loop.last %}, {% endif %}{% endfor %}</span>
+                    {% endif %}
+                    {% if character.owned and character.level %}
+                    <span class="level-badge">{{ character.level }}</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="/js/tooltip.js"></script>
+<script>
+(function () {
+  var active = null;
+
+  /* ── Stats ── */
+  var owned = document.querySelectorAll('.skylander-item.collected').length;
+  var total = document.querySelectorAll('.skylander-item').length;
+  document.getElementById('collection-stats').textContent = owned + ' of ' + total + ' owned across 6 games';
+
+  /* ── Character info (species / gender / role) toggle ── */
+  var metaKey = 'skylanders-show-meta';
+  var metaToggle = document.getElementById('meta-toggle');
+  var container = document.querySelector('.skylanders-container');
+  var showMeta = localStorage.getItem(metaKey) !== 'off';
+
+  function applyMetaVisibility() {
+    container.classList.toggle('hide-meta', !showMeta);
+    metaToggle.textContent = showMeta ? '[ Hide character info ]' : '[ Show character info ]';
+    metaToggle.classList.toggle('meta-active', showMeta);
+  }
+  applyMetaVisibility();
+
+  metaToggle.addEventListener('click', function () {
+    showMeta = !showMeta;
+    localStorage.setItem(metaKey, showMeta ? 'on' : 'off');
+    applyMetaVisibility();
+  });
+
+  /* ── Filter ── */
+  function applyFilter() {
+    document.querySelectorAll('.filter-btn').forEach(function (b) {
+      b.classList.toggle('filter-active', b.dataset.filter === active);
+    });
+    document.getElementById('filter-reset').style.display = active ? '' : 'none';
+
+    document.querySelectorAll('.skylander-item').forEach(function (card) {
+      card.style.display = (active && card.dataset.element !== active) ? 'none' : '';
+    });
+
+    document.querySelectorAll('.game-section').forEach(function (section) {
+      var hasVisible = section.querySelector('.skylander-item:not([style*="display: none"])');
+      section.style.display = hasVisible ? '' : 'none';
+    });
+
+    if (active) {
+      history.replaceState(null, '', '#' + active);
+    } else {
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+
+  document.getElementById('element-filter').addEventListener('click', function (e) {
+    var btn = e.target.closest('.filter-btn');
+    if (btn) {
+      active = (active === btn.dataset.filter) ? null : btn.dataset.filter;
+      applyFilter();
+      return;
+    }
+    if (e.target.closest('#filter-reset')) {
+      active = null;
+      applyFilter();
+    }
+  });
+
+  /* ── Restore filter from URL hash ── */
+  var hash = window.location.hash.slice(1);
+  if (hash && document.querySelector('.filter-btn[data-filter="' + hash + '"]')) {
+    active = hash;
+    applyFilter();
+  }
+})();
+</script>
