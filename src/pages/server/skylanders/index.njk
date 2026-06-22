@@ -1,69 +1,215 @@
 ---
-title: Skylanders Collection
+title: Skylanders Hub
 layout: blank.njk
 permalink: "/server/skylanders/"
 ---
 
-<link href="/css/skylanders.css" rel="stylesheet" type="text/css" media="all">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@700;900&display=swap');
 
-<div class="skylanders-page-wrapper">
-    <style>
-        body {
-            background: url(/images/clouds.png) repeat !important;
-            background-color: #004a99 !important;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-        
-        .wrapper {
-            max-width: none !important;
-            padding: 0 !important;
-        }
-        
-        #main-content {
-            padding: 0 !important;
-        }
-    </style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <div class="skylanders-container">
-        <header class="skylanders-header">
-            <h1>Skylanders Collection</h1>
-            <a href="/server/">[ Return to Server Index ]</a>
-        </header>
+:root {
+  --gold:  #ffcc00;
+  --gold2: #ff9900;
+}
 
-        {% for entry in skylanders %}
-        <section class="game-section">
-            <h2>{{ entry.game }}</h2>
-            <div class="skylanders-grid">
-                {% for character in entry.characters %}
-                <div class="skylander-item {{ 'collected' if character.owned }}" 
-                     data-tooltip="{{ character.name }}"
-                     data-tooltip-image="{{ character.tooltip_image if character.tooltip_image else character.image }}">
-                    <img src="{{ character.image }}" alt="{{ character.name }}" loading="lazy">
-                    <span class="skylander-name">{{ character.name }}</span>
-                    
-                    {% if character.owned %}
-                    <div class="skylander-metadata">
-                        {% if character.level %}
-                        <div class="meta-icon level" data-tooltip="Level {{ character.level }}">Lvl {{ character.level }}</div>
-                        {% endif %}
-                        
-                        {% if character.favorite %}
-                        <div class="meta-icon favorite" data-tooltip="Favorite">❤️</div>
-                        {% endif %}
-                        
-                        {% if character.is_card %}
-                        <div class="meta-icon card" data-tooltip="Card Version">🎴</div>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-        </section>
-        {% endfor %}
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
+  background-color: #09182e;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* ── Page shell ── */
+#hub-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px 60px;
+}
+
+#hub-panel {
+  width: 100%;
+  max-width: 720px;
+  border: 1px solid #3a4a66;
+}
+
+/* ── Banner ── */
+#hub-banner {
+  position: relative;
+  height: 92px;
+  overflow: hidden;
+}
+#hub-banner-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+#hub-banner-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(9,24,46,0) 0%,
+    rgba(9,24,46,0.45) 60%,
+    rgba(9,24,46,0.92) 100%);
+}
+#hub-banner-chars {
+  position: absolute;
+  right: 90px;
+  bottom: -12px;
+  display: flex;
+  align-items: flex-end;
+}
+.hub-banner-char {
+  height: 90px;
+  margin-right: -22px;
+  opacity: 0.92;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));
+}
+.hub-banner-char:nth-child(2) {
+  height: 96px;
+}
+.hub-banner-char:last-child {
+  margin-right: 0;
+}
+
+#hub-wordmark {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Bangers', Impact, sans-serif;
+  font-size: clamp(1.4rem, 5vw, 1.75rem);
+  letter-spacing: 1px;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #09182e, -1px -1px 0 var(--gold2);
+}
+
+/* ── Nav bar ── */
+#hub-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(12px, 4vw, 24px);
+  padding: 9px 24px;
+  background: #0c1e38;
+  border-top: 2px solid var(--gold);
+  border-bottom: 1px solid #25324a;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+#hub-nav a {
+  color: #cfd8e8;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+#hub-nav a:hover {
+  color: var(--gold);
+  text-decoration: underline;
+}
+#hub-nav-back {
+  margin-left: auto;
+  color: #445166 !important;
+  font-weight: 400;
+  text-transform: none;
+}
+
+/* ── Link list ── */
+#hub-links {
+  padding: 18px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hub-link-box {
+  border: 1px solid #25324a;
+  padding: 10px;
+}
+.hub-link-box a {
+  color: var(--gold);
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 0.95rem;
+}
+.hub-link-box p {
+  color: #a8b4cc;
+  font-size: 0.78rem;
+  margin-top: 3px;
+}
+.hub-link-box.disabled {
+  opacity: 0.5;
+}
+.hub-link-box.disabled span {
+  color: #cfd8e8;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  #hub-nav { gap: 12px; }
+  #hub-banner-chars { right: 16px; }
+  .hub-banner-char { height: 64px; }
+  .hub-banner-char:nth-child(2) { height: 70px; }
+}
+</style>
+
+<div id="hub-root">
+  <div id="hub-panel">
+
+    <div id="hub-banner">
+      <img id="hub-banner-bg" src="/images/skylanders-archive/ring-of-heroes/banners/banner-assets-used-for-the-gacha-segments-of-sky_748388608360235000_2.png" alt="">
+      <div id="hub-banner-scrim"></div>
+      <div id="hub-banner-chars">
+        <img class="hub-banner-char" src="" alt="">
+        <img class="hub-banner-char" src="" alt="">
+        <img class="hub-banner-char" src="" alt="">
+      </div>
+      <div id="hub-wordmark">SKYLANDERS HUB</div>
     </div>
-</div>
 
-<script src="/js/tooltip.js"></script>
+    <nav id="hub-nav">
+      <a href="/server/skylanders/archive/">Archive</a>
+      <a href="/server/skylanders/collection/">Collection</a>
+      <a href="/server/skylanders-builder/">Builder</a>
+      <a href="/server/skylanders/nfc-card/">NFC Cards</a>
+      <a id="hub-nav-back" href="/server/">&larr; /server/</a>
+    </nav>
+
+    <div id="hub-links">
+      <div class="hub-link-box">
+        <a href="/server/skylanders/archive/">Archive</a>
+        <p>Browse the full Tumblr image archive — classify, tag, and annotate</p>
+      </div>
+      <div class="hub-link-box">
+        <a href="/server/skylanders/collection/">Collection</a>
+        <p>View your full Skylanders collection across all six games</p>
+      </div>
+      <div class="hub-link-box">
+        <a href="/server/skylanders-builder/">Builder</a>
+        <p>Build and customize your collection data, mark owned figures</p>
+      </div>
+      <div class="hub-link-box">
+        <a href="/server/skylanders/nfc-card/">NFC Cards</a>
+        <p>Design custom NFC card art for any Skylander character</p>
+      </div>
+      <div class="hub-link-box disabled">
+        <span>Page Doll</span>
+        <p>Coming Soon</p>
+      </div>
+    </div>
+
+  </div>
+</div>
