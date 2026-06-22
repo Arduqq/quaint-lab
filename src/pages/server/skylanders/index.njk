@@ -212,4 +212,23 @@ body {
     </div>
 
   </div>
+
+  <script>
+  (function() {
+    var games = {{ skylanders | json | safe }};
+    var all = games.flatMap(function(g) { return g.characters; })
+                    .filter(function(c) { return c.render; });
+    var picks = all.slice()
+                    .sort(function() { return Math.random() - 0.5; })
+                    .slice(0, 3);
+    document.addEventListener('DOMContentLoaded', function() {
+      var imgs = document.querySelectorAll('.hub-banner-char');
+      picks.forEach(function(c, i) {
+        if (!imgs[i]) return;
+        imgs[i].src = '/images/skylanders-archive/' + c.render;
+        imgs[i].alt = c.name;
+      });
+    });
+  })();
+  </script>
 </div>

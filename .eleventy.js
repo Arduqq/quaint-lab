@@ -24,6 +24,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addFilter("join", (arr, sep = ",") =>
     Array.isArray(arr) ? arr.join(sep) : arr || ""
   );
+  eleventyConfig.addFilter("json", (obj) => JSON.stringify(obj));
   eleventyConfig.addFilter("toSlugs", (input, sep = " ") => {
     const arr = Array.isArray(input) ? input : input ? [input] : [];
     return arr.map(slugify).join(sep);
