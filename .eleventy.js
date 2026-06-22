@@ -24,7 +24,12 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addFilter("join", (arr, sep = ",") =>
     Array.isArray(arr) ? arr.join(sep) : arr || ""
   );
-  eleventyConfig.addFilter("json", (obj) => JSON.stringify(obj));
+  eleventyConfig.addFilter("json", (obj) => JSON.stringify(obj).replace(/</g, "\\u003c"));
+  eleventyConfig.addFilter("flattenRoster", (games) =>
+    games.flatMap((g) => g.characters)
+         .filter((c) => c.render)
+         .map((c) => ({ name: c.name, render: c.render }))
+  );
   eleventyConfig.addFilter("toSlugs", (input, sep = " ") => {
     const arr = Array.isArray(input) ? input : input ? [input] : [];
     return arr.map(slugify).join(sep);

@@ -215,9 +215,7 @@ body {
 
   <script>
   (function() {
-    var games = {{ skylanders | json | safe }};
-    var all = games.flatMap(function(g) { return g.characters; })
-                    .filter(function(c) { return c.render; });
+    var all = {{ skylanders | flattenRoster | json | safe }};
     var picks = all.slice()
                     .sort(function() { return Math.random() - 0.5; })
                     .slice(0, 3);
