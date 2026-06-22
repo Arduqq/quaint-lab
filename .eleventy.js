@@ -9,8 +9,14 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("./src/images");
   eleventyConfig.addPassthroughCopy("./src/sounds");
   eleventyConfig.addPassthroughCopy("./src/fonts");
+  eleventyConfig.addPassthroughCopy("./src/projects");
+  eleventyConfig.addPassthroughCopy("./src/xml-style.xsl");
   // Copy server pages' static assets (images/css) so they are available at /server/...
   eleventyConfig.addPassthroughCopy({"./src/pages/server/fear-and-hunger": "server/fear-and-hunger"});
+  eleventyConfig.addPassthroughCopy({"./src/pages/server/skylanders/archive": "server/skylanders/archive"});
+  eleventyConfig.addPassthroughCopy({"./src/pages/server/skylanders/models": "server/skylanders/models"});
+  // Extracted Lost Islands 3D models (.obj + animations) for the model viewer
+  eleventyConfig.addPassthroughCopy({"./src/models": "models"});
 
   // simple slug helper
   const slugify = (s = "") =>
@@ -21,6 +27,20 @@ module.exports = function(eleventyConfig) {
 
   // Filters
   eleventyConfig.addFilter("slug", slugify);
+  eleventyConfig.addFilter("getImages", function(dirPath) {
+    const fullPath = path.join(__dirname, "src", dirPath);
+    try {
+      if (fs.existsSync(fullPath) && fs.lstatSync(fullPath).isDirectory()) {
+        const files = fs.readdirSync(fullPath);
+        return files
+          .filter(file => /\.(png|jpe?g|gif|svg|webp)$/i.test(file))
+          .map(file => path.join("/", dirPath, file));
+      }
+    } catch (e) {
+      console.error(`Error in getImages filter for ${dirPath}:`, e);
+    }
+    return [];
+  });
   eleventyConfig.addFilter("join", (arr, sep = ",") =>
     Array.isArray(arr) ? arr.join(sep) : arr || ""
   );
@@ -29,7 +49,34 @@ module.exports = function(eleventyConfig) {
     return arr.map(slugify).join(sep);
   });
   eleventyConfig.addFilter("dateToRfc822", (date) => {
-    return new Date(date).toUTCString();
+    const d = (date && date.date) ? date.date : date;
+    if (!d || isNaN(new Date(d).getTime())) return "";
+    return new Date(d).toUTCString();
+  });
+  eleventyConfig.addFilter("readableDate", (dateObj) => {
+    return new Date(dateObj).toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  });
+
+  eleventyConfig.addFilter("slice", (arr, start, end) => {
+    return (arr || []).slice(start, end);
+  });
+
+  eleventyConfig.addFilter("limit", (arr, count) => {
+    return (arr || []).slice(0, count);
+  });
+
+  // Returns URLs of the 5 newest artworks — used for the "new" badge in the atelier
+  eleventyConfig.addCollection("newestArtworkUrls", function(collectionApi) {
+    return collectionApi
+      .getFilteredByGlob("./src/posts/artwork/**/*.md")
+      .filter(item => !item.data.draft)
+      .sort((a, b) => (b.date || 0) - (a.date || 0))
+      .slice(0, 5)
+      .map(item => item.url);
   });
 
   // Build a deduplicated categories collection with metadata (hasArtwork, thumb, posts)
@@ -42,6 +89,8 @@ module.exports = function(eleventyConfig) {
       if (!item.inputPath) return;
       // only posts under /posts/
       if (!item.inputPath.includes("/posts/")) return;
+      // exclude games from categories
+      if (item.inputPath.includes("/posts/games/")) return;
       const cats = item.data && item.data.categories ? item.data.categories : [];
       (Array.isArray(cats) ? cats : [cats]).forEach(cat => {
         if (!cat) return;
@@ -71,6 +120,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addCollection("categories", function (collectionApi) {
     const map = new Map();
     collectionApi.getAll().forEach((item) => {
+      if (item.inputPath && item.inputPath.includes("/posts/games/")) return;
       const cats = item.data && item.data.categories;
       if (!cats) return;
       const arr = Array.isArray(cats) ? cats : [cats];
@@ -91,6 +141,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addCollection("allCategories", function (collectionApi) {
     const set = new Set();
     collectionApi.getAll().forEach((item) => {
+      if (item.inputPath && item.inputPath.includes("/posts/games/")) return;
       const cats = item.data && item.data.categories;
       if (!cats) return;
       (Array.isArray(cats) ? cats : [cats]).forEach((c) => set.add(c));
@@ -119,15 +170,53 @@ module.exports = function(eleventyConfig) {
     return collectionApi.getFilteredByGlob("./src/posts/exhibitions/*.md");
   });
 
+  // Artwork grouped by category, each sorted newest-first, for the atelier page
+  eleventyConfig.addCollection("artworkByCategory", function(collectionApi) {
+    const artworks = collectionApi.getFilteredByGlob("./src/posts/artwork/**/*.md")
+      .filter(notDraft)
+      .sort((a, b) => (b.date || 0) - (a.date || 0));
+
+    const map = new Map();
+    for (const item of artworks) {
+      const cats = item.data.categories;
+      const arr  = Array.isArray(cats) ? cats : (cats ? [cats] : []);
+      for (const cat of arr) {
+        if (!map.has(cat)) map.set(cat, []);
+        map.get(cat).push(item);
+      }
+    }
+
+    return Array.from(map.entries())
+      .map(([name, items]) => ({ name, artworks: items }))
+      .sort((a, b) => ((b.artworks[0] || {}).date || 0) - ((a.artworks[0] || {}).date || 0));
+  });
+
   // Games collection: pick up explicit posts placed under src/posts/games/
+  const notDraft = item => !item.data.draft;
+
   eleventyConfig.addCollection("games", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("./src/posts/games/*.md").sort((a,b) => (b.date || 0) - (a.date || 0));
+    return collectionApi.getFilteredByGlob("./src/posts/games/*.md").filter(notDraft).sort((a,b) => (b.date || 0) - (a.date || 0));
+  });
+
+  // Artwork collection
+  eleventyConfig.addCollection("artwork", function(collectionApi) {
+    return collectionApi.getFilteredByGlob("./src/posts/artwork/**/*.md").filter(notDraft).sort((a,b) => (b.date || 0) - (a.date || 0));
   });
 
   // Combined post collection for archive and RSS
   eleventyConfig.addCollection("post", function(collectionApi) {
     return collectionApi.getFilteredByGlob("./src/posts/writing/*.md")
+      .filter(notDraft)
       .sort((a, b) => (a.date || 0) - (b.date || 0));
+  });
+
+  // Combined collection for the main RSS feed
+  eleventyConfig.addCollection("allFeeds", function(collectionApi) {
+    return collectionApi.getFilteredByGlob([
+      "./src/posts/writing/*.md",
+      "./src/posts/artwork/**/*.md",
+      "./src/posts/games/*.md"
+    ]).filter(notDraft).sort((a, b) => (b.date || 0) - (a.date || 0));
   });
 
   // Directory / template configuration
