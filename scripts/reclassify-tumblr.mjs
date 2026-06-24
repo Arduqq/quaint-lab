@@ -3165,7 +3165,82 @@ function renderPoseDetail(charName) {
   window.ProfileModelViewer?.mount(canvasWrap, models, { posable: true, boneUiHost: sideEl });
 }
 
-function render() { renderSidebar(); renderGrid(); renderCharPanel(); if (tagModeOn) refreshTagOverlays(); }
+let _navigatingFromHistory = false;
+
+function hashFromState() {
+  if (mvActive || poseDetailChar) return null; // those features manage the hash themselves
+  if (annFilter) return '#ann/' + annFilter;
+  if (sel.char) return '#char/' + encodeURIComponent(sel.char);
+  if (viewAll) return '#all';
+  if (sel.game && sel.cat) return '#' + sel.game + '/' + sel.cat;
+  if (sel.game) return '#' + sel.game;
+  return '#';
+}
+
+function syncHash() {
+  const next = hashFromState();
+  if (next === null) return;
+  if (location.hash === next) return;
+  if (_navigatingFromHistory) return;
+  history.pushState(null, '', next);
+}
+
+function parseHash() {
+  const h = location.hash;
+  if (/^#(model|texture|pose)=/.test(h)) return; // owned by model-viewer.js / the pose-editor deep link below
+
+  const annMatch = h.match(/^#ann\\/(background|detail)$/);
+  const charMatch = h.match(/^#char\\/(.+)$/);
+  const pathMatch = h.match(/^#([^/]+)(?:\\/([^/]+))?$/);
+
+  if (h === '#all') {
+    sel = {game: null, cat: null, char: null};
+    annFilter = null;
+    viewAll = true;
+    return;
+  }
+  if (annMatch) {
+    sel = {game: null, cat: null, char: null};
+    annFilter = annMatch[1];
+    viewAll = false;
+    return;
+  }
+  if (charMatch) {
+    const name = decodeURIComponent(charMatch[1]);
+    const sky = SKYLANDERS.find(s => s.name.toLowerCase() === name.toLowerCase());
+    if (sky) {
+      sel = {game: null, cat: null, char: sky.name.toLowerCase()};
+      annFilter = null;
+      viewAll = false;
+      return;
+    }
+  } else if (pathMatch && pathMatch[1]) {
+    const game = pathMatch[1];
+    const cat = pathMatch[2];
+    if (GO.includes(game)) {
+      if (!cat || (TREE[game] && TREE[game][cat])) {
+        sel = {game, cat: cat || null, char: null};
+        annFilter = null;
+        viewAll = false;
+        expanded.add(game);
+        return;
+      }
+    }
+  }
+
+  // Empty hash, or anything that didn't match a valid state above: landing.
+  sel = {game: null, cat: null, char: null};
+  annFilter = null;
+  viewAll = false;
+}
+
+function render() {
+  renderSidebar();
+  renderGrid();
+  renderCharPanel();
+  if (tagModeOn) refreshTagOverlays();
+  syncHash();
+}
 
 function openLb(idx) {
   lbIdx = Math.max(0, Math.min(idx, lbImgs.length - 1));
@@ -3273,6 +3348,14 @@ window.addEventListener('skylander-model-viewer-close', () => {
 // existing #model=/#texture= deep link above doesn't hit this because it's
 // triggered by a CustomEvent dispatched from *inside* model-viewer.js's own
 // module-evaluation — i.e. only after that module has already loaded.
+parseHash();
+window.addEventListener('popstate', () => {
+  _navigatingFromHistory = true;
+  parseHash();
+  render();
+  _navigatingFromHistory = false;
+});
+
 {
   const m = location.hash.match(/^#pose=(.+)$/);
   const sky = m && SKYLANDERS.find(s => s.name === decodeURIComponent(m[1]));
