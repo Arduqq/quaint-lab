@@ -3,6 +3,8 @@ node_modules/
 .DS_Store
 node_modules
 .env
+.superpowers/
+.worktrees/
 
 # Synced from skylanders-archive/ by `npm run publish-archive` —
 # regenerate via that script rather than tracking ~650MB of images in git.
