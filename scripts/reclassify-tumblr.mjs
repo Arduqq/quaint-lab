@@ -1982,6 +1982,7 @@ const escAttr = s => String(s ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;'
 const MAINLINE_GAMES = new Set(['spyros-adventure','giants','swap-force','trap-team','superchargers','imaginators']);
 
 let sel     = {game: null, cat: null, char: null};
+let viewAll = false; // true only when the user explicitly asked to see every image across every game
 let lastPanelChar = null; // tracks which character the metadata strip/3D viewer were built for
 let lastProfileChar = null; // tracks which character #char-profile-rebuild's containers exist for
 let annFilter = null; // null | 'background' | 'detail' — cross-cutting annotation filter
@@ -2029,7 +2030,7 @@ function renderSidebar() {
   const allEl = document.createElement('div');
   allEl.className = 'sb-all' + (sel.game === null && sel.cat === null && !sel.char && !annFilter ? ' on' : '');
   allEl.innerHTML = '<span>All Images</span><span class="cnt">${total}</span>';
-  allEl.addEventListener('click', () => { sel = {game:null, cat:null, char:null}; annFilter = null; mvActive = false; render(); });
+  allEl.addEventListener('click', showAllImages);
   sb.appendChild(allEl);
 
   for (const [ann, label] of [['background', 'Backgrounds'], ['detail', 'Details']]) {
@@ -2042,6 +2043,7 @@ function renderSidebar() {
       annFilter = (annFilter === ann ? null : ann);
       sel = {game: null, cat: null, char: null};
       mvActive = false;
+      viewAll = false;
       render();
     });
     sb.appendChild(annEl);
@@ -2752,6 +2754,29 @@ function renderDashboard(g) {
   }
 }
 
+function showAllImages() {
+  sel = {game: null, cat: null, char: null};
+  annFilter = null;
+  mvActive = false;
+  viewAll = true;
+  render();
+}
+
+function renderLanding() {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const wrap = document.createElement('div'); wrap.id = 'landing';
+  const msg = document.createElement('p');
+  msg.textContent = 'Pick a game from the sidebar to start browsing.';
+  const link = document.createElement('a');
+  link.href = '#all';
+  link.id = 'landing-all';
+  link.textContent = 'Browse everything (${total} images)';
+  link.addEventListener('click', e => { e.preventDefault(); showAllImages(); });
+  wrap.append(msg, link);
+  main.appendChild(wrap);
+}
+
 function renderGrid() {
   const main = document.getElementById('main');
   const mvRoot = document.getElementById('mv-root');
@@ -2780,6 +2805,13 @@ function renderGrid() {
     lastProfileChar = null;
     main.classList.remove('char-mode');
     renderDashboard(sel.game);
+    return;
+  }
+
+  if (!sel.game && !sel.cat && !sel.char && !annFilter && !query && !viewAll) {
+    lastProfileChar = null;
+    main.classList.remove('char-mode');
+    renderLanding();
     return;
   }
 
