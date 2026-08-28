@@ -199,6 +199,9 @@ function renderDashboard(data) {
         `<li data-file="${esc(d.file)}" data-type="${esc(d.type)}">${esc(d.title)} <span class="badge-draft">${esc(d.type)}</span></li>`
       ).join('')}</ul>`
     : '<p class="dashboard-unavailable">No drafts — everything is published.</p>';
+  const backlogBlock = backlog.available
+    ? `<div class="dashboard-stats">${backlogStats}</div>${backlogList}`
+    : '<p class="dashboard-unavailable">Backlog data unavailable.</p>';
 
   const bucketList = Object.entries(repoHealth.buckets)
     .sort((a, b) => b[1] - a[1])
@@ -206,6 +209,11 @@ function renderDashboard(data) {
   const lastCommitLine = repoHealth.lastCommit
     ? `Last commit: ${repoHealth.lastCommit.date} — ${repoHealth.lastCommit.message}`
     : 'No commits found';
+  const repoHealthBlock = repoHealth.available
+    ? `<div class="dashboard-stats"><span>Uncommitted <b>${repoHealth.total}</b></span></div>
+       <ul class="dashboard-list">${bucketList}</ul>
+       <div class="dashboard-footnote">${esc(lastCommitLine)}</div>`
+    : '<p class="dashboard-unavailable">Repo health data unavailable.</p>';
 
   const skyBlock = skylanders.available
     ? `<div class="dashboard-stats">
@@ -228,14 +236,11 @@ function renderDashboard(data) {
   dashboardGrid.innerHTML = `
     <div class="post-card dashboard-card">
       <div class="section-label">Content Backlog</div>
-      <div class="dashboard-stats">${backlogStats}</div>
-      ${backlogList}
+      ${backlogBlock}
     </div>
     <div class="post-card dashboard-card">
       <div class="section-label">Repo Health</div>
-      <div class="dashboard-stats"><span>Uncommitted <b>${repoHealth.total}</b></span></div>
-      <ul class="dashboard-list">${bucketList}</ul>
-      <div class="dashboard-footnote">${esc(lastCommitLine)}</div>
+      ${repoHealthBlock}
     </div>
     <div class="post-card dashboard-card">
       <div class="section-label">Skylanders Archive</div>
