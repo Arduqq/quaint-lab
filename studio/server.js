@@ -150,6 +150,95 @@ function scanPosts(type) {
   return results;
 }
 
+// ─── Dashboard helpers ─────────────────────────────────────────────────────────
+
+function getBacklog() {
+  try {
+    const counts = {};
+    const drafts = [];
+    for (const type of Object.keys(POST_ROOTS)) {
+      const posts = scanPosts(type);
+      counts[type] = posts.filter(p => p.draft).length;
+      for (const p of posts) {
+        if (p.draft) drafts.push({ title: p.title, type, file: p.file, date: p.date });
+      }
+    }
+    drafts.sort((a, b) => {
+      if (!a.date && !b.date) return 0;
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return new Date(b.date) - new Date(a.date);
+    });
+    return { available: true, counts, recent: drafts.slice(0, 5) };
+  } catch {
+    return { available: false, counts: {}, recent: [] };
+  }
+}
+
+function getRepoHealth() {
+  return new Promise(resolve => {
+    exec('git status --porcelain', { cwd: ROOT }, (err, stdout) => {
+      if (err) return resolve({ available: false, total: 0, buckets: {}, lastCommit: null });
+      const lines = stdout.split('\n').map(l => l.trim()).filter(Boolean);
+      const buckets = {};
+      for (const line of lines) {
+        const filePath = line.slice(3).trim().replace(/^"|"$/g, '');
+        const parts = filePath.split('/');
+        const bucket = parts[0] === 'src' ? (parts[1] || 'src') : parts[0];
+        buckets[bucket] = (buckets[bucket] || 0) + 1;
+      }
+      exec('git log -1 --format=%cd|%s --date=short', { cwd: ROOT }, (err2, stdout2) => {
+        let lastCommit = null;
+        if (!err2 && stdout2.trim()) {
+          const [date, ...rest] = stdout2.trim().split('|');
+          lastCommit = { date, message: rest.join('|') };
+        }
+        resolve({ available: true, total: lines.length, buckets, lastCommit });
+      });
+    });
+  });
+}
+
+function getSkylandersStats() {
+  try {
+    const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'skylanders-archive/manifest.json'), 'utf-8'));
+    const posts = manifest.posts || [];
+    let images = 0, featured = 0;
+    for (const p of posts) {
+      for (const img of (p.images || [])) {
+        images++;
+        if (img.featured) featured++;
+      }
+    }
+    return {
+      available:   true,
+      posts:       posts.length,
+      images,
+      featured,
+      nonFeatured: images - featured,
+      fetchedAt:   manifest.fetched_at || null,
+    };
+  } catch {
+    return { available: false, posts: 0, images: 0, featured: 0, nonFeatured: 0, fetchedAt: null };
+  }
+}
+
+function getJourneyPetsStats() {
+  const result = { available: true, journeyCount: 0, grades: { A: 0, B: 0, C: 0, D: 0 }, petCount: 0 };
+  try {
+    const journey = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/_data/journey.json'), 'utf-8'));
+    result.journeyCount = journey.length;
+    for (const entry of journey) {
+      if (entry.grade && result.grades[entry.grade] !== undefined) result.grades[entry.grade]++;
+    }
+  } catch { result.available = false; }
+  try {
+    const pets = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/_data/pet_list.json'), 'utf-8'));
+    result.petCount = pets.length;
+  } catch { result.available = false; }
+  return result;
+}
+
 // ─── API handlers ─────────────────────────────────────────────────────────────
 
 async function handleAPI(method, pathname, params, req, res) {
@@ -393,6 +482,17 @@ async function handleAPI(method, pathname, params, req, res) {
       date:     today,
       draft:    true,
       data,
+    });
+  }
+
+  // GET /api/dashboard
+  if (method === 'GET' && pathname === '/api/dashboard') {
+    const repoHealth = await getRepoHealth();
+    return send(res, 200, {
+      backlog:     getBacklog(),
+      repoHealth,
+      skylanders:  getSkylandersStats(),
+      journeyPets: getJourneyPetsStats(),
     });
   }
 
