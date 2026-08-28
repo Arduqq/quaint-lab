@@ -65,7 +65,7 @@ const SCHEMAS = {
 // ─── State ───────────────────────────────────────────────────────────────────
 
 const state = {
-  type:          'writing',
+  type:          'home',
   posts:         [],
   editing:       null,
   artworkSeries: [],
@@ -78,11 +78,15 @@ const atelierState = {
   fromAtelier:  false,
 };
 
+let cameFromHome = false;
+
 // ─── DOM refs ─────────────────────────────────────────────────────────────────
 const $     = id => document.getElementById(id);
 const listView     = $('list-view');
 const atelierView  = $('atelier-view');
 const editView     = $('edit-view');
+const homeView      = $('home-view');
+const dashboardGrid = $('dashboard-grid');
 const postsGrid    = $('posts-grid');
 const typeHeading  = $('type-heading');
 const editHeading  = $('edit-heading');
@@ -167,6 +171,87 @@ function renderPostList() {
   }
 }
 
+// ─── Dashboard ────────────────────────────────────────────────────────────────
+
+async function loadDashboard() {
+  dashboardGrid.innerHTML = '<p style="color:#555;font-size:.75rem">Loading…</p>';
+  const data = await api('GET', '/api/dashboard');
+  renderDashboard(data || {});
+}
+
+function openDraftFromHome(draft) {
+  state.type   = draft.type;
+  cameFromHome = true;
+  homeView.classList.add('hidden');
+  openEdit(draft.file);
+}
+
+function renderDashboard(data) {
+  const backlog     = data.backlog     || { available: false, counts: {}, recent: [] };
+  const repoHealth  = data.repoHealth  || { available: false, total: 0, buckets: {}, lastCommit: null };
+  const skylanders  = data.skylanders  || { available: false };
+  const journeyPets = data.journeyPets || { available: false, journeyCount: 0, grades: {}, petCount: 0 };
+
+  const backlogStats = Object.entries(backlog.counts)
+    .map(([type, n]) => `<span>${esc(type)} <b>${n}</b></span>`).join('');
+  const backlogList = backlog.recent.length
+    ? `<ul class="dashboard-list">${backlog.recent.map(d =>
+        `<li data-file="${esc(d.file)}" data-type="${esc(d.type)}">${esc(d.title)} <span class="badge-draft">${esc(d.type)}</span></li>`
+      ).join('')}</ul>`
+    : '<p class="dashboard-unavailable">No drafts — everything is published.</p>';
+
+  const bucketList = Object.entries(repoHealth.buckets)
+    .sort((a, b) => b[1] - a[1])
+    .map(([name, n]) => `<li>${esc(name)} <b>${n}</b></li>`).join('');
+  const lastCommitLine = repoHealth.lastCommit
+    ? `Last commit: ${repoHealth.lastCommit.date} — ${repoHealth.lastCommit.message}`
+    : 'No commits found';
+
+  const skyBlock = skylanders.available
+    ? `<div class="dashboard-stats">
+         <span>Posts <b>${skylanders.posts}</b></span>
+         <span>Images <b>${skylanders.images}</b></span>
+         <span>Featured <b>${skylanders.featured}</b></span>
+       </div>
+       <div class="dashboard-footnote">Synced ${esc(skylanders.fetchedAt ? skylanders.fetchedAt.split('T')[0] : '—')}</div>`
+    : '<p class="dashboard-unavailable">Archive manifest not found on this checkout.</p>';
+
+  const grades = journeyPets.grades || {};
+  const journeyBlock = journeyPets.available
+    ? `<div class="dashboard-stats">
+         <span>Journey entries <b>${journeyPets.journeyCount}</b></span>
+         <span>Pets <b>${journeyPets.petCount}</b></span>
+       </div>
+       <div class="dashboard-footnote">Grades — A ${grades.A||0} · B ${grades.B||0} · C ${grades.C||0} · D ${grades.D||0}</div>`
+    : '<p class="dashboard-unavailable">Journey/pet data not found.</p>';
+
+  dashboardGrid.innerHTML = `
+    <div class="post-card dashboard-card">
+      <div class="section-label">Content Backlog</div>
+      <div class="dashboard-stats">${backlogStats}</div>
+      ${backlogList}
+    </div>
+    <div class="post-card dashboard-card">
+      <div class="section-label">Repo Health</div>
+      <div class="dashboard-stats"><span>Uncommitted <b>${repoHealth.total}</b></span></div>
+      <ul class="dashboard-list">${bucketList}</ul>
+      <div class="dashboard-footnote">${esc(lastCommitLine)}</div>
+    </div>
+    <div class="post-card dashboard-card">
+      <div class="section-label">Skylanders Archive</div>
+      ${skyBlock}
+    </div>
+    <div class="post-card dashboard-card">
+      <div class="section-label">Journey / Pets</div>
+      ${journeyBlock}
+    </div>
+  `;
+
+  dashboardGrid.querySelectorAll('.dashboard-list li[data-file]').forEach(li => {
+    li.addEventListener('click', () => openDraftFromHome({ file: li.dataset.file, type: li.dataset.type }));
+  });
+}
+
 // ─── Edit view ────────────────────────────────────────────────────────────────
 
 async function openNew() {
@@ -220,6 +305,12 @@ function backToList() {
     atelierState.fromAtelier = false;
     atelierView.classList.remove('hidden');
     if (atelierState.activeFolder) selectAtelierFolder(atelierState.activeFolder);
+  } else if (cameFromHome) {
+    cameFromHome = false;
+    state.type = 'home';
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.type === 'home'));
+    homeView.classList.remove('hidden');
+    loadDashboard();
   } else {
     listView.classList.remove('hidden');
     loadPosts();
@@ -643,13 +734,21 @@ document.querySelectorAll('.tab').forEach(tab => {
     state.type    = tab.dataset.type;
     state.editing = null;
     atelierState.fromAtelier = false;
+    cameFromHome  = false;
     editView.classList.add('hidden');
 
-    if (state.type === 'artwork') {
+    if (state.type === 'home') {
+      listView.classList.add('hidden');
+      atelierView.classList.add('hidden');
+      homeView.classList.remove('hidden');
+      loadDashboard();
+    } else if (state.type === 'artwork') {
+      homeView.classList.add('hidden');
       listView.classList.add('hidden');
       atelierView.classList.remove('hidden');
       loadAtelier();
     } else {
+      homeView.classList.add('hidden');
       atelierView.classList.add('hidden');
       listView.classList.remove('hidden');
       loadPosts();
@@ -1047,4 +1146,4 @@ $('btn-atelier-new').addEventListener('click', () => {
 
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 
-loadPosts();
+loadDashboard();

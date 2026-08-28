@@ -167,6 +167,48 @@ header {
   overflow: hidden;
 }
 
+/* ─── Home / dashboard ──────────────────────────────────────────────────── */
+.dashboard-card { cursor: default; }
+.dashboard-card:hover { border-color: var(--border); background: var(--surface); }
+
+.dashboard-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.dashboard-stats b { color: var(--text); font-weight: normal; }
+
+.dashboard-list {
+  list-style: none;
+  font-size: 0.72rem;
+  color: var(--text);
+}
+.dashboard-list li {
+  padding: 0.3rem 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.dashboard-list li[data-file] { cursor: pointer; }
+.dashboard-list li[data-file]:hover { color: var(--accent); }
+
+.dashboard-footnote {
+  margin-top: 0.5rem;
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+.dashboard-unavailable {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
 /* ─── Edit view ──────────────────────────────────────────────────────────── */
 #edit-view { display: flex; flex-direction: column; height: 100%; }
 
