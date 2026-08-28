@@ -179,15 +179,16 @@ function getRepoHealth() {
   return new Promise(resolve => {
     exec('git status --porcelain', { cwd: ROOT }, (err, stdout) => {
       if (err) return resolve({ available: false, total: 0, buckets: {}, lastCommit: null });
-      const lines = stdout.split('\n').map(l => l.trim()).filter(Boolean);
+      const lines = stdout.split('\n').filter(Boolean);
       const buckets = {};
       for (const line of lines) {
-        const filePath = line.slice(3).trim().replace(/^"|"$/g, '');
+        let filePath = line.slice(3).trim().replace(/^"|"$/g, '');
+        filePath = filePath.split(' -> ').pop(); // Handle git renames
         const parts = filePath.split('/');
         const bucket = parts[0] === 'src' ? (parts[1] || 'src') : parts[0];
         buckets[bucket] = (buckets[bucket] || 0) + 1;
       }
-      exec('git log -1 --format=%cd|%s --date=short', { cwd: ROOT }, (err2, stdout2) => {
+      exec('git log -1 --format="%cd|%s" --date=short', { cwd: ROOT }, (err2, stdout2) => {
         let lastCommit = null;
         if (!err2 && stdout2.trim()) {
           const [date, ...rest] = stdout2.trim().split('|');
