@@ -1,0 +1,188 @@
+[
+  {
+    "grade": "B",
+    "name": "Subeta",
+    "url": "https://subeta.net",
+    "notes": "As of recent, the developer has been more keen on improving the site and making it future-proof. Still a bit of a mess to navigate with minor gacha elements. Usability problems are solved through a subscription paywall.",
+    "tags": ["neolike", "human avatars", "ancient", "rusty", "player visuals"]
+  },
+  {
+    "grade": "D",
+    "name": "Neopets",
+    "url": "https://www.neopets.com",
+    "notes": "I was rather hopeful for some time, but the game remains to be utter chaos. I wouldn't want to see new people join at this point.",
+    "tags": ["neolike", "ancient", "rusty", "modern"]
+  },
+  {
+    "grade": "B",
+    "name": "FlightRising",
+    "url": "https://flightrising.com",
+    "notes": "It's the biggest one, it looks great, and is probably the most serviceable of them all. The community feels a bit odd, and there's a lot of history to catch up on.",
+    "tags": ["breeding", "customization", "player visuals"]
+  },
+  {
+    "grade": "C",
+    "name": "Lioden",
+    "url": "https://www.lioden.com",
+    "notes": "It is a grindfest with very off-putting themes in their monthly event cycle (i.e. Jan: Great Hunger, Feb: Aphrodisia). Very time-intensive, but full of content and visuals to explore. Definitely harder to understand, but surely a blast for the ones who commit to it.",
+    "tags": ["breeding", "ancient", "customization", "player visuals"],
+    "rating": "50% [Just Off]",
+    "rating_pct": 50,
+    "long_notes": "Many consider Lioden to be one of the more time-intensive and complex VPS. The artwork feels interesting, and customization to me even slightly outshines FlightRising with its very raw and thematical imagery. However, events do not hold back on their grind, the community is rather difficult to delve into and many concepts feel strange and lack reflexivity. Despite its focus on realism, the game didn't have to establish the weird interactions with lionesses or its odd relation to inbreeding. There is something very weird going on with that site, and it's hard to really wrap my head around it."
+  },
+  {
+    "grade": "B",
+    "name": "Wolvden",
+    "url": "https://www.wolvden.com",
+    "notes": "Definitely the better compared to Lioden with a stronger focus on survival aspects. More cohesive direction in art and mechanics, and an updated framework make it more enjoyable to me. Definitely less sparkly.",
+    "tags": ["breeding", "customization", "modern", "player visuals"]
+  },
+  {
+    "grade": "D",
+    "name": "Lorwolf",
+    "url": "https://www.lorwolf.com",
+    "notes": "Absolute grindfest, weird communication from staff, frustrating mechanics, and an economy that is not fun to get into. Breeding does not feel fulfilling, but it may appeal to someone who like to do some roleplay with their pack.",
+    "tags": ["breeding", "modern", "player visuals"]
+  },
+  {
+    "grade": "B",
+    "name": "4dopt",
+    "url": "https://www.4dopt.com/",
+    "notes": "Intriguing concept with an economy solely based on the artwork produced by the community. Strong focus on player contribution and self-imposed goals. The interfact is a bit hard to navigate at times and could use a bit of a fresh coat to support the amazing work players are putting in.",
+    "tags": ["player visuals", "rusty", "modern"]
+  },
+  {
+    "grade": "C",
+    "name": "PokéFarm Q",
+    "url": "https://pokefarm.com/",
+    "notes": "Very strong and intricate spin on egg hatchers, and full of unique mechanics. The head of the operation is genuinely not a good person to be around, so you should stay away from the forums and the Discord. It features some heavy microtransactions that make up for the obtuse chances to hatch special Pokémon. The player interface is unique, but only enjoyable when it's customized and user-scripted.",
+    "tags": ["clicking", "breeding", "modern", "rusty"],
+    "rating": "40% [Addictive, terrible leadership]",
+    "rating_pct": 40,
+    "long_notes": "I won't get into detail about the problems this game's development/leadership has. They ought to figure that out on their own, as this game prides itself on being child-friendly. What irks me most is their terribly monetization that is based on opaque calculations, fear of missing out, and subscription models that sell you the fix to designed problems. The quality of releases and all the intricacies you are free to explore are major, though, and I would do them a disservice if I ignored any of it. If you would love to just breed up a fun little team, or collect whatever makes you happy, you will have a blast. Remain mindful, however, of the dark patterns littered across the site."
+  },
+  {
+    "grade": "A",
+    "name": "The Final Outpost",
+    "url": "https://finaloutpost.net",
+    "notes": "Very standard egg hatcher with a very strong narrative, beautiful pixel sprites, and cute events. Nothing that would captivate one for days and hours, but a delightful experience for short moments.",
+    "tags": ["clicking", "modern"],
+    "rating": "80% [Simple and to the Point]",
+    "rating_pct": 80,
+    "long_notes": "While the overall interface looks rather hacky and dated, I always end up clicking my way through the site from time to time. The art and story on the site is remarkable. Where the creatures look masterfully sprited, the tone of the story lets you sink into the life of a researcher on a planet long abandoned, and it fits so perfectly into this small and dedicated community! I do hope for the future recoded website to offer even more oportunities to refine this little gem."
+  },
+  {
+    "grade": "A",
+    "name": "Pixel Cat's End",
+    "url": "https://www.pixelcatsend.com",
+    "notes": "Stunningly cute visuals, very fun concepts, and great whimsy in this one. It can get a bit overwhelming in its progression, but it is hard to find anything I don't like about this game. The developer seems very dedicated, and I am sure that this can be a delightful space to get lost in.",
+    "tags": ["breeding", "modern"]
+  },
+  {
+    "grade": "D",
+    "name": "Dappervolk",
+    "url": "https://dappervolk.com",
+    "notes": "A tragedy of a kickstarter. Probably the biggest of grindfest with an infuriating focus on gacha systems fueled by microtransactions. The art is very beautiful, but I don't think that it is worth investing in at this point. Definitely worth a marvel at some of the artwork, though. It could be a fun dress-up, but this is not why we are here.",
+    "tags": ["human avatars", "modern", "player visuals", "clicking"]
+  },
+  {
+    "grade": "D",
+    "name": "Exabyss",
+    "url": "https://www.exabyss.com/",
+    "notes": "Strong combat focus on a player grid. As a Fire Emblem fan I was hooked, and played through the campaign. Definitely has everything going for it, but it unfortunately is abandoned. Very cool graphics, super fun pets, and just so much work went into this. I hope to see it thrive under different leadership and a dedicated community.",
+    "tags": ["human avatars", "modern"]
+  },
+  {
+    "grade": "A",
+    "name": "Poppy Seed Pets",
+    "url": "https://poppyseedpets.com/",
+    "notes": "Absolute joy, and it even has gone open-source! It may become a bit stale after some time, but games are not supposed to leave you addicted.",
+    "tags": ["modern"],
+    "rating": "100% [Perfectly Odd]",
+    "rating_pct": 100,
+    "long_notes": "Genuinely innovative spin on a VPS with unique mechanics. BenMakesGames is a very dedicated soul who, in my opinion, needs way more support for this project. The creative ways one can interact with their pets is goofy, weird and always puts a smile on my face."
+  },
+  {
+    "grade": "B",
+    "name": "RuneTails",
+    "url": "https://runetails.com",
+    "notes": "Really strong foundation for a very cool game. The devs seem dedicated and the art is very beautiful to look at. Some mechanics need fine-tuning, and I found myself closing the game because of weird loading problems, or just usability problems. I really hope to see it thrive.",
+    "tags": ["neolike", "modern", "customization"]
+  },
+  {
+    "grade": "B",
+    "name": "Leviathan Myth",
+    "url": "https://leviathan-myth.com",
+    "notes": "Very cool spin on what a pet site with dragons could be. It reminds me a lot of Dragosien which used to be a weird german dragon hatching game. Strong battle focus with some very charming artwork. It lost me a bit as I got stomped in the arena, but I am sure it's a place worth investing your time in. The community felt very welcoming.",
+    "tags": ["breeding", "modern"]
+  },
+  {
+    "grade": "B",
+    "name": "Moderneopets",
+    "url": "https://www.moderneopets.com",
+    "notes": "This used to be my absolute favorite. I still adore it, but it has been mostly dormant after some very petty accusations and overwhelming workload for the main developer. Until he is able to work out the direction of the game, the game will remain mostly quiet, which I think is incredibly reasonable. Still, the mechanics features are fun, and emphasize the player creativity that Neopets once treasured. The artwork of the pets is amazing to me.",
+    "tags": ["neolike", "modern", "customization"],
+    "rating": "70% [Slumbering Work of Love]",
+    "rating_pct": 70,
+    "long_notes": "This one is a bit of an odd one. I have been deeply in love with the site since it was my introduction to Neopets as a whole. With its focus on creative freedom and lack of difficult grind I enjoyed sharing my creations with a welcoming community. The artwork outshines all Neopets clones to me with its detail and cohesion. However, the team is rather small and administration reliant on one person who also is responsible for all of the coding. Events are rather dull and after one ugly fall-out, the site has been in a state of hibernation. I still believe in the site's future; as to me, it feels like home."
+  },
+  {
+    "grade": "C",
+    "name": "Grundo's Café",
+    "url": "https://www.grundos.cafe/",
+    "notes": "This one could not capture me at all. The amount of minigames is there, the \"stuff\" to do is plentiful. The community feels incredibly Neopets, the customization did not feel fulfilling, and I would argue that it is quite the grindfest. I think the devs are very dedicated, and the community is thriving. It's like a coat of fresh nostalgia paint on what Neopets would have looked like if it started out now.",
+    "tags": ["neolike", "modern", "customization"],
+    "rating": "60% [Hard to Love]",
+    "rating_pct": 60,
+    "long_notes": "This game has amassed a great following as one of the most content-rich and active Neopets clone. It features a strong set of games with varying events, fun colors and very frequent updates. It thrives on its competetive market and getting your dream pet is usually quite the challenge. I think it's fun and has so many tasks you can go for each and every day, yet I can't help but notice how much time it can eat up, and how difficult the community is for me to get into. The competetive aspect is rather daunting to me and makes me wish I had some friends to have started out with. The game can turn into a click-fest, and I personally dislike the customization of every pet. To some extent, it's less rewarding than the original Neopets."
+  },
+  {
+    "grade": "B",
+    "name": "IcePets",
+    "url": "https://icepets.com",
+    "notes": "The team decided to give the game a new look, and I think there is definitely something there. It's surprisingly old, and many systems seem like they need a bit of direction away from their Neopets inspiration. Another one of those sites that I REALLY want to be succeeding.",
+    "tags": ["neolike", "modern", "ancient"]
+  },
+  {
+    "grade": "C",
+    "name": "OviPets",
+    "url": "https://ovipets.com",
+    "notes": "Very odd, but it captures the Zeitgeist of the post-MySpace era. It wasn't much fun to play, but most systems are inherently social. I was confused a lot, but the pets look pretty cool. Oddly enough, it feels like Sylestia, but what if it's also Facebook. Do with that what you want, lol.",
+    "tags": ["ancient", "clicking", "breeding"]
+  },
+  {
+    "grade": "F",
+    "name": "Santae",
+    "url": "https://www.santae.net",
+    "notes": "I would not advise to play this game. The leadership is probably some of the worst I have ever experienced in their mistreatment of staff, use of GenAI and overall tone. It is a massive grindfest with some stunningly beautiful artwork that lacks any proper direction. We can do better, and this Kickstarter is not it.",
+    "tags": ["neolike", "modern", "customization", "human avatar"]
+  },
+  {
+    "grade": "C",
+    "name": "Sylestia",
+    "url": "",
+    "notes": "I think this is such an odd-one-out. Lots of odd systems, and RPG mode, a whole lot of participatory events, and it's wrapped in the weirdest UI I have seen. All of this makes me really love the place, but it did feel very convoluted at times. However, I find the pets a lot of fun to actually breed and collect, but I wish it had a different pace to it. More time for players to really understand the ins and outs of what the game really wants you to do. Definitely something to look into.",
+    "tags": ["ancient", "breeding", "clicking", "human avatars"]
+  },
+  {
+    "grade": "C",
+    "name": "Leayph",
+    "url": "https://leayph.com",
+    "notes": "There was a time where everyone did their own pet site, and this one still exists! Very beautiful artwork, and a small amount of people still giving the space the love it needs. If you're into the jank of it, it's a blast. Definitely very simple to get through, but it does require a certain amount of self-imposed goals to really thrive on here.",
+    "tags": ["ancient", "breeding", "human avatars"]
+  },
+  {
+    "grade": "B",
+    "name": "Snoozelings",
+    "url": "https://snoozelings.com",
+    "notes": "Very adorable early build of a wholesome spin on virtual pet sites. It doesn't have too much depth, but I think the breeding is sound, the journal feature interesting, and generally this is an absolute passion project of someone who cares for the genre.",
+    "tags": ["breeding", "modern"]
+  },
+  {
+    "grade": "B",
+    "name": "Global PokéDex Plus",
+    "url": "https://gpx.plus",
+    "notes": "Very cool-looking site with some weird mechanics. Overall the better alternative to a feature-heavy PFQ, but it does lack some proper documentation on features and guides. Community seemed very sweet, though, and their forums are internet archeology GOLD.",
+    "tags": ["ancient", "clicking", "breeding"]
+  }
+]

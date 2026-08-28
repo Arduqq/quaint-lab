@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quaint Lab Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="brand">✦ QUAINT LAB STUDIO</div>
+    <div class="header-actions">
+      <button id="btn-build" class="btn-primary">Build Site</button>
+    </div>
+  </header>
+
+  <nav class="type-tabs">
+    <button class="tab active" data-type="writing">Writing</button>
+    <button class="tab" data-type="games">Games</button>
+    <button class="tab" data-type="artwork">Artwork</button>
+    <button class="tab" data-type="pets">Pets</button>
+  </nav>
+
+  <main id="main-view">
+
+    <!-- List view -->
+    <div id="list-view">
+      <div class="list-header">
+        <h2 id="type-heading">Writing</h2>
+        <button id="btn-new" class="btn-primary">+ New</button>
+      </div>
+      <div id="posts-grid" class="posts-grid"></div>
+    </div>
+
+    <!-- Atelier view: category-first artwork browser -->
+    <div id="atelier-view" class="hidden">
+      <div class="atelier-layout">
+
+        <div class="atelier-folders">
+          <div class="atelier-folders-header">
+            <span class="section-label">Folders</span>
+            <button id="btn-new-folder" class="btn-secondary" title="New folder" style="padding:.2rem .5rem;font-size:.7rem">+</button>
+          </div>
+          <ul id="folder-list"></ul>
+        </div>
+
+        <div class="atelier-canvas">
+          <div class="atelier-canvas-header">
+            <span id="atelier-folder-name" class="section-label">select a folder</span>
+            <span id="atelier-folder-count" class="atelier-folder-count"></span>
+            <div style="flex:1"></div>
+            <button id="btn-atelier-cleanup" class="btn-secondary" style="font-size:.65rem;padding:.25rem .55rem" title="Rename all artwork files to match their titles">Clean Names</button>
+            <button id="btn-atelier-new" class="btn-secondary" style="font-size:.65rem;padding:.25rem .55rem">+ New Post</button>
+          </div>
+          <div id="atelier-grid" class="atelier-grid"></div>
+          <div id="atelier-drop" class="atelier-drop">
+            <span id="atelier-drop-label">Drop images here to add to folder</span>
+            <input type="file" accept="image/*" multiple id="atelier-file-input">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Edit view -->
+    <div id="edit-view" class="hidden">
+      <div class="edit-header">
+        <button id="btn-back" class="btn-secondary">← Back</button>
+        <h2 id="edit-heading">New Post</h2>
+        <div class="edit-actions">
+          <button id="btn-delete" class="btn-danger hidden">Delete</button>
+          <button id="btn-save" class="btn-primary">Save  ⌘S</button>
+        </div>
+      </div>
+      <div class="edit-content">
+        <div class="edit-form" id="edit-form"></div>
+        <div class="edit-markdown">
+          <label class="section-label">Content (Markdown)</label>
+          <textarea id="content-editor" placeholder="Write your content in Markdown…"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Cartridge generator overlay -->
+  <div id="cartridge-overlay" class="overlay hidden">
+    <div class="overlay-box cartridge-box">
+      <div class="overlay-header">
+        <h3>Cartridge Generator</h3>
+        <button id="btn-close-cartridge">✕</button>
+      </div>
+      <div class="cartridge-editor">
+
+        <div class="cartridge-left">
+          <canvas id="cartridge-canvas" width="112" height="104"></canvas>
+          <button id="btn-cart-randomize" class="btn-secondary" style="width:100%">Randomize</button>
+          <button id="btn-cart-save" class="btn-primary" style="width:100%">Save as Hero Image</button>
+        </div>
+
+        <div class="cartridge-right">
+          <div class="cartridge-section">
+            <div class="cartridge-section-head">
+              <span class="section-label">Base</span>
+              <label class="cart-color-label">color <input type="color" id="cart-baseColor" value="#ffffff"></label>
+              <button class="btn-secondary cart-rand-btn" data-cart-rand="cart-baseColor" style="padding:.15rem .4rem;font-size:.65rem">🎲</button>
+            </div>
+            <div id="cart-baseOptions" class="cartridge-option-grid"></div>
+          </div>
+          <div class="cartridge-section">
+            <div class="cartridge-section-head">
+              <span class="section-label">Cover</span>
+              <label class="cart-color-label">c1 <input type="color" id="cart-accentColor" value="#ff00ff"></label>
+              <button class="btn-secondary cart-rand-btn" data-cart-rand="cart-accentColor" style="padding:.15rem .4rem;font-size:.65rem">🎲</button>
+              <label class="cart-color-label">c2 <input type="color" id="cart-borderColor" value="#000000"></label>
+              <button class="btn-secondary cart-rand-btn" data-cart-rand="cart-borderColor" style="padding:.15rem .4rem;font-size:.65rem">🎲</button>
+            </div>
+            <div id="cart-coverOptions" class="cartridge-option-grid"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Build overlay -->
+  <div id="build-overlay" class="overlay hidden">
+    <div class="overlay-box">
+      <div class="overlay-header">
+        <h3>Build Output</h3>
+        <button id="btn-close-overlay">✕</button>
+      </div>
+      <pre id="build-output">Building…</pre>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
