@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quaint Lab Studio</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/css/exhibition-canvas.css">
+  <link rel="stylesheet" href="exhibition-builder.css">
 </head>
 <body>
 
@@ -21,6 +23,7 @@
     <button class="tab" data-type="games">Games</button>
     <button class="tab" data-type="artwork">Artwork</button>
     <button class="tab" data-type="pets">Pets</button>
+    <button class="tab" data-type="exhibitions">Exhibitions</button>
   </nav>
 
   <main id="main-view">
@@ -32,6 +35,38 @@
       </div>
       <div id="dashboard-grid" class="posts-grid"></div>
     </div>
+
+    <!-- Exhibitions: list view -->
+    <div id="exhibitions-view" class="hidden">
+      <div class="list-header">
+        <h2>Exhibitions</h2>
+        <button id="btn-new-exhibition" class="btn-primary">+ New</button>
+      </div>
+      <div id="exhibitions-list" class="posts-grid"></div>
+    </div>
+
+    <!-- Exhibitions: canvas editor -->
+    <div id="exhibition-editor-view" class="hidden">
+      <div class="exhibition-toolbar">
+        <button id="btn-exhibition-back" class="btn-secondary">← Back</button>
+        <span id="exhibition-editor-title" class="section-label"></span>
+        <div style="flex:1"></div>
+        <button id="btn-add-text" class="btn-secondary">+ Text</button>
+        <label class="exhibition-bg-label">bg <input type="color" id="exhibition-bg-color" value="#1a1a2e"></label>
+        <button id="btn-save-exhibition" class="btn-primary">Save</button>
+      </div>
+      <div class="exhibition-editor-layout">
+        <div id="exhibition-palette" class="exhibition-palette"></div>
+        <div id="exhibition-canvas-wrap" class="exhibition-canvas-wrap">
+          <div id="exhibition-canvas" class="ex-stage"></div>
+        </div>
+        <div id="exhibition-properties" class="exhibition-properties">
+          <p class="dashboard-unavailable">Select an element to edit its properties.</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="exhibition-builder.js"></script>
 
     <!-- List view -->
     <div id="list-view" class="hidden">

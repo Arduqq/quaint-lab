@@ -741,12 +741,20 @@ document.querySelectorAll('.tab').forEach(tab => {
     atelierState.fromAtelier = false;
     cameFromHome  = false;
     editView.classList.add('hidden');
+    document.getElementById('exhibitions-view').classList.add('hidden');
+    document.getElementById('exhibition-editor-view').classList.add('hidden');
 
     if (state.type === 'home') {
       listView.classList.add('hidden');
       atelierView.classList.add('hidden');
       homeView.classList.remove('hidden');
       loadDashboard();
+    } else if (state.type === 'exhibitions') {
+      homeView.classList.add('hidden');
+      listView.classList.add('hidden');
+      atelierView.classList.add('hidden');
+      document.getElementById('exhibitions-view').classList.remove('hidden');
+      loadExhibitionsList();
     } else if (state.type === 'artwork') {
       homeView.classList.add('hidden');
       listView.classList.add('hidden');
