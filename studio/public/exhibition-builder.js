@@ -387,3 +387,22 @@ function startRotate(el, downEvent) {
   document.addEventListener('pointermove', onMove);
   document.addEventListener('pointerup', onUp);
 }
+
+// ─── Save ─────────────────────────────────────────────────────────────────────
+
+async function saveExhibition() {
+  const r = await api('PUT', '/api/exhibition', {
+    slug: exState.meta.slug,
+    meta: {
+      title:        exState.meta.title,
+      canvasWidth:  exState.meta.canvasWidth,
+      canvasHeight: exState.meta.canvasHeight,
+      background:   exState.meta.background,
+    },
+    elements: exState.elements,
+  });
+  if (r.error) { showToast(r.error, 'err'); return; }
+  showToast('Exhibition saved!');
+}
+
+document.getElementById('btn-save-exhibition').addEventListener('click', saveExhibition);
