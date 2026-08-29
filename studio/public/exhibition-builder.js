@@ -114,7 +114,15 @@ function buildElementDOM(el) {
     wrap.appendChild(div);
   }
 
-  if (el.id === exState.selectedId) wrap.classList.add('ex-selected');
+  wrap.addEventListener('pointerdown', (e) => {
+    if (e.target.classList.contains('ex-handle') || e.target.classList.contains('ex-rotate-handle')) return;
+    startElementDrag(el, e);
+  });
+
+  if (el.id === exState.selectedId) {
+    wrap.classList.add('ex-selected');
+    addSelectionHandles(wrap, el);
+  }
   return wrap;
 }
 
@@ -126,3 +134,256 @@ document.getElementById('btn-exhibition-back').addEventListener('click', () => {
   document.getElementById('exhibitions-view').classList.remove('hidden');
   loadExhibitionsList();
 });
+
+// ─── Selection & properties ────────────────────────────────────────────────────
+
+let exNextId = 1;
+function newElId() { return `el-${Date.now()}-${exNextId++}`; }
+
+function selectElement(id) {
+  exState.selectedId = id;
+  renderExhibitionCanvas();
+  renderProperties();
+}
+
+function getSelectedElement() {
+  return exState.elements.find(e => e.id === exState.selectedId) || null;
+}
+
+function renderProperties() {
+  const panel = document.getElementById('exhibition-properties');
+  const el = getSelectedElement();
+  if (!el) {
+    panel.innerHTML = '<p class="dashboard-unavailable">Select an element to edit its properties.</p>';
+    return;
+  }
+
+  const common = `
+    <div class="field-row"><label>X</label><input type="number" data-prop="x" value="${el.x}"></div>
+    <div class="field-row"><label>Y</label><input type="number" data-prop="y" value="${el.y}"></div>
+    <div class="field-row"><label>Width</label><input type="number" data-prop="width" value="${el.width}"></div>
+    ${el.type === 'image' ? `<div class="field-row"><label>Height</label><input type="number" data-prop="height" value="${el.height}"></div>` : ''}
+    <div class="field-row"><label>Rotation</label><input type="number" data-prop="rotation" value="${el.rotation}"></div>
+    <div class="field-row"><label>Opacity</label><input type="number" step="0.1" min="0" max="1" data-prop="opacity" value="${el.opacity}"></div>
+  `;
+
+  const textFields = el.type === 'text' ? `
+    <div class="field-row"><label>Text</label><textarea data-prop="content" rows="3" style="width:100%">${esc(el.content)}</textarea></div>
+    <div class="field-row"><label>Font size</label><input type="number" data-prop="fontSize" value="${el.fontSize}"></div>
+    <div class="field-row"><label>Color</label><input type="color" data-prop="color" value="${el.color}"></div>
+    <div class="field-row"><label>Align</label>
+      <select data-prop="align">
+        <option value="left" ${el.align === 'left' ? 'selected' : ''}>left</option>
+        <option value="center" ${el.align === 'center' ? 'selected' : ''}>center</option>
+        <option value="right" ${el.align === 'right' ? 'selected' : ''}>right</option>
+      </select>
+    </div>
+  ` : '';
+
+  panel.innerHTML = `
+    ${common}
+    ${textFields}
+    <div class="field-row" style="display:flex; gap:0.4rem;">
+      <button class="btn-secondary" id="btn-bring-front" style="flex:1">Front</button>
+      <button class="btn-secondary" id="btn-send-back" style="flex:1">Back</button>
+    </div>
+    <div class="field-row"><button class="btn-danger" id="btn-delete-el" style="width:100%">Delete</button></div>
+  `;
+
+  panel.querySelectorAll('[data-prop]').forEach(input => {
+    input.addEventListener('input', () => {
+      const prop = input.dataset.prop;
+      const raw  = input.value;
+      const isNumeric = ['x', 'y', 'width', 'height', 'rotation', 'opacity', 'fontSize'].includes(prop);
+      el[prop] = isNumeric ? Number(raw) : raw;
+      renderExhibitionCanvas();
+    });
+  });
+  panel.querySelector('#btn-bring-front').addEventListener('click', () => reorderElement(el, 'front'));
+  panel.querySelector('#btn-send-back').addEventListener('click', () => reorderElement(el, 'back'));
+  panel.querySelector('#btn-delete-el').addEventListener('click', () => {
+    exState.elements = exState.elements.filter(e => e.id !== el.id);
+    exState.selectedId = null;
+    renderExhibitionCanvas();
+    renderProperties();
+  });
+}
+
+function reorderElement(el, dir) {
+  const zs = exState.elements.map(e => e.zIndex);
+  el.zIndex = dir === 'front' ? Math.max(...zs) + 1 : Math.min(...zs) - 1;
+  renderExhibitionCanvas();
+}
+
+// ─── Adding elements ────────────────────────────────────────────────────────────
+
+function addTextElement() {
+  const el = {
+    id: newElId(), type: 'text', content: 'New text', x: exState.meta.canvasWidth / 2, y: exState.meta.canvasHeight / 2,
+    width: 240, rotation: 0, zIndex: exState.elements.length + 1, opacity: 1,
+    fontSize: 20, color: '#eeeeee', align: 'left',
+  };
+  exState.elements.push(el);
+  selectElement(el.id);
+}
+
+function addImageElement(file) {
+  const el = {
+    id: newElId(), type: 'image', src: file,
+    x: exState.meta.canvasWidth / 2, y: exState.meta.canvasHeight / 2,
+    width: 300, height: 300, rotation: 0, zIndex: exState.elements.length + 1, opacity: 1,
+  };
+  exState.elements.push(el);
+  selectElement(el.id);
+}
+
+document.getElementById('btn-add-text').addEventListener('click', addTextElement);
+document.getElementById('exhibition-bg-color').addEventListener('input', (e) => {
+  exState.meta.background = e.target.value;
+  renderExhibitionCanvas();
+});
+document.getElementById('exhibition-palette').addEventListener('click', (e) => {
+  const img = e.target.closest('img[data-file]');
+  if (img) addImageElement(img.dataset.file);
+});
+
+// ─── Drag / resize / rotate math ────────────────────────────────────────────────
+
+function toLocalDelta(dxScreen, dyScreen, rotationDeg) {
+  const rad = -rotationDeg * Math.PI / 180;
+  return {
+    dx: dxScreen * Math.cos(rad) - dyScreen * Math.sin(rad),
+    dy: dxScreen * Math.sin(rad) + dyScreen * Math.cos(rad),
+  };
+}
+
+function toScreenDelta(dxLocal, dyLocal, rotationDeg) {
+  const rad = rotationDeg * Math.PI / 180;
+  return {
+    dx: dxLocal * Math.cos(rad) - dyLocal * Math.sin(rad),
+    dy: dxLocal * Math.sin(rad) + dyLocal * Math.cos(rad),
+  };
+}
+
+function startElementDrag(el, downEvent) {
+  downEvent.preventDefault();
+  selectElement(el.id);
+  const startX = el.x, startY = el.y;
+  const startPointerX = downEvent.clientX, startPointerY = downEvent.clientY;
+
+  function onMove(moveEvent) {
+    const dxScreen = (moveEvent.clientX - startPointerX) / EX_EDIT_SCALE;
+    const dyScreen = (moveEvent.clientY - startPointerY) / EX_EDIT_SCALE;
+    el.x = startX + dxScreen;
+    el.y = startY + dyScreen;
+    renderExhibitionCanvas();
+  }
+  function onUp() {
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    renderProperties();
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+}
+
+// ─── Resize / rotate handles ─────────────────────────────────────────────────────
+
+const EX_RESIZE_HANDLES = [
+  { dir: 'nw', widthSign: -1, heightSign: -1, cursor: 'nwse-resize' },
+  { dir: 'n',  widthSign:  0, heightSign: -1, cursor: 'ns-resize'   },
+  { dir: 'ne', widthSign:  1, heightSign: -1, cursor: 'nesw-resize' },
+  { dir: 'e',  widthSign:  1, heightSign:  0, cursor: 'ew-resize'   },
+  { dir: 'se', widthSign:  1, heightSign:  1, cursor: 'nwse-resize' },
+  { dir: 's',  widthSign:  0, heightSign:  1, cursor: 'ns-resize'   },
+  { dir: 'sw', widthSign: -1, heightSign:  1, cursor: 'nesw-resize' },
+  { dir: 'w',  widthSign: -1, heightSign:  0, cursor: 'ew-resize'   },
+];
+
+function addSelectionHandles(wrap, el) {
+  for (const h of EX_RESIZE_HANDLES) {
+    const handle = document.createElement('div');
+    handle.className = 'ex-handle';
+    handle.dataset.dir = h.dir;
+    handle.style.cssText = `position:absolute; width:8px; height:8px; background:var(--accent,#c8a55a); cursor:${h.cursor}; z-index:1000;`;
+    const posMap = {
+      nw: ['0%', '0%'],   n: ['50%', '0%'],   ne: ['100%', '0%'],
+      w:  ['0%', '50%'],                       e: ['100%', '50%'],
+      sw: ['0%', '100%'], s: ['50%', '100%'], se: ['100%', '100%'],
+    };
+    const [left, top] = posMap[h.dir];
+    handle.style.left = left; handle.style.top = top;
+    handle.style.transform = 'translate(-50%, -50%)';
+    handle.addEventListener('pointerdown', (e) => startResize(el, h, e));
+    wrap.appendChild(handle);
+  }
+
+  const rotateHandle = document.createElement('div');
+  rotateHandle.className = 'ex-rotate-handle';
+  rotateHandle.style.cssText = 'position:absolute; left:50%; top:-24px; width:8px; height:8px; border-radius:50%; background:var(--accent,#c8a55a); transform:translateX(-50%); cursor:grab; z-index:1000;';
+  rotateHandle.addEventListener('pointerdown', (e) => startRotate(el, e));
+  wrap.appendChild(rotateHandle);
+}
+
+function startResize(el, handleConfig, downEvent) {
+  downEvent.preventDefault();
+  downEvent.stopPropagation();
+  // Text elements have no persisted height (it's automatic, based on content), so
+  // vertical resize doesn't apply to them — force heightSign to 0 for text regardless
+  // of which handle was grabbed, so only width changes and Y never shifts.
+  const heightSign  = el.type === 'image' ? handleConfig.heightSign : 0;
+  const startX = el.x, startY = el.y, startWidth = el.width, startHeight = el.height || 40;
+  const startPointerX = downEvent.clientX, startPointerY = downEvent.clientY;
+
+  function onMove(moveEvent) {
+    const dxScreen = (moveEvent.clientX - startPointerX) / EX_EDIT_SCALE;
+    const dyScreen = (moveEvent.clientY - startPointerY) / EX_EDIT_SCALE;
+    const local = toLocalDelta(dxScreen, dyScreen, el.rotation);
+
+    const newWidth  = Math.max(20, startWidth  + local.dx * handleConfig.widthSign);
+    const newHeight = Math.max(20, startHeight + local.dy * heightSign);
+    const widthDelta  = (newWidth  - startWidth)  * handleConfig.widthSign;
+    const heightDelta = (newHeight - startHeight) * heightSign;
+
+    const screenShift = toScreenDelta(widthDelta / 2, heightDelta / 2, el.rotation);
+
+    el.width  = newWidth;
+    if (el.type === 'image') el.height = newHeight;
+    el.x = startX + screenShift.dx;
+    el.y = startY + screenShift.dy;
+    renderExhibitionCanvas();
+  }
+  function onUp() {
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    renderProperties();
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+}
+
+function startRotate(el, downEvent) {
+  downEvent.preventDefault();
+  downEvent.stopPropagation();
+  const canvasRect = document.getElementById('exhibition-canvas').getBoundingClientRect();
+  const centerScreenX = canvasRect.left + el.x * EX_EDIT_SCALE;
+  const centerScreenY = canvasRect.top  + el.y * EX_EDIT_SCALE;
+
+  function angleAt(e) {
+    return Math.atan2(e.clientY - centerScreenY, e.clientX - centerScreenX) * 180 / Math.PI;
+  }
+  const startAngle = angleAt(downEvent);
+  const startRotation = el.rotation;
+
+  function onMove(moveEvent) {
+    el.rotation = startRotation + (angleAt(moveEvent) - startAngle);
+    renderExhibitionCanvas();
+  }
+  function onUp() {
+    document.removeEventListener('pointermove', onMove);
+    document.removeEventListener('pointerup', onUp);
+    renderProperties();
+  }
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup', onUp);
+}
