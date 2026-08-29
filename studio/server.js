@@ -155,9 +155,10 @@ function scanPosts(type) {
 const EXHIBITIONS_DIR = path.join(ROOT, 'src/posts/exhibitions');
 
 function exhibitionPaths(slug) {
+  const safeSlug = String(slug).replace(/[^\w-]/g, '');
   return {
-    md:   path.join(EXHIBITIONS_DIR, `${slug}.md`),
-    json: path.join(EXHIBITIONS_DIR, `${slug}.canvas.json`),
+    md:   path.join(EXHIBITIONS_DIR, `${safeSlug}.md`),
+    json: path.join(EXHIBITIONS_DIR, `${safeSlug}.canvas.json`),
   };
 }
 
@@ -577,7 +578,7 @@ async function handleAPI(method, pathname, params, req, res) {
   // PUT /api/exhibition  { slug, meta, elements }
   if (method === 'PUT' && pathname === '/api/exhibition') {
     const { slug, meta, elements } = await parseBody(req);
-    if (!slug) return send(res, 400, { error: 'Missing slug' });
+    if (!slug || !meta) return send(res, 400, { error: 'Missing slug or meta' });
     const { md } = exhibitionPaths(slug);
     if (!fs.existsSync(md)) return send(res, 404, { error: 'Not found' });
     writeExhibition(slug, meta, elements || []);
