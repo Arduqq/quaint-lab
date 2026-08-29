@@ -1,0 +1,53 @@
+---
+posttitle: "{{ title }}"
+layout: simple-base.njk
+---
+{% block nav %}
+  <a href="/atelier/"><span>Back to Atelier</span></a>
+{% endblock %}
+
+<link rel="stylesheet" href="/css/exhibition-canvas.css">
+
+{% set exElements = page.fileSlug | canvasElements %}
+
+<div class="ex-stage-wrap" id="ex-stage-wrap-{{ page.fileSlug }}">
+  <div class="ex-stage" id="ex-stage-{{ page.fileSlug }}"
+       style="width:{{ canvasWidth }}px; height:{{ canvasHeight }}px; background:{{ background }};">
+    {% for el in exElements %}
+      {% if el.type == "image" %}
+        <div class="ex-el ex-el-image"
+             style="left:{{ el.x - (el.width / 2) }}px; top:{{ el.y - (el.height / 2) }}px;
+                    width:{{ el.width }}px; height:{{ el.height }}px;
+                    transform:rotate({{ el.rotation }}deg); z-index:{{ el.zIndex }}; opacity:{{ el.opacity }};">
+          <img src="/images/artwork/{{ el.src }}" alt=""
+               onerror="this.classList.add('ex-broken')">
+        </div>
+      {% elif el.type == "text" %}
+        <div class="ex-el ex-el-text"
+             style="left:{{ el.x - (el.width / 2) }}px; top:{{ el.y - 20 }}px;
+                    width:{{ el.width }}px;
+                    transform:rotate({{ el.rotation }}deg); z-index:{{ el.zIndex }}; opacity:{{ el.opacity }};">
+          <div class="ex-text-content"
+               style="font-size:{{ el.fontSize }}px; color:{{ el.color }}; text-align:{{ el.align }};">{{ el.content }}</div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+(function () {
+  var wrap  = document.getElementById('ex-stage-wrap-{{ page.fileSlug }}');
+  var stage = document.getElementById('ex-stage-{{ page.fileSlug }}');
+  var canvasWidth = {{ canvasWidth }};
+  function fit() {
+    var ratio = wrap.clientWidth / canvasWidth;
+    stage.style.transform = 'scale(' + ratio + ')';
+    wrap.style.height = ({{ canvasHeight }} * ratio) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+})();
+</script>
+
+<a href="/atelier/"><span>Back to Atelier</span></a>

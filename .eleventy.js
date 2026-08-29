@@ -27,6 +27,15 @@ module.exports = function(eleventyConfig) {
 
   // Filters
   eleventyConfig.addFilter("slug", slugify);
+  eleventyConfig.addFilter("canvasElements", function(slug) {
+    const jsonPath = path.join(__dirname, "src/posts/exhibitions", `${slug}.canvas.json`);
+    try {
+      return JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
+    } catch (e) {
+      console.warn(`[exhibition-canvas] Could not read/parse ${jsonPath}: ${e.message}`);
+      return [];
+    }
+  });
   eleventyConfig.addFilter("getImages", function(dirPath) {
     const fullPath = path.join(__dirname, "src", dirPath);
     try {
