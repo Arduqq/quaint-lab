@@ -1,13 +1,13 @@
 ---
 title: Artwork
-layout: artwork.njk
-posttitle: "Sergio: Winter"
+posttitle: "Sergio: Sulphur Heat"
 comment: ...
 tags:
   - artwork
   - exhibition-karat
 categories: [karat, paperdemon]
-image: sergio-winter.png
+image: sergio-sulphur-heat.png
+layout: artwork.njk
 ---
 
 

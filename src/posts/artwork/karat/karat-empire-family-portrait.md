@@ -1,13 +1,13 @@
 ---
 title: Artwork
-layout: artwork.njk
-posttitle: "Sergio: Winter"
+posttitle: "Karat Empire: Family Portrait"
 comment: ...
 tags:
   - artwork
   - exhibition-karat
 categories: [karat, paperdemon]
-image: sergio-winter.png
+image: karat-empire-family-portrait.png
+layout: artwork.njk
 ---
 
 

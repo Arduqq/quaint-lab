@@ -1,13 +1,13 @@
 ---
 title: Artwork
-layout: artwork.njk
-posttitle: "Sergio: Winter"
+posttitle: "Sergio: Sock Puppet"
 comment: ...
 tags:
   - artwork
   - exhibition-karat
 categories: [karat, paperdemon]
-image: sergio-winter.png
+image: sergio-sock-puppet.png
+layout: artwork.njk
 ---
 
 

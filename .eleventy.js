@@ -97,6 +97,8 @@ module.exports = function(eleventyConfig) {
       if (!item.inputPath.includes("/posts/")) return;
       // exclude games from categories
       if (item.inputPath.includes("/posts/games/")) return;
+      // exclude drafts from public category pages
+      if (item.data && item.data.draft) return;
       const cats = item.data && item.data.categories ? item.data.categories : [];
       (Array.isArray(cats) ? cats : [cats]).forEach(cat => {
         if (!cat) return;
