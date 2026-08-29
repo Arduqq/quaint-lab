@@ -150,6 +150,66 @@ function scanPosts(type) {
   return results;
 }
 
+// ─── Exhibitions ───────────────────────────────────────────────────────────────
+
+const EXHIBITIONS_DIR = path.join(ROOT, 'src/posts/exhibitions');
+
+function exhibitionPaths(slug) {
+  return {
+    md:   path.join(EXHIBITIONS_DIR, `${slug}.md`),
+    json: path.join(EXHIBITIONS_DIR, `${slug}.canvas.json`),
+  };
+}
+
+function listExhibitions() {
+  if (!fs.existsSync(EXHIBITIONS_DIR)) return [];
+  return fs.readdirSync(EXHIBITIONS_DIR)
+    .filter(f => f.endsWith('.md'))
+    .map(f => {
+      const slug = f.replace(/\.md$/, '');
+      const { data } = parseFM(fs.readFileSync(path.join(EXHIBITIONS_DIR, f), 'utf-8'));
+      return { slug, title: data.posttitle || slug };
+    });
+}
+
+function readExhibition(slug) {
+  const { md, json } = exhibitionPaths(slug);
+  if (!fs.existsSync(md)) return null;
+  const { data } = parseFM(fs.readFileSync(md, 'utf-8'));
+  let elements = [];
+  try {
+    elements = JSON.parse(fs.readFileSync(json, 'utf-8'));
+  } catch {
+    elements = [];
+  }
+  return {
+    meta: {
+      slug,
+      title:       data.posttitle || slug,
+      canvasWidth:  data.canvasWidth  || 1600,
+      canvasHeight: data.canvasHeight || 1000,
+      background:   data.background  || '#1a1a2e',
+    },
+    elements,
+  };
+}
+
+function writeExhibition(slug, meta, elements) {
+  const { md, json } = exhibitionPaths(slug);
+  if (!fs.existsSync(EXHIBITIONS_DIR)) fs.mkdirSync(EXHIBITIONS_DIR, { recursive: true });
+  const data = {
+    title:       'Exhibition',
+    posttitle:   meta.title,
+    layout:      'exhibition-canvas.njk',
+    permalink:   `atelier/${slug}/`,
+    canvasWidth:  meta.canvasWidth,
+    canvasHeight: meta.canvasHeight,
+    background:   meta.background,
+  };
+  fs.writeFileSync(md, `${dumpFM(data)}\n`);
+  fs.writeFileSync(json, JSON.stringify(elements, null, 2));
+}
+
 // ─── Dashboard helpers ─────────────────────────────────────────────────────────
 
 function getBacklog() {
@@ -486,6 +546,44 @@ async function handleAPI(method, pathname, params, req, res) {
     });
   }
 
+  // GET /api/exhibitions
+  if (method === 'GET' && pathname === '/api/exhibitions') {
+    return send(res, 200, listExhibitions());
+  }
+
+  // GET /api/exhibition?slug=X
+  if (method === 'GET' && pathname === '/api/exhibition') {
+    if (!params.slug) return send(res, 400, { error: 'Missing slug' });
+    const ex = readExhibition(params.slug);
+    if (!ex) return send(res, 404, { error: 'Not found' });
+    return send(res, 200, ex);
+  }
+
+  // POST /api/exhibition  { slug, title, canvasWidth, canvasHeight, background }
+  if (method === 'POST' && pathname === '/api/exhibition') {
+    const { slug, title, canvasWidth, canvasHeight, background } = await parseBody(req);
+    if (!slug || !title) return send(res, 400, { error: 'Missing slug or title' });
+    const { md } = exhibitionPaths(slug);
+    if (fs.existsSync(md)) return send(res, 409, { error: 'Slug already exists' });
+    writeExhibition(slug, {
+      title,
+      canvasWidth:  canvasWidth  || 1600,
+      canvasHeight: canvasHeight || 1000,
+      background:   background   || '#1a1a2e',
+    }, []);
+    return send(res, 201, readExhibition(slug));
+  }
+
+  // PUT /api/exhibition  { slug, meta, elements }
+  if (method === 'PUT' && pathname === '/api/exhibition') {
+    const { slug, meta, elements } = await parseBody(req);
+    if (!slug) return send(res, 400, { error: 'Missing slug' });
+    const { md } = exhibitionPaths(slug);
+    if (!fs.existsSync(md)) return send(res, 404, { error: 'Not found' });
+    writeExhibition(slug, meta, elements || []);
+    return send(res, 200, { ok: true });
+  }
+
   // GET /api/dashboard
   if (method === 'GET' && pathname === '/api/dashboard') {
     const repoHealth = await getRepoHealth();
@@ -528,6 +626,15 @@ http.createServer(async (req, res) => {
       const ext = path.extname(imgPath).toLowerCase();
       res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
       return fs.createReadStream(imgPath).pipe(res);
+    }
+  }
+
+  // Serve site CSS so Studio's builder can share the exact same stylesheet as the public site
+  if (u.pathname.startsWith('/css/')) {
+    const cssPath = path.join(ROOT, 'src', u.pathname);
+    if (fs.existsSync(cssPath) && fs.lstatSync(cssPath).isFile()) {
+      res.writeHead(200, { 'Content-Type': 'text/css' });
+      return fs.createReadStream(cssPath).pipe(res);
     }
   }
 
