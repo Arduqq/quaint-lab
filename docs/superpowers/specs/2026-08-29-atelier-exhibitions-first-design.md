@@ -1,0 +1,112 @@
+# Atelier: Exhibitions-First Redesign — Design (Phase 2)
+
+## Goal
+
+This is Phase 2 of the Exhibition Canvas Builder project (Phase 1:
+`docs/superpowers/specs/2026-08-29-exhibition-canvas-builder-design.md`, already
+built and merged). With the builder now real, `/atelier/` gets redesigned to lead
+with curated exhibitions instead of a raw content grid: exhibitions become the
+front door, and the existing category-based browsing moves to a secondary page
+for people who want to dig past the curated view.
+
+**Scope is engineering only.** Migrating the existing Karat exhibition into the
+new canvas format, and building the planned Helix Vacui exhibition, are creative
+acts the site owner does by hand in the builder — not something this phase
+generates. This phase makes the pages and data model ready for that content
+whenever it's made; it does not create the content itself.
+
+## Background
+
+`/atelier/` currently has uncommitted, in-progress work on `main` (stashed
+during Phase 1's merge as `wip-atelier-njk-before-exhibition-merge-2026-08-29`)
+that replaces the old exhibition grid with a "Recent artwork" strip plus
+featured-category blocks and a "More" grid. That stash is **not** applied by
+this design as-is: the "Recent" strip is redundant with the site's existing
+artwork RSS feed and is dropped. The featured-category-blocks + "More" grid
+portion is reused, relocated to the new secondary browse page (Section 3).
+
+## Section 1 — Data model: `description` on canvas exhibitions
+
+Canvas exhibitions (from Phase 1) currently have `title`, `canvasWidth`,
+`canvasHeight`, `background` — no description. The legacy exhibition format
+(Karat) already has one (`description: "The Karat Empire has been
+crumbling..."`). To show a uniform "title + blurb" card for every exhibition
+regardless of type, canvas exhibitions need the same field.
+
+- `studio/server.js`: `writeExhibition(slug, meta, elements)` accepts and
+  persists an optional `description` string in the `.md` frontmatter,
+  alongside the fields it already manages. `readExhibition()` returns it in
+  `meta`. `POST`/`PUT /api/exhibition` accept it in the request body (empty
+  string if omitted — no validation beyond what already exists for other
+  meta fields).
+- `studio/public/exhibition-builder.js` / `index.html`: a textarea in the
+  editor toolbar, next to the background color picker, bound to
+  `exState.meta.description`, included in the `saveExhibition()` payload.
+
+## Section 2 — `/atelier/` front page (exhibitions-first)
+
+Replaces the current committed content (the old "Current Exhibitions" +
+"Galleries by Category" grids) entirely:
+
+- A short page intro (title, tagline).
+- A list of exhibition cards, one per entry in `collections.exhibitions`
+  (already defined in `.eleventy.js`, already globs every `.md` under
+  `src/posts/exhibitions/` regardless of which layout renders it) — each
+  card shows `posttitle` and `description`, linking to the exhibition's own
+  URL. No explicit sort order for v1 (at most 1-2 exhibitions exist
+  initially; revisit if the list grows enough to need curated ordering).
+- A clearly visible link to `/atelier/browse/` (Section 3) for the full
+  category-based archive.
+
+## Section 3 — `/atelier/browse/` secondary page
+
+New page at `src/pages/atelier-browse.njk` (permalink `atelier/browse/`),
+carrying forward the stashed design's featured-category-blocks + "More" grid
+structure — same `featuredSlugs` hardcoded list, same `collections.artworkByCategory`
+source, same `atelier-cat-block`/`atelier-flex-gallery`/`atelier-more-grid`
+markup and CSS classes already used by the stash — with the "Recent" strip
+at the top removed entirely (redundant with the RSS feed, per this phase's
+decision). This page is reachable only via the link from Section 2's front
+page; it isn't itself linked from primary site navigation, matching its role
+as the secondary/deep-dive view.
+
+## Section 4 — Legacy/new coexistence
+
+No branching logic needed anywhere: `collections.exhibitions` and the
+Section 2 card loop treat every `.md` under `src/posts/exhibitions/`
+identically regardless of its `layout` field. Karat (legacy, `layout:
+exhibition.njk`) and any canvas exhibition (`layout: exhibition-canvas.njk`)
+render through their own existing layouts already; the front-page list just
+needs `posttitle`, `description`, and `url` — fields both formats already
+provide (once Section 1 adds `description` to the canvas format). Migrating
+Karat later requires no template change on this page at all.
+
+## Section 5 — Out of scope
+
+- Retiring `src/_includes/exhibition.njk` — stays alive until Karat is
+  manually migrated by the site owner; deleting it is a trivial follow-up
+  once that happens, not part of this phase.
+- Actually migrating Karat's 16 pieces into a canvas layout, or building the
+  Helix Vacui exhibition's content — both are the site owner's creative work
+  in the builder, not generated by this phase.
+- Exhibition card preview images (poster or auto-thumbnail) — explicitly
+  decided against for v1; cards are text-only (title + description).
+- Explicit ordering/curation of the exhibition list on the front page —
+  deferred until there are enough exhibitions for order to matter.
+
+## Testing
+
+No automated test suite exists in this repo — verification is manual,
+matching project convention:
+
+1. Add a `description` to a canvas exhibition via the builder, save, reload,
+   confirm it round-trips exactly.
+2. Build the site with both the legacy Karat exhibition and at least one
+   canvas exhibition present; confirm `/atelier/` lists both as cards with
+   correct title/description/link, and neither the old grid markup nor the
+   stashed "Recent" strip appears anywhere in the output.
+3. Confirm `/atelier/browse/` renders the featured-category blocks and
+   "More" grid correctly, matches the stash's existing (already-working)
+   category-block behavior, and is reachable via the link from `/atelier/`.
+4. Confirm `/atelier/browse/` is not linked from primary site navigation
+   (only reachable via the front-page link).
