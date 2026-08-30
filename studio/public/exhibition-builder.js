@@ -127,18 +127,9 @@ function buildElementDOM(el) {
   wrap.className = `ex-el ex-el-${el.type}`;
   wrap.dataset.id = el.id;
   wrap.style.left     = (el.x - el.width / 2) + 'px';
-  // Text elements have no persisted height (it's automatic, from content), so for them
-  // `y` is an APPROXIMATE anchor near the top of the box — not a true visual centre the
-  // way it is for images. The fixed 20px offset only reads as centred for short,
-  // single-line captions at typical font sizes; multi-line or large text sits lower than
-  // its `y` suggests. Rotation pivots around this same approximate point, so it can look
-  // slightly off-centre in those cases. True centring would need runtime height
-  // measurement (out of scope). `y` is persisted in every .canvas.json, so changing this
-  // convention would reposition existing exhibitions.
-  // Keep in sync with the text `top` calculation in src/_includes/exhibition-canvas.njk.
-  wrap.style.top      = (el.type === 'text' ? el.y - 20 : el.y - el.height / 2) + 'px';
+  wrap.style.top      = (el.y - el.height / 2) + 'px';
   wrap.style.width    = el.width + 'px';
-  if (el.type === 'image') wrap.style.height = el.height + 'px';
+  wrap.style.height   = el.height + 'px';
   wrap.style.transform = `rotate(${el.rotation}deg)`;
   wrap.style.zIndex    = el.zIndex;
   wrap.style.opacity   = el.opacity;
@@ -149,6 +140,7 @@ function buildElementDOM(el) {
     img.onerror = () => img.classList.add('ex-broken');
     wrap.appendChild(img);
   } else if (el.type === 'text') {
+    wrap.style.background = el.backgroundColor || 'transparent';
     const div = document.createElement('div');
     div.className = 'ex-text-content';
     div.textContent  = el.content;
@@ -206,7 +198,7 @@ function renderProperties() {
     <div class="field-row"><label>X</label><input type="number" data-prop="x" value="${el.x}"></div>
     <div class="field-row"><label>Y</label><input type="number" data-prop="y" value="${el.y}"></div>
     <div class="field-row"><label>Width</label><input type="number" data-prop="width" value="${el.width}"></div>
-    ${el.type === 'image' ? `<div class="field-row"><label>Height</label><input type="number" data-prop="height" value="${el.height}"></div>` : ''}
+    <div class="field-row"><label>Height</label><input type="number" data-prop="height" value="${el.height}"></div>
     <div class="field-row"><label>Rotation</label><input type="number" data-prop="rotation" value="${el.rotation}"></div>
     <div class="field-row"><label>Opacity</label><input type="number" step="0.1" min="0" max="1" data-prop="opacity" value="${el.opacity}"></div>
   `;
@@ -215,6 +207,8 @@ function renderProperties() {
     <div class="field-row"><label>Text</label><textarea data-prop="content" rows="3" style="width:100%">${esc(el.content)}</textarea></div>
     <div class="field-row"><label>Font size</label><input type="number" data-prop="fontSize" value="${el.fontSize}"></div>
     <div class="field-row"><label>Color</label><input type="color" data-prop="color" value="${el.color}"></div>
+    <div class="field-row"><label>Background</label><input type="color" data-prop="backgroundColor" value="${el.backgroundColor && el.backgroundColor !== 'transparent' ? el.backgroundColor : '#000000'}"></div>
+    <div class="field-row"><label><input type="checkbox" data-prop="_bgTransparent" ${(!el.backgroundColor || el.backgroundColor === 'transparent') ? 'checked' : ''} style="width:auto; vertical-align:middle;"> Transparent background</label></div>
     <div class="field-row"><label>Align</label>
       <select data-prop="align">
         <option value="left" ${el.align === 'left' ? 'selected' : ''}>left</option>
@@ -235,14 +229,29 @@ function renderProperties() {
   `;
 
   panel.querySelectorAll('[data-prop]').forEach(input => {
+    const prop = input.dataset.prop;
+    if (prop === 'backgroundColor' || prop === '_bgTransparent') return; // wired separately below
     input.addEventListener('input', () => {
-      const prop = input.dataset.prop;
-      const raw  = input.value;
+      const raw = input.value;
       const isNumeric = ['x', 'y', 'width', 'height', 'rotation', 'opacity', 'fontSize'].includes(prop);
       el[prop] = isNumeric ? Number(raw) : raw;
       renderExhibitionCanvas();
     });
   });
+
+  // Background color and its "transparent" checkbox interact: the checkbox always wins
+  // when checked, regardless of whatever color the picker last held.
+  const bgColorInput = panel.querySelector('[data-prop="backgroundColor"]');
+  const bgTransparentCheckbox = panel.querySelector('[data-prop="_bgTransparent"]');
+  if (bgColorInput && bgTransparentCheckbox) {
+    const applyBackground = () => {
+      el.backgroundColor = bgTransparentCheckbox.checked ? 'transparent' : bgColorInput.value;
+      renderExhibitionCanvas();
+    };
+    bgColorInput.addEventListener('input', () => { bgTransparentCheckbox.checked = false; applyBackground(); });
+    bgTransparentCheckbox.addEventListener('change', applyBackground);
+  }
+
   panel.querySelector('#btn-bring-front').addEventListener('click', () => reorderElement(el, 'front'));
   panel.querySelector('#btn-send-back').addEventListener('click', () => reorderElement(el, 'back'));
   panel.querySelector('#btn-delete-el').addEventListener('click', () => {
@@ -271,8 +280,8 @@ function nextZIndex() {
 function addTextElement() {
   const el = {
     id: newElId(), type: 'text', content: 'New text', x: exState.meta.canvasWidth / 2, y: exState.meta.canvasHeight / 2,
-    width: 240, rotation: 0, zIndex: nextZIndex(), opacity: 1,
-    fontSize: 20, color: '#eeeeee', align: 'left',
+    width: 240, height: 100, rotation: 0, zIndex: nextZIndex(), opacity: 1,
+    fontSize: 20, color: '#eeeeee', align: 'left', backgroundColor: 'transparent',
   };
   exState.elements.push(el);
   selectElement(el.id);
@@ -379,11 +388,7 @@ function addSelectionHandles(wrap, el) {
 function startResize(el, handleConfig, downEvent) {
   downEvent.preventDefault();
   downEvent.stopPropagation();
-  // Text elements have no persisted height (it's automatic, based on content), so
-  // vertical resize doesn't apply to them — force heightSign to 0 for text regardless
-  // of which handle was grabbed, so only width changes and Y never shifts.
-  const heightSign  = el.type === 'image' ? handleConfig.heightSign : 0;
-  const startX = el.x, startY = el.y, startWidth = el.width, startHeight = el.height || 40;
+  const startX = el.x, startY = el.y, startWidth = el.width, startHeight = el.height;
   const startPointerX = downEvent.clientX, startPointerY = downEvent.clientY;
 
   function onMove(moveEvent) {
@@ -392,14 +397,14 @@ function startResize(el, handleConfig, downEvent) {
     const local = toLocalDelta(dxScreen, dyScreen, el.rotation);
 
     const newWidth  = Math.max(20, startWidth  + local.dx * handleConfig.widthSign);
-    const newHeight = Math.max(20, startHeight + local.dy * heightSign);
+    const newHeight = Math.max(20, startHeight + local.dy * handleConfig.heightSign);
     const widthDelta  = (newWidth  - startWidth)  * handleConfig.widthSign;
-    const heightDelta = (newHeight - startHeight) * heightSign;
+    const heightDelta = (newHeight - startHeight) * handleConfig.heightSign;
 
     const screenShift = toScreenDelta(widthDelta / 2, heightDelta / 2, el.rotation);
 
     el.width  = newWidth;
-    if (el.type === 'image') el.height = newHeight;
+    el.height = newHeight;
     el.x = startX + screenShift.dx;
     el.y = startY + screenShift.dy;
     renderExhibitionCanvas();

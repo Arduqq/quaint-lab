@@ -64,6 +64,9 @@
   height: 100%;
   white-space: pre-wrap;
   overflow-wrap: break-word;
+  /* No overflow:hidden — text taller than the box overflows visibly past its bottom
+     edge rather than being clipped, by design. The box's own background-color still
+     only paints its own height, so overflow reads clearly as "too much text." */
   /* Explicit, not inherited: must match the public site's --main-font exactly, and
      line-height must be pinned too or the same text needs a different box height in
      each context. */

@@ -1,5 +1,16 @@
 /* ─── Exhibition builder — editor-only chrome, never affects published look ── */
 
+/* #main-view (shared by every tab) never gives this view a real height on its own —
+   without flex:1 + min-height:0 here, .exhibition-editor-layout's height below has
+   nothing definite to size against, so no column ever actually clips/scrolls: the
+   whole page just grows and #main-view itself scrolls as one long unit instead. */
+#exhibition-editor-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 .exhibition-toolbar {
   display: flex;
   align-items: center;
@@ -7,6 +18,7 @@
   padding: 0.5rem 0.75rem;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 .exhibition-bg-label {
@@ -19,7 +31,8 @@
 
 .exhibition-editor-layout {
   display: flex;
-  height: calc(100% - 48px);
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
