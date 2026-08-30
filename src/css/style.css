@@ -2380,3 +2380,151 @@ tr td {
 .like-snail:hover {
   transform: scale(1.3);
 }
+
+/* ── Atelier ── */
+
+/* Single section container — suppress default section > * margin */
+.atelier-all > * { margin: 0; }
+
+/* Category block inside the section */
+.atelier-cat-block {
+  border-top: 1px solid var(--border-color);
+  padding   : 0.6rem 0 0.6rem;
+}
+.atelier-cat-block:first-child {
+  border-top : none;
+  padding-top: 0;
+}
+.atelier-cat-block:last-child { padding-bottom: 0; }
+
+/* h3 inside atelier blocks — add breathing room before the gallery */
+.atelier-cat-block h3 {
+  margin-bottom: 0.6rem;
+}
+
+/* count link inside h3 */
+.atelier-cat-count {
+  font-family    : var(--main-font);
+  font-size      : 0.7rem;
+  font-weight    : 400;
+  color          : inherit;
+  opacity        : 0.45;
+  text-decoration: none;
+  vertical-align : middle;
+}
+.atelier-cat-count:hover { opacity: 1; }
+
+/* Gallery — same flex-wrap pattern as .illustration-gallery */
+.atelier-flex-gallery {
+  display        : flex;
+  flex-flow      : row wrap;
+  gap            : 0.7rem;
+  align-items    : flex-start;
+  justify-content: flex-start;
+}
+
+/* Thumbnail — fixed 155px matching site's gallery sizing */
+.atelier-thumb {
+  width          : 155px;
+  height         : 155px;
+  display        : block;
+  position       : relative;
+  overflow       : hidden;
+  transition     : transform 0.25s ease, box-shadow 0.2s ease;
+  transform-origin: center;
+  flex-shrink    : 0;
+}
+
+/* nth-child rotation — mirrors .illustration-gallery and .category-tile */
+.atelier-flex-gallery .atelier-thumb:nth-child(3n+1) {
+  transform: translateY(-6px) rotate(-1.2deg);
+}
+.atelier-flex-gallery .atelier-thumb:nth-child(3n+2) {
+  transform: translateY(0) rotate(0.6deg);
+}
+.atelier-flex-gallery .atelier-thumb:nth-child(3n+3) {
+  transform: translateY(5px) rotate(-0.6deg);
+}
+.atelier-flex-gallery .atelier-thumb:hover {
+  transform : translateY(-4px) scale(1.03) rotate(0deg);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 12%);
+  z-index   : 2;
+}
+
+.atelier-thumb img {
+  display   : block;
+  width     : 100%;
+  height    : 100%;
+  object-fit: cover;
+}
+
+/* "new" badge */
+.badge-new {
+  position      : absolute;
+  top           : 5px;
+  right         : 5px;
+  background    : var(--text-color);
+  color         : var(--background-color);
+  font-family   : var(--main-font);
+  font-size     : 0.55rem;
+  font-weight   : 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding       : 2px 5px;
+  line-height   : 1;
+  pointer-events: none;
+}
+
+/* "More" teaser grid */
+.atelier-more-grid {
+  display              : flex;
+  flex-flow            : row wrap;
+  gap                  : 0.7rem;
+  align-items          : flex-start;
+}
+
+.atelier-more-item {
+  display        : flex;
+  flex-direction : column;
+  width          : 100px;
+  text-decoration: none;
+  color          : inherit;
+  transition     : transform 0.2s ease;
+  transform-origin: center;
+}
+
+.atelier-more-item:nth-child(3n+1) { transform: rotate(-1deg); }
+.atelier-more-item:nth-child(3n+2) { transform: rotate(0.5deg); }
+.atelier-more-item:nth-child(3n+3) { transform: rotate(-0.7deg); }
+.atelier-more-item:hover {
+  transform : translateY(-3px) rotate(0deg);
+  z-index   : 2;
+}
+
+.atelier-more-thumbs {
+  display              : grid;
+  grid-template-columns: 1fr 1fr;
+  gap                  : 2px;
+  background           : var(--border-color);
+  width                : 100%;
+}
+
+.atelier-more-thumbs img {
+  width       : 100%;
+  aspect-ratio: 1;
+  object-fit  : cover;
+  display     : block;
+}
+
+.atelier-more-label {
+  font-size  : 0.72rem;
+  font-weight: 700;
+  padding    : 0.25rem 0 0;
+  line-height: 1.3;
+}
+
+.atelier-more-label em {
+  font-style : normal;
+  font-weight: 400;
+  opacity    : 0.5;
+}
