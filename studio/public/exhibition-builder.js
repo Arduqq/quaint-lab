@@ -456,7 +456,7 @@ async function saveExhibition() {
     slug: exState.meta.slug,
     meta: {
       title:        exState.meta.title,
-      description:  document.getElementById('exhibition-description').value,
+      description:  document.getElementById('exhibition-description').value.replace(/\s*\n+\s*/g, ' '),
       canvasWidth:  exState.meta.canvasWidth,
       canvasHeight: exState.meta.canvasHeight,
       background:   exState.meta.background,

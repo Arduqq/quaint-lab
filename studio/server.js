@@ -238,7 +238,7 @@ function writeExhibition(slug, meta, elements) {
     title:     'Exhibition',
     ...existing,
     posttitle:   meta.title,
-    description: meta.description || '',
+    description: String(meta.description || '').replace(/\s*\n+\s*/g, ' '),
     layout:      CANVAS_LAYOUT,
     permalink:   `atelier/${safeSlug}/`,
     canvasWidth:  meta.canvasWidth,
