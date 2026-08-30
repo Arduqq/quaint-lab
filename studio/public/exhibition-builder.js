@@ -6,6 +6,7 @@ const exState = {
   meta: null,       // { slug, title, canvasWidth, canvasHeight, background }
   elements: [],
   selectedId: null,
+  parseError: null, // set when the .canvas.json sidecar failed to parse — saving would destroy it
 };
 
 const EX_EDIT_SCALE = 0.5; // editor renders the stage at half size to fit typical screens
@@ -49,6 +50,7 @@ async function openExhibitionEditor(slug) {
   exState.meta       = ex.meta;
   exState.elements   = ex.elements;
   exState.selectedId = null;
+  exState.parseError = ex.parseError || null;
 
   document.getElementById('exhibitions-view').classList.add('hidden');
   document.getElementById('exhibition-editor-view').classList.remove('hidden');
@@ -57,6 +59,38 @@ async function openExhibitionEditor(slug) {
 
   await loadExhibitionPalette();
   renderExhibitionCanvas();
+  // Reset the properties panel — otherwise it keeps showing the previously open
+  // exhibition's selected element, which is no longer on this canvas.
+  renderProperties();
+  renderParseErrorBanner();
+}
+
+// The sidecar exists but couldn't be parsed: the canvas looks empty but ISN'T, and a
+// Save would overwrite the damaged-but-possibly-recoverable file with []. Make that
+// impossible to miss and impossible to do in one unwitting click.
+function renderParseErrorBanner() {
+  const toolbar = document.querySelector('.exhibition-toolbar');
+  let banner = document.getElementById('exhibition-parse-error');
+  if (!exState.parseError) {
+    if (banner) banner.remove();
+    return;
+  }
+  if (!banner && toolbar) {
+    banner = document.createElement('div');
+    banner.id = 'exhibition-parse-error';
+    banner.style.cssText = 'padding:.5rem .7rem; background:#5a1111; color:#ffd7d7; ' +
+      'border:1px solid #a33; font-size:.72rem; line-height:1.5;';
+    // Sibling after the toolbar, not inside it: the toolbar is a non-wrapping flex row.
+    toolbar.insertAdjacentElement('afterend', banner);
+  }
+  if (banner) {
+    banner.textContent =
+      `⚠ Could not read ${exState.meta.slug}.canvas.json (${exState.parseError}). ` +
+      'The canvas below is EMPTY because the file failed to load — it is not actually empty. ' +
+      'Saving now will overwrite the file and permanently lose its contents. ' +
+      'Fix the JSON by hand first, or reload after repairing it.';
+  }
+  showToast('Canvas data failed to load — do NOT save, you would overwrite it', 'err');
 }
 
 async function loadExhibitionPalette() {
@@ -92,6 +126,15 @@ function buildElementDOM(el) {
   wrap.className = `ex-el ex-el-${el.type}`;
   wrap.dataset.id = el.id;
   wrap.style.left     = (el.x - el.width / 2) + 'px';
+  // Text elements have no persisted height (it's automatic, from content), so for them
+  // `y` is an APPROXIMATE anchor near the top of the box — not a true visual centre the
+  // way it is for images. The fixed 20px offset only reads as centred for short,
+  // single-line captions at typical font sizes; multi-line or large text sits lower than
+  // its `y` suggests. Rotation pivots around this same approximate point, so it can look
+  // slightly off-centre in those cases. True centring would need runtime height
+  // measurement (out of scope). `y` is persisted in every .canvas.json, so changing this
+  // convention would reposition existing exhibitions.
+  // Keep in sync with the text `top` calculation in src/_includes/exhibition-canvas.njk.
   wrap.style.top      = (el.type === 'text' ? el.y - 20 : el.y - el.height / 2) + 'px';
   wrap.style.width    = el.width + 'px';
   if (el.type === 'image') wrap.style.height = el.height + 'px';
@@ -215,12 +258,19 @@ function reorderElement(el, dir) {
   renderExhibitionCanvas();
 }
 
+// Next free z-index. Uses the live max rather than elements.length, which collides with
+// an existing element as soon as anything has been deleted or explicitly reordered.
+function nextZIndex() {
+  const zs = exState.elements.map(e => e.zIndex).filter(z => Number.isFinite(z));
+  return zs.length ? Math.max(...zs) + 1 : 1;
+}
+
 // ─── Adding elements ────────────────────────────────────────────────────────────
 
 function addTextElement() {
   const el = {
     id: newElId(), type: 'text', content: 'New text', x: exState.meta.canvasWidth / 2, y: exState.meta.canvasHeight / 2,
-    width: 240, rotation: 0, zIndex: exState.elements.length + 1, opacity: 1,
+    width: 240, rotation: 0, zIndex: nextZIndex(), opacity: 1,
     fontSize: 20, color: '#eeeeee', align: 'left',
   };
   exState.elements.push(el);
@@ -231,7 +281,7 @@ function addImageElement(file) {
   const el = {
     id: newElId(), type: 'image', src: file,
     x: exState.meta.canvasWidth / 2, y: exState.meta.canvasHeight / 2,
-    width: 300, height: 300, rotation: 0, zIndex: exState.elements.length + 1, opacity: 1,
+    width: 300, height: 300, rotation: 0, zIndex: nextZIndex(), opacity: 1,
   };
   exState.elements.push(el);
   selectElement(el.id);
@@ -391,6 +441,16 @@ function startRotate(el, downEvent) {
 // ─── Save ─────────────────────────────────────────────────────────────────────
 
 async function saveExhibition() {
+  // Never let a corrupt-sidecar session be overwritten by one unwitting click.
+  if (exState.parseError) {
+    const ok = confirm(
+      `${exState.meta.slug}.canvas.json could not be read (${exState.parseError}).\n\n` +
+      'The editor is showing an EMPTY canvas because the file failed to load, not because ' +
+      'it is empty. Saving now OVERWRITES that file and permanently destroys its contents.\n\n' +
+      'Save anyway?'
+    );
+    if (!ok) return;
+  }
   const r = await api('PUT', '/api/exhibition', {
     slug: exState.meta.slug,
     meta: {
@@ -402,6 +462,11 @@ async function saveExhibition() {
     elements: exState.elements,
   });
   if (r.error) { showToast(r.error, 'err'); return; }
+  // The sidecar has just been rewritten as valid JSON, so the warning no longer applies.
+  if (exState.parseError) {
+    exState.parseError = null;
+    renderParseErrorBanner();
+  }
   showToast('Exhibition saved!');
 }
 

@@ -23,6 +23,14 @@ layout: simple-base.njk
                onerror="this.classList.add('ex-broken')">
         </div>
       {% elif el.type == "text" %}
+        {# Text elements have no persisted height (it's automatic, from content), so `y`
+           here is an APPROXIMATE anchor near the top of the box — not a true visual
+           centre the way it is for images. The fixed 20px offset only reads as centred
+           for short, single-line captions at typical font sizes; multi-line or large
+           text sits lower than its `y` suggests. Rotation pivots around this same
+           approximate point, so it can look slightly off-centre for those cases.
+           True centring would need runtime height measurement (out of scope).
+           Keep this in sync with buildElementDOM() in studio/public/exhibition-builder.js. #}
         <div class="ex-el ex-el-text"
              style="left:{{ el.x - (el.width / 2) }}px; top:{{ el.y - 20 }}px;
                     width:{{ el.width }}px;

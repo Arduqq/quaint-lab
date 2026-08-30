@@ -10,8 +10,15 @@ permalink: "atelier/"
 
 <section class="exhibitions">
   <h2>Current Exhibitions</h2>
+    {# Canvas exhibitions built in Studio have no poster field (there is no UI for one),
+       so only emit the <img> when a poster actually exists — otherwise it renders as
+       <img src="/images/"> and silently breaks. Fall back to a plain title link. #}
     {% for exhibition in collections.exhibitions %}
-      <a href="{{ exhibition.url }}"><img src="/images/{{ exhibition.data.poster }}" alt="{{ exhibition.data.posttitle }}"> </a>
+      {% if exhibition.data.poster %}
+        <a href="{{ exhibition.url }}"><img src="/images/{{ exhibition.data.poster }}" alt="{{ exhibition.data.posttitle }}"> </a>
+      {% else %}
+        <a class="exhibition-link" href="{{ exhibition.url }}"><span>{{ exhibition.data.posttitle }}</span></a>
+      {% endif %}
     {% endfor %}
 </section>
 
@@ -72,5 +79,9 @@ permalink: "atelier/"
   }
   .exhibitions a:hover img{
     transform: rotate(-5deg);
+  }
+  .exhibitions .exhibition-link {
+    display: inline-block;
+    margin : .25rem .75rem .25rem 0;
   }
 </style>

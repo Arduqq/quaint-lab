@@ -1,5 +1,38 @@
 /* ─── Exhibition canvas — shared between the public site and Studio's builder ── */
 
+/* This stylesheet is the ONE file both the public site and Studio's builder load, so
+   the text font must be declared here rather than inherited. Inheriting resolved to
+   Courier New in Studio (--font) and Atkinson Hyperlegible on the site (--main-font),
+   so identical text wrapped differently in the two contexts. These @font-face rules
+   duplicate the ones in accessibility.css on purpose — Studio does not load that file.
+   Paths are relative to this file (src/css/), matching src/fonts → /fonts/ in both
+   Eleventy's passthrough copy and Studio's /fonts/ route. */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src        : url("../fonts/Atkinson-Hyperlegible-Regular-102.woff");
+  font-weight: normal;
+  font-style : normal;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src        : url("../fonts/Atkinson-Hyperlegible-Bold-102.woff");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src        : url("../fonts/Atkinson-Hyperlegible-Italic-102.woff");
+  font-style : italic;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src        : url("../fonts/Atkinson-Hyperlegible-BoldItalic-102.woff");
+  font-weight: bold;
+  font-style : italic;
+}
+
 .ex-stage-wrap {
   width: 100%;
   overflow: hidden;
@@ -31,5 +64,9 @@
   height: 100%;
   white-space: pre-wrap;
   overflow-wrap: break-word;
-  font-family: inherit;
+  /* Explicit, not inherited: must match the public site's --main-font exactly, and
+     line-height must be pinned too or the same text needs a different box height in
+     each context. */
+  font-family: 'Atkinson Hyperlegible', helvetica, arial, sans-serif;
+  line-height: 1.4;
 }

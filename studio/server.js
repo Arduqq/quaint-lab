@@ -21,6 +21,10 @@ const MIME = {
   '.gif':  'image/gif',
   '.svg':  'image/svg+xml',
   '.webp': 'image/webp',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.ttf':  'font/ttf',
+  '.otf':  'font/otf',
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -154,9 +158,15 @@ function scanPosts(type) {
 
 const EXHIBITIONS_DIR = path.join(ROOT, 'src/posts/exhibitions');
 
+// Only files carrying this layout are canvas exhibitions this tool may list or edit.
+// Legacy exhibitions (e.g. layout: exhibition.njk) carry fields this tool knows
+// nothing about — listing or writing them would silently destroy those fields.
+const CANVAS_LAYOUT = 'exhibition-canvas.njk';
+
 function exhibitionPaths(slug) {
   const safeSlug = String(slug).replace(/[^\w-]/g, '');
   return {
+    slug: safeSlug,
     md:   path.join(EXHIBITIONS_DIR, `${safeSlug}.md`),
     json: path.join(EXHIBITIONS_DIR, `${safeSlug}.canvas.json`),
   };
@@ -164,45 +174,71 @@ function exhibitionPaths(slug) {
 
 function listExhibitions() {
   if (!fs.existsSync(EXHIBITIONS_DIR)) return [];
-  return fs.readdirSync(EXHIBITIONS_DIR)
-    .filter(f => f.endsWith('.md'))
-    .map(f => {
-      const slug = f.replace(/\.md$/, '');
-      const { data } = parseFM(fs.readFileSync(path.join(EXHIBITIONS_DIR, f), 'utf-8'));
-      return { slug, title: data.posttitle || slug };
-    });
+  const out = [];
+  for (const f of fs.readdirSync(EXHIBITIONS_DIR)) {
+    if (!f.endsWith('.md')) continue;
+    const slug = f.replace(/\.md$/, '');
+    let data;
+    try { ({ data } = parseFM(fs.readFileSync(path.join(EXHIBITIONS_DIR, f), 'utf-8'))); }
+    catch { continue; }
+    if (data.layout !== CANVAS_LAYOUT) continue;
+    out.push({ slug, title: data.posttitle || slug });
+  }
+  return out;
 }
 
 function readExhibition(slug) {
-  const { md, json } = exhibitionPaths(slug);
+  const { slug: safeSlug, md, json } = exhibitionPaths(slug);
   if (!fs.existsSync(md)) return null;
   const { data } = parseFM(fs.readFileSync(md, 'utf-8'));
+  // Never treat a non-canvas exhibition as one of ours (route turns null into a 404).
+  if (data.layout && data.layout !== CANVAS_LAYOUT) return null;
+
   let elements = [];
+  let parseError = null;
   try {
     elements = JSON.parse(fs.readFileSync(json, 'utf-8'));
-  } catch {
+  } catch (e) {
     elements = [];
+    // Distinguish "sidecar is corrupt/unreadable" from "genuinely empty exhibition":
+    // without this the next Save silently overwrites recoverable data with [].
+    if (fs.existsSync(json)) parseError = String(e.message);
   }
-  return {
+  const result = {
     meta: {
-      slug,
-      title:       data.posttitle || slug,
+      slug: safeSlug,
+      title:       data.posttitle || safeSlug,
       canvasWidth:  data.canvasWidth  || 1600,
       canvasHeight: data.canvasHeight || 1000,
       background:   data.background  || '#1a1a2e',
     },
     elements,
   };
+  if (parseError) result.parseError = parseError;
+  return result;
 }
 
 function writeExhibition(slug, meta, elements) {
-  const { md, json } = exhibitionPaths(slug);
+  const { slug: safeSlug, md, json } = exhibitionPaths(slug);
   if (!fs.existsSync(EXHIBITIONS_DIR)) fs.mkdirSync(EXHIBITIONS_DIR, { recursive: true });
+
+  // Preserve any frontmatter fields this tool doesn't manage, and refuse outright to
+  // touch a file that isn't a canvas exhibition (defence in depth against a stale
+  // list in the UI or a hand-rolled API call).
+  let existing = {};
+  if (fs.existsSync(md)) {
+    ({ data: existing } = parseFM(fs.readFileSync(md, 'utf-8')));
+    if (existing.layout && existing.layout !== CANVAS_LAYOUT) {
+      throw new Error(`Refusing to overwrite "${safeSlug}.md": layout is "${existing.layout}", not a canvas exhibition`);
+    }
+  }
+
   const data = {
-    title:       'Exhibition',
+    title:     'Exhibition',
+    ...existing,
     posttitle:   meta.title,
-    layout:      'exhibition-canvas.njk',
-    permalink:   `atelier/${slug}/`,
+    layout:      CANVAS_LAYOUT,
+    permalink:   `atelier/${safeSlug}/`,
     canvasWidth:  meta.canvasWidth,
     canvasHeight: meta.canvasHeight,
     background:   meta.background,
@@ -564,14 +600,19 @@ async function handleAPI(method, pathname, params, req, res) {
   if (method === 'POST' && pathname === '/api/exhibition') {
     const { slug, title, canvasWidth, canvasHeight, background } = await parseBody(req);
     if (!slug || !title) return send(res, 400, { error: 'Missing slug or title' });
-    const { md } = exhibitionPaths(slug);
+    const { slug: safeSlug, md } = exhibitionPaths(slug);
+    if (!safeSlug) return send(res, 400, { error: 'Slug is empty after sanitizing' });
     if (fs.existsSync(md)) return send(res, 409, { error: 'Slug already exists' });
-    writeExhibition(slug, {
-      title,
-      canvasWidth:  canvasWidth  || 1600,
-      canvasHeight: canvasHeight || 1000,
-      background:   background   || '#1a1a2e',
-    }, []);
+    try {
+      writeExhibition(slug, {
+        title,
+        canvasWidth:  canvasWidth  || 1600,
+        canvasHeight: canvasHeight || 1000,
+        background:   background   || '#1a1a2e',
+      }, []);
+    } catch (e) {
+      return send(res, 409, { error: String(e.message) });
+    }
     return send(res, 201, readExhibition(slug));
   }
 
@@ -579,9 +620,14 @@ async function handleAPI(method, pathname, params, req, res) {
   if (method === 'PUT' && pathname === '/api/exhibition') {
     const { slug, meta, elements } = await parseBody(req);
     if (!slug || !meta) return send(res, 400, { error: 'Missing slug or meta' });
-    const { md } = exhibitionPaths(slug);
+    const { slug: safeSlug, md } = exhibitionPaths(slug);
+    if (!safeSlug) return send(res, 400, { error: 'Slug is empty after sanitizing' });
     if (!fs.existsSync(md)) return send(res, 404, { error: 'Not found' });
-    writeExhibition(slug, meta, elements || []);
+    try {
+      writeExhibition(slug, meta, elements || []);
+    } catch (e) {
+      return send(res, 409, { error: String(e.message) });
+    }
     return send(res, 200, { ok: true });
   }
 
@@ -636,6 +682,17 @@ http.createServer(async (req, res) => {
     if (fs.existsSync(cssPath) && fs.lstatSync(cssPath).isFile()) {
       res.writeHead(200, { 'Content-Type': 'text/css' });
       return fs.createReadStream(cssPath).pipe(res);
+    }
+  }
+
+  // Serve site fonts (src/fonts → /fonts/) so the shared exhibition stylesheet's
+  // @font-face resolves in Studio exactly as it does on the built public site
+  if (u.pathname.startsWith('/fonts/')) {
+    const fontPath = path.join(ROOT, 'src', u.pathname);
+    if (fs.existsSync(fontPath) && fs.lstatSync(fontPath).isFile()) {
+      const ext = path.extname(fontPath).toLowerCase();
+      res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+      return fs.createReadStream(fontPath).pipe(res);
     }
   }
 
