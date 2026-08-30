@@ -208,6 +208,7 @@ function readExhibition(slug) {
     meta: {
       slug: safeSlug,
       title:       data.posttitle || safeSlug,
+      description: data.description || '',
       canvasWidth:  data.canvasWidth  || 1600,
       canvasHeight: data.canvasHeight || 1000,
       background:   data.background  || '#1a1a2e',
@@ -237,6 +238,7 @@ function writeExhibition(slug, meta, elements) {
     title:     'Exhibition',
     ...existing,
     posttitle:   meta.title,
+    description: meta.description || '',
     layout:      CANVAS_LAYOUT,
     permalink:   `atelier/${safeSlug}/`,
     canvasWidth:  meta.canvasWidth,
@@ -596,9 +598,9 @@ async function handleAPI(method, pathname, params, req, res) {
     return send(res, 200, ex);
   }
 
-  // POST /api/exhibition  { slug, title, canvasWidth, canvasHeight, background }
+  // POST /api/exhibition  { slug, title, description, canvasWidth, canvasHeight, background }
   if (method === 'POST' && pathname === '/api/exhibition') {
-    const { slug, title, canvasWidth, canvasHeight, background } = await parseBody(req);
+    const { slug, title, description, canvasWidth, canvasHeight, background } = await parseBody(req);
     if (!slug || !title) return send(res, 400, { error: 'Missing slug or title' });
     const { slug: safeSlug, md } = exhibitionPaths(slug);
     if (!safeSlug) return send(res, 400, { error: 'Slug is empty after sanitizing' });
@@ -606,6 +608,7 @@ async function handleAPI(method, pathname, params, req, res) {
     try {
       writeExhibition(slug, {
         title,
+        description:  description || '',
         canvasWidth:  canvasWidth  || 1600,
         canvasHeight: canvasHeight || 1000,
         background:   background   || '#1a1a2e',

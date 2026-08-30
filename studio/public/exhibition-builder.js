@@ -56,6 +56,7 @@ async function openExhibitionEditor(slug) {
   document.getElementById('exhibition-editor-view').classList.remove('hidden');
   document.getElementById('exhibition-editor-title').textContent = ex.meta.title;
   document.getElementById('exhibition-bg-color').value = ex.meta.background;
+  document.getElementById('exhibition-description').value = ex.meta.description || '';
 
   await loadExhibitionPalette();
   renderExhibitionCanvas();
@@ -455,6 +456,7 @@ async function saveExhibition() {
     slug: exState.meta.slug,
     meta: {
       title:        exState.meta.title,
+      description:  document.getElementById('exhibition-description').value,
       canvasWidth:  exState.meta.canvasWidth,
       canvasHeight: exState.meta.canvasHeight,
       background:   exState.meta.background,
