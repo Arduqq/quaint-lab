@@ -4,84 +4,23 @@ layout: base.njk
 permalink: "atelier/"
 ---
 <section>
-  <h2>{{ title }}</h2>
-  <p class="tagline">Curated galleries of my artwork — browse exhibitions or click a gallery to see the pieces inside.</p>
-</section>
-
-<section class="exhibitions">
-  <h2>Current Exhibitions</h2>
-    {# Canvas exhibitions built in Studio have no poster field (there is no UI for one),
-       so only emit the <img> when a poster actually exists — otherwise it renders as
-       <img src="/images/"> and silently breaks. Fall back to a plain title link. #}
-    {% for exhibition in collections.exhibitions %}
-      {% if exhibition.data.poster %}
-        <a href="{{ exhibition.url }}"><img src="/images/{{ exhibition.data.poster }}" alt="{{ exhibition.data.posttitle }}"> </a>
-      {% else %}
-        <a class="exhibition-link" href="{{ exhibition.url }}"><span>{{ exhibition.data.posttitle }}</span></a>
-      {% endif %}
-    {% endfor %}
-</section>
-
-<section class="categories-gallery">
-  <h2>Galleries by Category</h2>
-  <div class="category-grid">
-    {# Avoid duplicate category names by tracking previous name (collections.categories may contain duplicates) #}
-    {% set _prev = "" %}
-    {% for category in collections.categoriesData %}
-      {% if category.name != _prev %}
-        {# find a representative artwork thumbnail for this category, if any #}
-        {% set thumb = "" %}
-        {% for p in category.posts %}
-          {% if p.inputPath and '/posts/artwork/' in p.inputPath and p.data.image and thumb == "" %}
-            {% set thumb = '/images/artwork/thumbnails/' + p.data.image %}
-          {% endif %}
-        {% endfor %}
-
-        {# Only render categories that actually contain artwork posts #}
-            {% if thumb %}
-              {# count artwork posts in this category #}
-              {% set artCount = 0 %}
-              {% for p in category.posts %}
-                {% if p.inputPath and '/posts/artwork/' in p.inputPath %}
-                  {% set artCount = artCount + 1 %}
-                {% endif %}
-              {% endfor %}
-              <a class="category-tile" href="/categories/{{ category.name | slug }}/" title="{{ category.name }}: {{ artCount }} artworks">
-                <img src="{{ thumb }}" alt="{{ category.name }} gallery" />
-                <span class="category-name">{{ category.name }}</span>
-                <span class="category-count" role="status" aria-label="{{ artCount }} artworks" title="{{ artCount }} artworks">{{ artCount }}</span>
-              </a>
-            {% endif %}
-
-        {% set _prev = category.name %}
-      {% endif %}
-    {% endfor %}
-  </div>
+  <h2>{{ title }} <a href="/feed-artwork.xml" target="_blank" style="font-size: 0.8rem; vertical-align: middle;">[RSS Feed]</a></h2>
+  <p class="tagline">Curated exhibitions of my artwork — each one a small, hand-arranged show, not just a feed.</p>
 </section>
 
 <section class="feed">
-  <h2>Recent Exhibition Inventory</h2>
-  <div class="illustration-gallery">
-  {% for illustration in collections.artwork %}
-  {% if loop.index0 < 12 %}
-    <a class="illustration" href="{{ illustration.url }}">
-      <img src="/images/artwork/thumbnails/{{ illustration.data.image }}" alt="{{ illustration.data.posttitle }}"> 
+  {% for exhibition in collections.exhibitions %}
+    <a class="post" href="{{ exhibition.url }}">
+      <div class="post-info">
+        <h3 class="post-title">{{ exhibition.data.posttitle }}</h3>
+        {% if exhibition.data.description %}
+          <p class="post-excerpt">{{ exhibition.data.description }}</p>
+        {% endif %}
+      </div>
     </a>
-    {% endif %}  
   {% endfor %}
-  </div>
 </section>
-<style>
-  .exhibitions img {
-    transform-origin: top center;
-    transition: .2s;
-    display: block;
-  }
-  .exhibitions a:hover img{
-    transform: rotate(-5deg);
-  }
-  .exhibitions .exhibition-link {
-    display: inline-block;
-    margin : .25rem .75rem .25rem 0;
-  }
-</style>
+
+<section>
+  <p><a href="/atelier/browse/">Browse everything by category →</a></p>
+</section>
