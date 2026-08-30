@@ -1,0 +1,50 @@
+---
+title: "Browse"
+layout: base.njk
+permalink: "atelier/browse/"
+---
+<section>
+  <h2>{{ title }}</h2>
+  <p class="tagline">Every artwork, organized by category. Looking for something specific? Start here — or head back to the <a href="/atelier/">curated exhibitions</a>.</p>
+</section>
+
+<section class="atelier-all">
+
+  {% set featuredSlugs = ['karat', 'helix-vacui', 'character', 'watercolor', 'photos', 'concepts', 'scene'] %}
+  {% for cat in collections.artworkByCategory %}
+    {% set catSlug = cat.name | slug %}
+    {% if catSlug in featuredSlugs %}
+      <div class="atelier-cat-block">
+        <h3>{{ cat.name }} <a href="/categories/{{ catSlug }}/" class="atelier-cat-count">{{ cat.artworks | length }}</a></h3>
+        <div class="atelier-flex-gallery">
+          {% for artwork in cat.artworks | limit(20) %}
+            <a class="atelier-thumb" href="{{ artwork.url }}" title="{{ artwork.data.posttitle }}">
+              <img src="/images/artwork/thumbnails/{{ artwork.data.image }}" alt="{{ artwork.data.posttitle }}">
+              {% if artwork.url in collections.newestArtworkUrls %}<span class="badge-new">new</span>{% endif %}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="atelier-cat-block">
+    <h3>More</h3>
+    <div class="atelier-more-grid">
+      {% for cat in collections.artworkByCategory %}
+        {% set catSlug = cat.name | slug %}
+        {% if not (catSlug in featuredSlugs) %}
+          <a class="atelier-more-item" href="/categories/{{ catSlug }}/">
+            <div class="atelier-more-thumbs">
+              {% for artwork in cat.artworks | limit(2) %}
+                <img src="/images/artwork/thumbnails/{{ artwork.data.image }}" alt="">
+              {% endfor %}
+            </div>
+            <span class="atelier-more-label">{{ cat.name }} <em>({{ cat.artworks | length }})</em></span>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+</section>
