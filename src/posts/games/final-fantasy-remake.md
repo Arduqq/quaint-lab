@@ -1,0 +1,19 @@
+---
+posttitle: "Final Fantasy VII Remake"
+excerpt: "I had a grand time in the FF7 Remake. Never have I enjoyed my time in the original after the Midgar section, so this seemed like it could be a whole lot of fun. I think this is THE remake, as it is the one that is grappling with the concept in itself, and it does so fairly well, and possibly the most competent so far."
+layout: post.njk
+categories:
+  - games
+date: 2026-03-20
+image: "/images/home/ff7r.png"
+screenshots_folder: "images/posts/games/ff7"
+permalink: "/games/final-fantasy-remake/"
+---
+I had a grand time in the FF7 Remake. Never have I enjoyed my time in the original after the Midgar section, so this seemed like it could be a whole lot of fun. I think this is THE remake, as it is the one that is grappling with the concept in itself, and it does so fairly well, and possibly the most competent so far.
+I had a grand time in the FF7 Remake. Never have I enjoyed my time in the original after the Midgar section, so this seemed like it could be a whole lot of fun. I think this is THE remake, as it is the one that is grappling with the concept in itself, and it does so fairly well, and possibly the most competent so far.
+## AerTi
+I am happy for this game accepting the truly correct canon of Aerith and Tifa being in love and caring about their shared blorbo: Cloud. It was surprising for me to hear about an alleged love triangle, so I will just assume the people are talking about Cloud, Sephiroth, and the concept of trauma itself. This also has nothing to do with people's odd obsession with the most boring ships, I swear. Let the women have meaningful relationships with each other. I can't wait to see them kiss in Rebirth.
+## Barret and Cloud and Professional Duality
+Cloud is a goofball who is going through a major period of transition in his life (he's trans). He is a merc (Alleskönner: German for "all-can-do-er"), and he has a preconceived expectation of how he has to present and perform to be taken seriously. His work, however, he gets from the slums, which makes him rely on a good cred, as well as commitment to the community. Even when the community accepts him, he remains distant; yet, his newfound family (two lesbian women, himbo father, dog) is able to melt the ice. While embracing community is not home, its nourishment can bring you family. While I still need more context on the story and the overall experiences Cloud had in his past, his transition period is one that very likely may speak to trans players, which I think rules. Barret does see right through the false act, yet it inspires and motivates him. Even when Cloud's performance is somewhat inauthentic as apparent to Barret, Barret benefits from it in numerous ways. And when the shell begins to crack, he is the first one to support Cloud, establishing a rather unique bond in which both men play along yet support each other's misgivings.
+## Remake Ghosts
+**This has spoilers.** The game introduces a narrative element that the original did not have (for a good reason). Funny little ghosts are trying their best to keep the original canon intact, mending people's wounds, nudging the characters, and going crazy when things are not going the way they should. Overcoming them means changing destiny capital D, and that is what the squad is doing this time around. By fighting a big *thing*, they ultimately prevent the future the players once knew, allowing for the world to go in a completely new direction. Defying the expectations of the players who expect the remakes to adhere to their ancient story is ultimately bold and makes me really curious if this choice will pay out the way the studio wants to. I'm very curious how Rebirth tackles this new reality they've been paving their way for, and whether all is concluded as elegantly as I perceived this game to be. 

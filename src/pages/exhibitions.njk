@@ -1,0 +1,21 @@
+---
+title: "Exhibitions"
+layout: base.njk
+permalink: "exhibitions/"
+---
+<section>
+  <h2>{{ title }}</h2>
+  <p class="tagline">Long-running investigations. Each experiment is an ongoing inquiry into a world or body of work.</p>
+</section>
+
+<section class="exhibitions">
+  <div class="exhibition-grid">
+    {% for exhibition in collections.exhibitions %}
+      <a href="{{ exhibition.url }}" class="exhibition-card">
+        <img src="/images/{{ exhibition.data.poster }}" alt="{{ exhibition.data.posttitle }}">
+        <h3>{{ exhibition.data.posttitle }}</h3>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+

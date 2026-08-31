@@ -1,0 +1,38 @@
+[
+  {
+    "tag": "neolike",
+    "description": "Features common neopet-isms like a restocking market, pet care, item collection/trading, a battle system, and overall customization of pet pages."
+  },
+  {
+    "tag": "player visuals",
+    "description": "Features a player-submitted artwork system for custom items, apparel, etc."
+  },
+  {
+    "tag": "modern",
+    "description": "Player interface has a state-of-the-art feel to it."
+  },
+  {
+    "tag": "clicking",
+    "description": "Clicking another player's eggs/pets as a central mechanic."
+  },
+  {
+    "tag": "breeding",
+    "description": "Breeding offspring as a central mechanic."
+  },
+  {
+    "tag": "rusty",
+    "description": "Doesn't make up for its age through appropriate technologies or does it rather badly."
+  },
+  {
+    "tag": "ancient",
+    "description": "Kinda damn old."
+  },
+  {
+    "tag": "customization",
+    "description": "Features meaningful customization features such as pet pages, interesting BBCode flavors, or other ways to express yourself."
+  },
+  {
+    "tag": "human avatars",
+    "description": "Features a dress-up mode."
+  }
+]

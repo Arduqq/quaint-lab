@@ -1,6 +1,9 @@
-{% if screenshots %}
+{% if screenshots_folder %}
+  {% set screenshots = screenshots_folder | getImages %}
+{% endif %}
+
+{% if screenshots and screenshots.length > 0 %}
   <section class="screenshot-gallery">
-    <h3>Screenshots</h3>
     <div class="illustration-gallery">
       {% for screenshot in screenshots %}
         <a class="illustration" href="{{ screenshot }}" target="_blank">
@@ -13,7 +16,7 @@
   <style>
     .screenshot-gallery {
       margin-top: 2rem;
-      border-top: 1px dashed var(--border-color);
+      border: 1px dashed var(--border-color);
       padding-top: 1rem;
     }
     .screenshot-gallery h3 {

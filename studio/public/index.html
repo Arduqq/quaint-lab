@@ -58,6 +58,20 @@
       <div class="exhibition-description-row" style="padding:0 .75rem .5rem; background:var(--surface);">
         <textarea id="exhibition-description" placeholder="Description shown on the atelier page…" rows="2" style="width:100%; resize:vertical;"></textarea>
       </div>
+      <div class="exhibition-background-row">
+        <span class="section-label">Background</span>
+        <div id="exhibition-bg-picker" class="exhibition-bg-picker">
+          <div class="exhibition-bg-thumb exhibition-bg-none" id="exhibition-bg-none" title="No image — plain color">None</div>
+        </div>
+        <div id="exhibition-bg-drop" class="exhibition-bg-drop">
+          + Drop image
+          <input type="file" accept="image/*" id="exhibition-bg-file-input">
+        </div>
+        <div id="exhibition-bg-tile-controls" class="exhibition-bg-tile-controls hidden">
+          <label><input type="checkbox" id="exhibition-bg-tile" style="width:auto; vertical-align:middle;"> Tile</label>
+          <label id="exhibition-bg-tile-size-label" class="hidden">size <input type="number" id="exhibition-bg-tile-size" value="200" min="10" style="width:60px;"></label>
+        </div>
+      </div>
       <div class="exhibition-editor-layout">
         <div id="exhibition-palette" class="exhibition-palette"></div>
         <div id="exhibition-canvas-wrap" class="exhibition-canvas-wrap">

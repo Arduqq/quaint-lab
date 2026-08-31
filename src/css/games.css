@@ -1,13 +1,45 @@
-/* Cartridge grid and tooltip styles for /games/ */
-/* shelf-style grid: many narrow spines on a wooden shelf */
+/* Cartridge grid and shelf styles for /games/ */
+
 .games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 4rem 1.5rem; /* Large vertical gap for shelf spacing */
   align-items: end;
   position: relative;
-  padding-bottom: 2.4rem; /* space for shelf bar */
+  padding: 2rem 2rem 6rem;
   justify-items: center;
+  
+  /* Multiple Shelves: repeating background pattern */
+  background-image: 
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 160px,
+      #3d2110 160px, /* Dark top edge shadow */
+      #3d2110 163px,
+      #e0a36a 163px, /* Bright wood highlight */
+      #e0a36a 166px,
+      #c1884f 166px, /* Main wood body */
+      #c1884f 185px,
+      #8b5a2b 185px, /* Bottom depth shadow */
+      #8b5a2b 188px,
+      #3d2110 188px, /* Dark bottom edge */
+      #3d2110 191px,
+      transparent 191px,
+      transparent 224px
+    );
+  background-size: 100% 224px;
+  background-position: 0 2rem; /* Match top padding */
+}
+
+/* Add a bit of "wall" texture to the background */
+.games-landing {
+  background-color: #f4f1ea;
+  background-image: radial-gradient(#dcd8cf 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 2rem;
+  border-radius: 15px;
+  border: 4px solid #4a2d16;
 }
 
 .game-card {
@@ -18,50 +50,38 @@
   background: transparent;
   padding: 0;
   border: none;
-  box-shadow: none;
-  transition: transform .12s ease;
-}
-.game-card:hover,
-.game-card:focus {
-  transform: translateY(-6px) rotate(-1deg);
+  transition: transform .15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 2;
 }
 
-.cartridge {
-  width: 140px; /* uniform container size */
-  height: 160px;
-  display:block;
-  overflow: hidden;
-  background: transparent;
-  border-radius: 0;
-  position: relative;
+/* Hand-placed look: slight random-ish rotations */
+.game-card:nth-child(3n+1) { transform: rotate(-1.5deg); }
+.game-card:nth-child(3n+2) { transform: rotate(1deg); }
+.game-card:nth-child(3n+3) { transform: rotate(-0.5deg); }
+
+.game-card:hover,
+.game-card:focus {
+  transform: translateY(-15px) scale(1.1) rotate(0deg) !important;
+  z-index: 10;
 }
+
+.cartridge {
+  width: 140px;
+  height: 160px;
+  display: block;
+  overflow: visible;
+  background: transparent;
+  position: relative;
+  /* Shadow for the cartridge on the shelf */
+  filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2));
+}
+
 .cartridge img {
   width: 140px;
   height: 160px;
-  object-fit: contain; /* preserve PNG transparency */
+  object-fit: contain;
   display: block;
   image-rendering: auto;
 }
 
-.game-meta { padding-top: .5rem; display:none; }
-.game-meta h3 { margin: 0; font-size: .9rem; }
-.game-meta .short { display:none; }
-
-/* vertical title on the spine for non-image fallback / accessible label */
-
-.games-grid::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 18px;
-  bottom: 0.6rem;
-  background: linear-gradient(180deg,#b87944,#8b4f2a);
-  box-shadow: 0 6px 10px rgba(0,0,0,0.45) inset;
-  border-top: 2px solid rgba(0,0,0,0.25);
-  z-index: 0;
-}
-
-/* ensure cards float above shelf */
-.game-card { z-index: 2; }
+.game-meta { display: none; }

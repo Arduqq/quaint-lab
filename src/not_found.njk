@@ -1,0 +1,21 @@
+---
+title: "404 - Not Found"
+layout: base.njk
+permalink: "not_found.html"
+eleventyExcludeFromCollections: true
+---
+
+<div class="splash-wrapper">
+  <h1 class="splash-header">Oh no, wrong turn!</h1>
+  <p class="splash-text">The page you were looking for doesn't exist. Better call security ...</p>
+  <center>
+    <a href="/">
+      <img width="100" alt="Mayday!" src="/images/pets/default.png" onerror="this.src='/favicon.ico'">
+      <br>Mayday! Back to Base
+    </a>
+  </center>
+</div>
+
+<hr>
+
+{% include "sitemap-content.njk" %}

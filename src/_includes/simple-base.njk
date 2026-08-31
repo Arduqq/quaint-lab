@@ -3,10 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <meta name="description" content="{{ excerpt | default('') }}">
   <meta name="keywords" content="Laboratory, Neocities, Web Revival, Personal Homepage" />
   <meta name="author" content="Lyonid" />
   <title>aql: {{ title }}{% if posttitle %} ~ {{ posttitle }}{% endif %}</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-16x16.png">
+  <link rel="manifest" href="/images/favicons/site.webmanifest">
+  <link rel="alternate" type="application/rss+xml" title="A Quaint Lab RSS Feed" href="/feed-blog.xml">
   <link href="/css/style.css" rel="stylesheet" type="text/css" media="all" />
   <link href="/css/accessibility.css" rel="stylesheet" type="text/css" media="all">
 </head>
@@ -26,6 +32,8 @@
 
     <aside>
       {% include 'appearance-switcher.njk' %}
+
+      {% block sidebar_content %}{% endblock %}
 
       <section>
         <h3>Thoughts? I wanna put them here!</h3>

@@ -29,6 +29,73 @@
   gap: 0.3rem;
 }
 
+.exhibition-background-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.exhibition-bg-picker {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  flex: 1;
+  min-width: 0;
+}
+
+.exhibition-bg-thumb {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.exhibition-bg-thumb.exhibition-bg-selected {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.exhibition-bg-none {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  color: var(--muted);
+  text-align: center;
+  background: var(--surface2);
+}
+
+.exhibition-bg-drop {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  color: var(--muted);
+  border: 1px dashed var(--border2);
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  position: relative;
+}
+.exhibition-bg-drop.drag-over { border-color: var(--accent); color: var(--accent); }
+.exhibition-bg-drop input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.exhibition-bg-tile-controls {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
 .exhibition-editor-layout {
   display: flex;
   flex: 1;

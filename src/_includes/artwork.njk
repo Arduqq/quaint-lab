@@ -2,26 +2,67 @@
 layout: simple-base.njk
 ---
 
+  {# simple-base.njk already provides breadcrumbs and h1 #}
 
-{% block main_content %}
-  <img src="/images/artwork/{{ image }}" alt="{{ posttitle }}"><br>
-  <p><b>[in:]</b>
-    {% for category in categories %}
-      <span class="category">{{ category }}</span>
-    {% endfor %}
-  </p>
-  <p class="atelier-description">{{ description }}</p>
-  <p>{{ date }}</p>
-  <p><b>[info:]</b> {{ comment }}</p>
-
-  {% set previousPost = collections.artwork | getPreviousCollectionItem %}
-  {% set nextPost = collections.artwork | getNextCollectionItem %}
-  {% if previousPost %}
-    <a href="{{ previousPost.url }}"><-- previous</a>
+  {# Check if this post is a pet #}
+  {% set isPet = false %}
+  {% if tags and 'pets' in tags %}
+    {% set isPet = true %}
   {% endif %}
-  {% if nextPost %}
-    ~ <a href="{{ nextPost.url }}">next --&gt;</a>
-  {% endif %}
-  <br><br>
 
-{% endblock %}
+  <div class="artwork-display">
+    <div class="artwork-frame">
+      <a href="/images/artwork/{{ image }}" target="_blank">
+        <img src="/images/artwork/{{ image }}" alt="{{ posttitle }}" 
+             class="{% if isPet %}alive {{ personality or 'calm' }} {{ spirit or '' }}{% endif %}">
+      </a>
+    </div>
+    
+    <div class="artwork-info-block">
+      <p><b>[in:]</b>
+        {% set _cats = [categories] if categories is string else (categories if categories else []) %}
+        {% for cat in _cats %}
+          <a href="/categories/{{ cat | slug }}/">{{ cat }}</a>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+      
+      {% if isPet %}
+        {% if personality %}<p><b>[personality:]</b> {{ personality }}</p>{% endif %}
+        {% if spirit %}<p><b>[spirit:]</b> {{ spirit }}</p>{% endif %}
+        {% if home %}<p><b>[home:]</b> {{ home }}</p>{% endif %}
+      {% endif %}
+
+      <p><b>[date:]</b> {{ page.date | readableDate }}</p>
+      <p><b>[info:]</b> {{ comment or description }}</p>
+    </div>
+<form action="https://api.oh.dddddddddzzzz.org/unartur{{ page.url }}?redirect" method="POST" enctype="text/plain" class="reaction-form">
+  <button class="like-snail" name="🐌">🐌</button>
+</form>
+    <div class="artwork-pager">
+      {% set previousPost = collections.artwork | getPreviousCollectionItem %}
+      {% set nextPost = collections.artwork | getNextCollectionItem %}
+      
+      {% if previousPost %}
+        <a href="{{ previousPost.url }}"><-- previous</a>
+      {% endif %}
+      
+      {% if previousPost and nextPost %} | {% endif %}
+      
+      {% if nextPost %}
+        <a href="{{ nextPost.url }}">next --></a>
+      {% endif %}
+      
+      <div style="margin-top: 1rem;">
+        {% if tags is not string %}
+          {% for tag in tags %}
+            {% if 'exhibition-' in tag %}
+              {% set exhibitionSlug = tag | replace('exhibition-', '') %}
+              <a href="/atelier/{{ exhibitionSlug }}/">[ {{ exhibitionSlug }} exhibition ]</a> ·
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        <a href="/atelier/">[ back to atelier ]</a>
+      </div>
+    </div>
+  </div>
+  

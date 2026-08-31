@@ -2,6 +2,16 @@
     <legend><h3>Themes</h3></legend>
     
     <div class="theme-list">
+      <label class="theme-option" data-theme-option="contrast">
+        <input type="radio" name="theme" value="contrast">
+        <span class="theme-name">Contrast</span>
+      </label>
+
+      <label class="theme-option" data-theme-option="woodland5">
+        <input type="radio" name="theme" value="woodland5">
+        <span class="theme-name">Woodland</span>
+      </label>
+
       <label class="theme-option" data-theme-option="chaos">
         <input type="radio" name="theme" value="chaos">
         <span class="theme-name">Chaos</span>
@@ -38,31 +48,40 @@
       </label>
     </div>
 
+    <small class="section-label">Raumfahrt Destination</small>
     <div class="destination-list">
+      <label class="destination-option" data-destination="none" data-tooltip="None">
+        <input type="radio" name="destination" value="none">
+        <div class="none-icon" style="display: flex; align-items: center; justify-content: center; border-radius: 50%; background-color: var(--background-color); width: 100%; height: 100%">∅</div>
+      </label>
+
       <label class="destination-option" data-destination="sofia" data-tooltip="Sofia">
         <input type="radio" name="destination" value="sofia">
-        <img src="/images/sofia.gif" alt="Sofia">
+        <img src="/images/destinations/sofia.gif" alt="Sofia">
       </label>
 
       <label class="destination-option" data-destination="fjoron" data-tooltip="Fjoron">
         <input type="radio" name="destination" value="fjoron">
-        <img src="/images/fjoron.gif" alt="Fjoron">
+        <img src="/images/destinations/fjoron.gif" alt="Fjoron">
       </label>
 
       <label class="destination-option" data-destination="larva" data-tooltip="Larva">
         <input type="radio" name="destination" value="larva">
-        <img src="/images/larva.gif" alt="Larva">
+        <img src="/images/destinations/larva.gif" alt="Larva">
       </label>
 
       <label class="destination-option" data-destination="even-thicket" data-tooltip="Even Thicket">
         <input type="radio" name="destination" value="even-thicket">
-        <img src="/images/even-thicket.gif" alt="Even Thicket">
+        <img src="/images/destinations/even-thicket.gif" alt="Even Thicket">
       </label>
 
       <label class="destination-option" data-destination="first-mine" data-tooltip="First Mine">
         <input type="radio" name="destination" value="first-mine">
-        <img src="/images/first-mine.gif" alt="First Mine">
+        <img src="/images/destinations/first-mine.gif" alt="First Mine">
       </label>
+    </div>
+    <div class="zone-readout" id="zone-readout" aria-live="polite">
+      [currently on:: <span id="zone-name">—</span>]
     </div>
   </fieldset>
 
@@ -75,7 +94,7 @@
       // --- Theme Logic ---
       const themeRadios = appearanceContainer.querySelectorAll('input[name="theme"]');
       const themeLabels = appearanceContainer.querySelectorAll('.theme-option');
-      const savedTheme = localStorage.getItem('theme') || root.getAttribute('data-theme') || 'chaos';
+      const savedTheme = localStorage.getItem('theme') || root.getAttribute('data-theme') || 'contrast';
 
       function setTheme(theme) {
         root.setAttribute('data-theme', theme);
@@ -91,33 +110,43 @@
       themeRadios.forEach(radio => {
         radio.addEventListener('change', (e) => setTheme(e.target.value));
       });
-      themeLabels.forEach(label => {
-        label.addEventListener('click', (e) => {
-          const input = label.querySelector('input[name="theme"]');
-          if (input) {
-            input.checked = true;
-            setTheme(input.value);
-          }
-        });
-      });
 
       // --- Destination Logic ---
       const destMapping = {
+        'none': null,
         'sofia': 'sofia.webp',
         'fjoron': 'fjoron.webp',
         'larva': 'larva.webp',
         'even-thicket': 'even-thicket.webp',
         'first-mine': 'first-mine.webp'
-      };      const destOptions = appearanceContainer.querySelectorAll('.destination-option');
+      };
+      const zoneNames = {
+        'none': '—',
+        'sofia': 'Sofia',
+        'fjoron': 'Fjoron',
+        'larva': 'Larva',
+        'even-thicket': 'Even Thicket',
+        'first-mine': 'First Mine'
+      };
+      const destOptions = appearanceContainer.querySelectorAll('.destination-option');
+      const zoneNameEl = document.getElementById('zone-name');
 
       function setDestination(name, skipBackground = false) {
-        if (!name || !destMapping[name]) name = 'sofia';
-        
+        if (!name || !(name in destMapping)) name = 'none';
+
         if (!skipBackground) {
-          const url = '/images/destinations/' + destMapping[name];
-          root.style.setProperty('--destination-image', `url('${url}')`);
+          const mapping = destMapping[name];
+          if (mapping) {
+            const url = '/images/destinations/' + mapping;
+            root.style.setProperty('--destination-image', `url('${url}')`);
+            root.classList.remove('no-destination');
+          } else {
+            root.style.setProperty('--destination-image', 'none');
+            root.classList.add('no-destination');
+          }
+          if (zoneNameEl) zoneNameEl.textContent = zoneNames[name] ?? '—';
         }
-        
+
         localStorage.setItem('destination', name);
 
         destOptions.forEach(o => {
@@ -128,7 +157,7 @@
         });
       }
 
-      const savedDest = localStorage.getItem('destination') || 'sofia';
+      const savedDest = localStorage.getItem('destination') || 'none';
       setDestination(savedDest);
 
       destOptions.forEach(opt => {
@@ -139,7 +168,7 @@
           // Immediate UI feedback (selection highlight)
           setDestination(name, true);
 
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || name === 'none') {
             setDestination(name);
             return;
           }

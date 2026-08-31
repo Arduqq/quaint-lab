@@ -12,8 +12,8 @@ permalink: "home/"
     </section>
     <section>
 
-    <p>
     <h2>Weeeel-coome!</h2>
+    <p>
       <b>-PAST-</b><br>
       When I first went online, it was all about games. I was looking up cheats on <i>mogelpower.de</i> for Animal Crossing: Wild World, reading wild rumors about various mysteries that were all made up. I barely hold any nostalgia for Geocities, IRC and whatnot. What I did was play disturbing flash games on <i>erdbeertorte.de</i>. I loved browsing DeviantArt even though I didn't know what the hell the english meant. I played games on neopets.com even though I didn't know what the hell the english meant. I played Toontown even though I didn't know what the hell the english meant. In general, there was a huge language barrier to me which I curiously did not mind. I kept telling my friends at school to go on nick.com and not nick.de because that's where all the cool SpongeBob games were hidden away from us. Eventually I became a mod on one of the bigger German Animal Crossing communities which I to this day treasure. And while most of my time online was spent on fun games, German social media platforms turned out to be quite magical before Facebook gobbled them all up.
     </p>
@@ -31,48 +31,72 @@ permalink: "home/"
 </section>
 
 <section class="latest-feed">
-  <h2>The Latest</h2>
+  <h2 class="latest-heading">Latest stuff</h2>
+
   <div class="latest-grid">
-    {% set latest_writing = collections.post | last %}
-    {% if latest_writing %}
-    <a class="latest-item" href="{{ latest_writing.url }}">
-      <div class="latest-label">Writing</div>
-      <div class="latest-image-wrapper">
-        <img src="{{ latest_writing.data.image or '/images/ui/quaint-lab.png' }}" alt="{{ latest_writing.data.posttitle }}">
+    {# Artwork column #}
+    {% if collections.artwork | length %}
+    <div class="latest-col">
+      <p class="latest-label">Artwork</p>
+      <div class="recent-small-grid">
+        {% for art in collections.artwork | limit(6) %}
+          <a href="{{ art.url }}" class="recent-small-item" title="{{ art.data.posttitle }}">
+            <img src="/images/artwork/thumbnails/{{ art.data.image }}" alt="{{ art.data.posttitle }}">
+          </a>
+        {% endfor %}
       </div>
-      <div class="latest-info">
-        <h3>{{ latest_writing.data.posttitle }}</h3>
-        <p>{{ latest_writing.data.excerpt }}</p>
-      </div>
-    </a>
+      <a href="/atelier/" class="view-all">More artwork &rarr;</a>
+    </div>
     {% endif %}
 
+    {# Writing column #}
+    {% set writing_list = collections.post | reverse %}
+    {% set latest_writing = writing_list | first %}
+    {% if latest_writing %}
+    <div class="latest-col">
+      <p class="latest-label">Writing</p>
+      <a class="latest-item" href="{{ latest_writing.url }}">
+        <div class="latest-info">
+          <time>{{ latest_writing.date | readableDate }}</time>
+          <h3>{{ latest_writing.data.posttitle }}</h3>
+          {% if latest_writing.data.excerpt %}<p>{{ latest_writing.data.excerpt }}</p>{% endif %}
+        </div>
+      </a>
+      <div class="recent-list-small">
+        {% for post in writing_list | slice(1, 4) %}
+          <a href="{{ post.url }}" class="recent-list-item">
+            <span>{{ post.data.posttitle }}</span>
+            <time>{{ post.date | readableDate }}</time>
+          </a>
+        {% endfor %}
+      </div>
+      <a href="/archive/" class="view-all">Full archive &rarr;</a>
+    </div>
+    {% endif %}
+
+    {# Games column #}
     {% set latest_game = collections.games | first %}
     {% if latest_game %}
-    <a class="latest-item" href="{{ latest_game.url }}">
-      <div class="latest-label">Game</div>
-      <div class="latest-image-wrapper">
-        <img src="{{ latest_game.data.image }}" alt="{{ latest_game.data.posttitle }}">
+    <div class="latest-col">
+      <p class="latest-label">Games</p>
+      <a class="latest-item game-item" href="{{ latest_game.url }}">
+        <div class="game-thumb">
+          <img src="{{ latest_game.data.image }}" alt="{{ latest_game.data.posttitle }}">
+        </div>
+        <div class="latest-info">
+          <h3>{{ latest_game.data.posttitle }}</h3>
+          {% if latest_game.data.excerpt %}<p>{{ latest_game.data.excerpt }}</p>{% endif %}
+        </div>
+      </a>
+      <div class="recent-small-grid">
+        {% for game in collections.games | slice(1, 4) %}
+          <a href="{{ game.url }}" class="recent-small-item" title="{{ game.data.posttitle }}">
+            <img src="{{ game.data.image }}" alt="{{ game.data.posttitle }}">
+          </a>
+        {% endfor %}
       </div>
-      <div class="latest-info">
-        <h3>{{ latest_game.data.posttitle }}</h3>
-        <p>{{ latest_game.data.excerpt }}</p>
-      </div>
-    </a>
-    {% endif %}
-
-    {% set latest_artwork = collections.artwork | first %}
-    {% if latest_artwork %}
-    <a class="latest-item" href="{{ latest_artwork.url }}">
-      <div class="latest-label">Artwork</div>
-      <div class="latest-image-wrapper">
-        <img src="/images/artwork/{{ latest_artwork.data.image }}" alt="{{ latest_artwork.data.posttitle }}">
-      </div>
-      <div class="latest-info">
-        <h3>{{ latest_artwork.data.posttitle }}</h3>
-        <p>{{ latest_artwork.data.comment or latest_artwork.data.description }}</p>
-      </div>
-    </a>
+      <a href="/games/" class="view-all">Game library &rarr;</a>
+    </div>
     {% endif %}
   </div>
 </section>
@@ -112,7 +136,6 @@ permalink: "home/"
       ><img alt="Fanlisting for Fire Emblem" src="/images/pages/about/fanlistings/fe.png"
     /></a>
   </div>
-</section>
 
 <span>
 <b>Colophon:</b> I built this website with

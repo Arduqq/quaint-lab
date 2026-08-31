@@ -1,0 +1,24 @@
+---
+permalink: "feed-all.xml"
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/xml-style.xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Quaint Lab - All Updates</title>
+    <description>The complete stream of artwork, blog posts, and game reviews from the Laboratory.</description>
+    <link>https://unartur.neocities.org/</link>
+    <atom:link href="https://unartur.neocities.org/feed-all.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>{{ collections.allFeeds | first | dateToRfc822 if collections.allFeeds | length > 0 else "" }}</lastBuildDate>
+    {% for post in collections.allFeeds %}
+    <item>
+      <title>{{ post.data.posttitle or post.data.title }}</title>
+      <link>https://unartur.neocities.org{{ post.url }}</link>
+      <description>{{ post.data.comment or post.data.excerpt }}</description>
+      <pubDate>{{ post.date | dateToRfc822 }}</pubDate>
+      <guid>https://unartur.neocities.org{{ post.url }}</guid>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

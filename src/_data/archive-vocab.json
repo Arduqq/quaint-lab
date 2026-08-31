@@ -1,0 +1,37 @@
+{
+  "sidebar": {
+    "mainlineGroup": "Skylanders Series",
+    "spinoffGroup": "Spin-offs & Apps"
+  },
+  "dashboards": {
+    "spyros-adventure": "First promotional material, cool renders, some weird website assets they used, which they kinda forgot about.",
+    "giants": "Mostly just character files, but also some cool island ones as well! They were still doing cute hover effects for the skylanders on the website.",
+    "swap-force": "More character art, some weird banners, elemental backgrounds that were used in Trap Team as well.",
+    "trap-team": "Cool trap images and also some polaroids of some villains. The villain backdrops are also kinda cool.",
+    "superchargers": "Some banger assets of the vehicles and some beautiful artwork for some assets.",
+    "imaginators": "Mostly just icons, so I'll have to keep looking for more artwork of the actual characters",
+    "lost-islands": "The game got a revival because of JesseTheLamest. I ripped all the graphics AND the models which is AWESOME. You can check them out in a model view as well.",
+    "ring-of-heroes": "Aside from all the shitty gacha icons, there's some beautiful artwork for the different towns, and cool character equipment!",
+    "battlecast": "CARD ILLUSTRATIONS AHHHHHH THEY LOOK SO COOOOOL",
+    "misc": "Anything else will probably delete"
+  },
+  "lostIslandsHero": {
+    "icon": "📐",
+    "title": "3D Model Archive",
+    "description": "616 extracted models with textures. You can browse the meshes, and texture sheets ripped from the game. They should have their boning as well alongside weight paint, but it seems a bit wonky. I couldn't make sense of how to rip the animations as well, but I am on it!"
+  },
+  "modelViewer": {
+    "selectPrompt": "model",
+    "textureHint": "texture (“Textured (UV)” for preview)",
+    "skeletonHint": "static t-pose with some boning.",
+    "searchModelsLabel": "filter models…",
+    "searchTexturesLabel": "filter textures…",
+    "backButton": "lost islands dashboard",
+    "downloadHint": "bundles the mesh (.obj + .mtl), texture, and skeleton/skin data (if any) into a zip."
+  },
+  "empty": {
+    "noImages": "No images here.",
+    "noSearchResultsPrefix": "No images match “",
+    "noSearchResultsSuffix": "”."
+  }
+}

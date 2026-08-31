@@ -1,74 +1,53 @@
 (function() {
+  const MARGIN = 40;
+
   const tooltip = document.createElement('div');
   tooltip.id = 'custom-tooltip';
-  tooltip.style.position = 'fixed';
-  tooltip.style.display = 'none';
-  tooltip.style.pointerEvents = 'none';
-  tooltip.style.zIndex = '10000';
-  tooltip.style.padding = '5px 10px';
-  tooltip.style.background = 'rgba(0, 0, 0, 0.85)';
-  tooltip.style.color = '#fff';
-  tooltip.style.borderRadius = '4px';
-  tooltip.style.fontSize = '12px';
-  tooltip.style.border = '1px solid rgba(255, 255, 255, 0.2)';
-  tooltip.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.5)';
-  tooltip.style.fontFamily = 'var(--main-font), sans-serif';
-  tooltip.style.maxWidth = '300px';
+  tooltip.classList.add('floating-tooltip');
+  tooltip.style.cssText = 'display:none;position:fixed;pointer-events:none;z-index:10000;';
   document.body.appendChild(tooltip);
 
+  let currentTarget = null;
+  let mouseX = 0, mouseY = 0;
+
+  function place() {
+    if (tooltip.style.display !== 'block') return;
+    const w = tooltip.offsetWidth;
+    const h = tooltip.offsetHeight;
+    let x = mouseX + 15;
+    let y = mouseY + 15;
+    if (x + w > window.innerWidth)  x = mouseX - w - 15;
+    if (y + h > window.innerHeight) y = mouseY - h - 15;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top  = y + 'px';
+  }
+
   document.addEventListener('mouseover', function(e) {
-    const target = e.target.closest('[data-tooltip], [data-tooltip-image]');
-    if (target) {
-      tooltip.innerHTML = '';
-      
-      const imgUrl = target.getAttribute('data-tooltip-image');
-      if (imgUrl) {
-        const img = document.createElement('img');
-        img.src = imgUrl;
-        img.style.maxWidth = '100%';
-        img.style.display = 'block';
-        img.style.borderRadius = '2px';
-        tooltip.appendChild(img);
-        
-        // If there is also text, add it below
-        const text = target.getAttribute('data-tooltip');
-        if (text) {
-          const caption = document.createElement('div');
-          caption.textContent = text;
-          caption.style.marginTop = '5px';
-          caption.style.textAlign = 'center';
-          caption.style.fontWeight = 'bold';
-          tooltip.appendChild(caption);
-        }
-      } else {
-        tooltip.textContent = target.getAttribute('data-tooltip');
-      }
-      
+    const target = e.target.closest('[data-tooltip]');
+    if (!target || target === currentTarget) return;
+
+    currentTarget = target;
+    tooltip.innerHTML = '';
+    tooltip.style.display = 'none';
+
+    const text = target.getAttribute('data-tooltip');
+    if (text) {
+      tooltip.textContent = text;
       tooltip.style.display = 'block';
+      place();
     }
   });
 
   document.addEventListener('mousemove', function(e) {
-    if (tooltip.style.display === 'block') {
-      let x = e.clientX + 15;
-      let y = e.clientY + 15;
-
-      const rect = tooltip.getBoundingClientRect();
-      if (x + rect.width > window.innerWidth) {
-        x = e.clientX - rect.width - 15;
-      }
-      if (y + rect.height > window.innerHeight) {
-        y = e.clientY - rect.height - 15;
-      }
-
-      tooltip.style.left = x + 'px';
-      tooltip.style.top = y + 'px';
-    }
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    place();
   });
 
   document.addEventListener('mouseout', function(e) {
-    const target = e.target.closest('[data-tooltip], [data-tooltip-image]');
-    if (target) {
+    const target = e.target.closest('[data-tooltip]');
+    if (target && !target.contains(e.relatedTarget)) {
+      currentTarget = null;
       tooltip.style.display = 'none';
     }
   });

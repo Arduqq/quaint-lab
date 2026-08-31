@@ -1,5 +1,5 @@
 body {
-    background: url(../images/base.gif) no-repeat;
+    background: url(../images/ui/base.gif) no-repeat;
     background-size: cover;
     image-rendering: pixelated;
     font-family: Consolas, monaco, monospace;

@@ -1,25 +1,195 @@
 <aside>
-  <h1 class="mutant">A Quaint Lab</h1>
-  <div class="site-logo" role="img"><a href="https://www.imood.com/users/Lyonid"><img src="https://moods.imood.com/display/uname-Lyonid/imood.gif" alt="The current mood of Lyonid at www.imood.com" border="0"></a></div>
+  <h1>A Quaint Lab</h1>
+  <div class="site-logo" role="img">
+    <div id="pet-chamber" class="pet-chamber">
+      <div id="event-log" class="event-log">Observing...</div>
+      <div id="pet-display" class="pet-display"></div>
+      <div class="imood-link">
+        <a href="https://www.imood.com/users/Lyonid" target="_blank">
+          <img src="https://moods.imood.com/display/uname-Lyonid/imood.gif" alt="The current mood of Lyonid at www.imood.com">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const petList = {{ pet_list | dump | safe }};
+    const petEvents = {{ pet_events | dump | safe }};
+
+    function initPetChamber() {
+      const display = document.getElementById('pet-display');
+      const log = document.getElementById('event-log');
+      
+      const rand = Math.random();
+      
+      if (rand < 0.2) { // 20% chance for empty
+        const eventTemplate = petEvents.empty[Math.floor(Math.random() * petEvents.empty.length)];
+        log.textContent = eventTemplate;
+        display.innerHTML = '';
+      } else if (rand < 0.6 && petList.length >= 2) { // 40% chance for duo
+        const petAIndex = Math.floor(Math.random() * petList.length);
+        let petBIndex = Math.floor(Math.random() * petList.length);
+        while (petBIndex === petAIndex) {
+          petBIndex = Math.floor(Math.random() * petList.length);
+        }
+        
+        const petA = petList[petAIndex];
+        const petB = petList[petBIndex];
+        
+        const eventTemplate = petEvents.duo[Math.floor(Math.random() * petEvents.duo.length)];
+        log.textContent = eventTemplate.replace('{petA}', petA.name).replace('{petB}', petB.name);
+        
+        display.innerHTML = `
+          <img src="/images/artwork/${petA.image}" class="alive calm" style="width: 60px;">
+          <img src="/images/artwork/${petB.image}" class="alive nervous" style="width: 60px;">
+        `;
+      } else { // 40% chance for solo
+        const pet = petList[Math.floor(Math.random() * petList.length)];
+        const eventTemplate = petEvents.solo[Math.floor(Math.random() * petEvents.solo.length)];
+        log.textContent = eventTemplate.replace('{pet}', pet.name);
+        
+        display.innerHTML = `<img src="/images/artwork/${pet.image}" class="alive eerie" style="width: 80px;">`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initPetChamber);
+  </script>
   
   {% include 'appearance-switcher.njk' %}
 
+  <div class="status">
+    <h3 title="Status"><span class="artur"></span>Status</h3>
+    <div id="statuscafe">
+      <div id="statuscafe-username"></div>
+      <div id="statuscafe-content"></div>
+    </div>
+    <script
+      src="https://status.cafe/current-status.js?name=lyonid"
+      defer
+    ></script>
+  </div>
   <section id="about">
-<img class="alive nervous" style="float:left" src="/images/snail.png"><p>This is a laboratory. Please behave, and solely touch what is to be touched.</p></section>
-  <h2>Navigation</h2>
+<img class="alive nervous" style="float:left" src="/images/ui/snail.png"><p>This is a laboratory. Please behave, and solely touch what is to be touched.</p></section>
+  <h2>Navigation <a href="/sitemap/" style="font-size: 0.8rem; vertical-align: middle; margin-left: 0.5rem; opacity: 0.7;">[Sitemap]</a></h2>
   {% include 'navigation.njk' %}
   {# Categories moved to reads.njk and atelier.njk per layout decision #}
 
-  <h2 title="Sound"s>Sound</h2>
-  <audio controls loop>
-    <source src="/sounds/home.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <h2><span class="knoll"></span>Ambient Signals</h2>
+  <div id="music-player" class="music-player">
+    <div id="yt-player-container" style="display:none;">
+      <div id="yt-player"></div>
+    </div>
+    <img src="/images/artwork/mozart.png">
+    <div class="player-controls">
+      <div class="song-info">
+        <span id="current-song-title">Loading...</span>
+      </div>
+      <div class="button-group">
+        <button id="prev-btn" title="Previous">«</button>
+        <button id="play-pause-btn" title="Play/Pause">►</button>
+        <button id="next-btn" title="Next">»</button>
+      </div>
+      <div class="link-group">
+        <a id="yt-link" href="#" target="_blank" title="View on YouTube">View Source</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const playlist = {{ playlist | dump | safe }};
+    let currentTrackIndex = 0;
+    let player;
+    let isPlaying = false;
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('yt-player', {
+        height: '0',
+        width: '0',
+        videoId: playlist[currentTrackIndex].youtubeId,
+        playerVars: {
+          'autoplay': 0,
+          'controls': 0,
+          'disablekb': 1,
+          'fs': 0,
+          'modestbranding': 1,
+          'rel': 0,
+          'showinfo': 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange,
+          'onError': onPlayerError
+        }
+      });
+    }
+
+    function onPlayerError(event) {
+      console.error('YouTube Player Error:', event.data);
+      let errorMsg = 'Error loading track.';
+      if (event.data === 101 || event.data === 150) {
+        errorMsg = 'Track restricted/not embeddable.';
+      }
+      document.getElementById('current-song-title').textContent = errorMsg;
+    }
+
+    function onPlayerReady(event) {
+      updateUI();
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        nextTrack();
+      }
+      if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        document.getElementById('play-pause-btn').textContent = '‖';
+      } else {
+        isPlaying = false;
+        document.getElementById('play-pause-btn').textContent = '►';
+      }
+    }
+
+    function updateUI() {
+      const track = playlist[currentTrackIndex];
+      document.getElementById('current-song-title').textContent = track.title;
+      document.getElementById('yt-link').href = `https://www.youtube.com/watch?v=${track.youtubeId}`;
+    }
+
+    function playPause() {
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    }
+
+    function nextTrack() {
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+      player.loadVideoById(playlist[currentTrackIndex].youtubeId);
+      updateUI();
+    }
+
+    function prevTrack() {
+      currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+      player.loadVideoById(playlist[currentTrackIndex].youtubeId);
+      updateUI();
+    }
+
+    document.getElementById('play-pause-btn').addEventListener('click', playPause);
+    document.getElementById('next-btn').addEventListener('click', nextTrack);
+    document.getElementById('prev-btn').addEventListener('click', prevTrack);
+
+    // Load YouTube API
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  </script>
 
   <h2 title="Webrings">Webrings</h2>
 
 </iframe><object title="Melonland Surf Club Webring Integration" id="melonland-surf-club" data="https://melonland.net/surf-badge.svg?fill=#129e8d" type="image/svg+xml" style="width: 100px; height: 100px;"></object>
-  <h2 title="Some Artwork">Some Artwork</h2>
+  <h2 title="From the Studies">From the Studies</h2>
   {% set randomArt = collections.artwork | random %}
   {% set recentArt = collections.artwork | first %}
   <section class="art-preview">
@@ -31,7 +201,7 @@
       <img src="/images/artwork/thumbnails/{{ randomArt.data.image }}"> 
       <b>{{ randomArt.data.posttitle }}</b>
     </a>
-    <a class="art-preview-more" href="/atelier">See more ></a>
+    <a class="art-preview-more" href="/atelier/">See more ></a>
 
   </section>
     <h2>Contact</h2>

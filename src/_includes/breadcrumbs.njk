@@ -25,6 +25,9 @@
   {% if _hasArtwork %}
     {% set _backUrl = '/atelier/' %}
     {% set _backLabel = 'Atelier' %}
+  {% elseif page is defined and page.inputPath and '/posts/games/' in page.inputPath %}
+    {% set _backUrl = '/games/' %}
+    {% set _backLabel = 'Games' %}
   {% else %}
     {% set _backUrl = '/archive/' %}
     {% set _backLabel = 'Archive' %}
@@ -37,8 +40,8 @@
 {% if currentLabel is not defined %}
   {% if category is defined and category.name %}
     {% set _current = category.name %}
-  {% elseif page is defined and (page.data.posttitle or page.data.title) %}
-    {% set _current = page.data.posttitle or page.data.title %}
+  {% elseif posttitle or title %}
+    {% set _current = posttitle or title %}
   {% else %}
     {% set _current = '' %}
   {% endif %}
@@ -46,13 +49,23 @@
   {% set _current = currentLabel %}
 {% endif %}
 
-{# Only render when we have a back link available #}
-{% if _backUrl %}
-  <div class="breadcrumbs" aria-label="Breadcrumbs">
-    <a href="{{ _backUrl }}" class="breadcrumbs-back">{{ _backLabel }}</a>
-    {% if _current %}
-      <span class="breadcrumbs-sep">›</span>
-      <span class="breadcrumbs-current">{{ _current }}</span>
-    {% endif %}
-  </div>
-{% endif %}
+<div class="breadcrumbs" aria-label="Breadcrumbs">
+  <a href="/home/">Home</a>
+  
+  {% if _backUrl %}
+    <span class="breadcrumbs-sep">›</span>
+    <a href="{{ _backUrl }}">{{ _backLabel }}</a>
+  {% endif %}
+
+  {# Show first category for writing/artwork posts; skip for game posts (category is always "games", already covered by the back-link) #}
+  {% set _breadcrumbCats = [categories] if categories is string else (categories if categories else []) %}
+  {% if _breadcrumbCats[0] and category is not defined and (not page.inputPath or '/posts/games/' not in page.inputPath) %}
+    <span class="breadcrumbs-sep">›</span>
+    <a href="/categories/{{ _breadcrumbCats[0] | slug }}/">{{ _breadcrumbCats[0] }}</a>
+  {% endif %}
+
+  {% if _current %}
+    <span class="breadcrumbs-sep">›</span>
+    <span class="breadcrumbs-current">{{ _current }}</span>
+  {% endif %}
+</div>

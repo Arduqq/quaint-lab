@@ -1,0 +1,110 @@
+---
+title: 'Media Recommendations'
+layout: base.njk
+permalink: "recommendations/"
+---
+<style>
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .rec-card {
+    background: var(--section-background-color);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+  }
+
+  .rec-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .rec-type {
+    display: inline-block;
+    font-family: var(--custom-font);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    background: var(--text-color);
+    color: var(--section-background-color);
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+    align-self: flex-start;
+  }
+
+  .rec-card h3 {
+    margin: 0 0 0.5rem 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+  }
+
+  .rec-description {
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+
+  .rec-notes {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+  }
+
+  .rec-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 1rem;
+  }
+
+  .rec-link {
+    text-decoration: none;
+    font-weight: 800;
+    color: var(--link-color);
+  }
+
+  .rec-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<section>
+  <h2>{{ title }}</h2>
+  <p>Here's a bunch of media I adore.</p>
+</section>
+
+<div class="rec-grid">
+  {% for item in recommendations %}
+    <div class="rec-card">
+      <span class="rec-type">{{ item.type }}</span>
+      <h3>{{ item.title }}</h3>
+      
+      <div class="rec-description">
+        {{ item.description }}
+      </div>
+
+      <div class="rec-notes">
+        {{ item.notes }}
+      </div>
+
+      <div class="rec-footer">
+        {% if item.url %}
+          <a href="{{ item.url }}" target="_blank" class="rec-link">Visit &rarr;</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

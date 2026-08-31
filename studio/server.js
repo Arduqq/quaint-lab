@@ -212,6 +212,9 @@ function readExhibition(slug) {
       canvasWidth:  data.canvasWidth  || 1600,
       canvasHeight: data.canvasHeight || 1000,
       background:   data.background  || '#1a1a2e',
+      backgroundImage:    data.backgroundImage || '',
+      backgroundTile:     Boolean(data.backgroundTile),
+      backgroundTileSize: data.backgroundTileSize || 200,
     },
     elements,
   };
@@ -244,6 +247,9 @@ function writeExhibition(slug, meta, elements) {
     canvasWidth:  meta.canvasWidth,
     canvasHeight: meta.canvasHeight,
     background:   meta.background,
+    backgroundImage:    meta.backgroundImage || '',
+    backgroundTile:     Boolean(meta.backgroundTile),
+    backgroundTileSize: meta.backgroundTileSize || 200,
   };
   fs.writeFileSync(md, `${dumpFM(data)}\n`);
   fs.writeFileSync(json, JSON.stringify(elements, null, 2));

@@ -1,0 +1,38 @@
+{
+  "solo": [
+    "{pet} is just sitting there.",
+    "{pet} is patrolling around the lab.",
+    "{pet} is boasting about their adventures.",
+    "{pet} will never learn.",
+    "{pet} is walking around without shoes on!!",
+    "{pet} is tending to their Petpet.",
+    "{pet} is giggling! What's so funny?!",
+    "{pet} is humming to the ambient signals.",
+    "{pet} has been reading some Thomas Mann and fell asleep.",
+    "{pet} is preparing for a fight."
+  ],
+  "duo": [
+    "{petA} and {petB} are discussing an EVIL theory.",
+    "{petA} is showing {petB} a sick handshake.",
+    "{petA} and {petB} have been contemplating hyperrality.",
+    "{petA} is following {petB} around in circles.",
+    "{petA} and {petB} are sharing a small snack.",
+    "{petA} is making fun of {petB}'s funny walk.",
+    "{petA} and {petB} are staring at a distant portal.",
+    "{petA} is helping {petB} with some new dance moves.",
+    "{petA} and {petB} are playing Reise nach Jerusalem.",
+    "{petA} is yapping to a confused {petB}."
+  ],
+  "empty": [
+    "What a long day...",
+    "It's as if no one has ever been here.",
+    "I've been yearning for a long rest.",
+    "This could be worth checking out?",
+    "I'm trespassing, but it's fine.",
+    "There's no one to be seen, but something's lingering.",
+    "What a shithole.",
+    "I just wanted some pizza ...",
+    "Oh, I hoped to see some pets.",
+    "There are paper scraps in the dirt.."
+  ]
+}

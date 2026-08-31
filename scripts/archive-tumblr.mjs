@@ -37,7 +37,7 @@ if (!API_KEY) {
   3. Copy the Consumer Key (API Key) from the app page
   4. Run:
 
-     TUMBLR_API_KEY=your_key  caffeinate -i  node scripts/archive-tumblr.mjs  ~/Desktop/skylanders-archive
+     TUMBLR_API_KEY=your_key  caffeinate -i  node scripts/archive-tumblr.mjs  ./skylanders-archive
 `);
   process.exit(1);
 }

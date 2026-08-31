@@ -10,9 +10,22 @@ layout: simple-base.njk
 
 {% set exElements = page.fileSlug | canvasElements %}
 
+{# Background-color is always the base (also shows through a transparent-edged pattern).
+   An image on top is either tiled at an explicit size, or stretched to cover the whole
+   stage edge-to-edge — "spans the whole exhibition" per the simplest, non-tiled case. #}
+{% if backgroundImage %}
+  {% if backgroundTile %}
+    {% set exBgStyle = "background-color:" + background + "; background-image:url(/images/exhibition-backgrounds/" + backgroundImage + "); background-repeat:repeat; background-size:" + backgroundTileSize + "px " + backgroundTileSize + "px;" %}
+  {% else %}
+    {% set exBgStyle = "background-color:" + background + "; background-image:url(/images/exhibition-backgrounds/" + backgroundImage + "); background-repeat:no-repeat; background-size:cover; background-position:center;" %}
+  {% endif %}
+{% else %}
+  {% set exBgStyle = "background:" + background + ";" %}
+{% endif %}
+
 <div class="ex-stage-wrap" id="ex-stage-wrap-{{ page.fileSlug }}">
   <div class="ex-stage" id="ex-stage-{{ page.fileSlug }}"
-       style="width:{{ canvasWidth }}px; height:{{ canvasHeight }}px; background:{{ background }};">
+       style="width:{{ canvasWidth }}px; height:{{ canvasHeight }}px; {{ exBgStyle }}">
     {% for el in exElements %}
       {% if el.type == "image" %}
         <div class="ex-el ex-el-image"

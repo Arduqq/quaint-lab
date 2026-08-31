@@ -1,12 +1,78 @@
 <nav class="main">
-  <a id="nav-entrance"  class="entrance route"   href="/home/" data-tooltip="Entrance"><span class="building">Entrance</span></a>
-  <a id="nav-atelier"   class="atelier route"    href="/atelier/" data-tooltip="Atelier"><span class="building">Atelier</span></a>
-  <a id="nav-reads"     class="reads route"      href="/archive/" data-tooltip="Archive"><span class="building">Archive</span></a>
-  <a id="nav-journey"   class="journey route"    href="/journey/" data-tooltip="Radio"><span class="building">Radio</span></a>
-  <a id="nav-pets"      class="pets route"       href="/pets/" data-tooltip="Pets"><span class="building">Pets</span></a>
-  <a id="nav-storage"   class="storage route"    href="/storage/" data-tooltip="Storage"><span class="building">Storage</span></a>
-  <a id="nav-contact"   class="contact route"    href="/contacts/" data-tooltip="Cafeteria"><span class="building">Cafeteria</span></a>
-  <a id="nav-qeycard"   class="qeycard route"    href="/qeycard/" data-tooltip="Qeycards"><span class="building">Qeycards</span></a>
-  <a id="nav-microgames"class="microgames route" href="/microgame/" data-tooltip="Microgames"><span class="building">Microgames</span></a>
-  <a id="nav-server"    class="server route"     href="/server/" data-tooltip="Server"><span class="building">Server</span></a>
+  <!-- Hidden radio to close all rooms and show the map -->
+  <input type="radio" name="nav-room" id="room-none" checked class="room-trigger">
+
+  <!-- Map Routes -->
+  <!-- Direct Links -->
+  <a id="nav-entrance" class="entrance route" href="/home/" data-tooltip="Home">
+    <span class="building">Entrance</span>
+  </a>
+
+  <a id="nav-storage" class="storage route" href="/storage/" data-tooltip="Things for you">
+    <span class="building">Storage</span>
+  </a>
+
+  <a id="nav-contact" class="contact route" href="/contacts/" data-tooltip="Places I find cool">
+    <span class="building">Cafeteria</span>
+  </a>
+
+  <a id="nav-server" class="server route" href="/server/" data-tooltip="???????">
+    <span class="building">Server</span>
+  </a>
+
+  <a id="nav-atelier" class="atelier route" href="/atelier/" data-tooltip="Visual studies">
+    <span class="building">Atelier</span>
+  </a>
+
+  <input type="radio" name="nav-room" id="trigger-reads" class="room-trigger">
+  <label for="trigger-reads" class="reads route" data-tooltip="Writing and knowledge base">
+    <span class="building">Archive</span>
+  </label>
+
+  <input type="radio" name="nav-room" id="trigger-pets" class="room-trigger">
+  <label for="trigger-pets" class="pets route" data-tooltip="Stuff on virtual pets">
+    <span class="building">Pets</span>
+  </label>
+
+  <input type="radio" name="nav-room" id="trigger-generators" class="room-trigger">
+  <label for="trigger-generators" class="generators route" data-tooltip="Doll makers but it's not actually dolls">
+    <span class="building">Generators</span>
+  </label>
+
+  <!-- Room Sub-Navigation Views -->
+  <div class="room-view" id="view-reads">
+    <div class="room-header">
+      <h3>Archive</h3>
+      <label for="room-none" class="back-btn">✕ Return to Map</label>
+    </div>
+    <div class="room-links">
+      <a href="/archive/">Blog</a>
+      <a href="/games/">Game Log</a>
+      <a href="/recommendations/">Recommendations</a>
+    </div>
+  </div>
+
+  <div class="room-view" id="view-pets">
+    <div class="room-header">
+      <h3>Pets</h3>
+      <label for="room-none" class="back-btn">✕ Return to Map</label>
+    </div>
+    <div class="room-links">
+      <a href="/pets/">Reservoir: Pets drawn by me</a>
+      <a href="/incubator/">Incubator: Pets owned by me</a>
+      <a href="/journey/">Journey: Virtual Pet Site Ranking</a>
+    </div>
+  </div>
+
+  <div class="room-view" id="view-generators">
+    <div class="room-header">
+      <h3>Generators</h3>
+      <label for="room-none" class="back-btn">✕ Return to Map</label>
+    </div>
+    <div class="room-links">
+      <a href="/qeycard/">Qeycard Maker</a>
+      <a href="/microgame/">Microgame Decorator</a>
+    </div>
+  </div>
+
 </nav>

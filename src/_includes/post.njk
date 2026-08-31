@@ -2,8 +2,95 @@
 layout: simple-base.njk
 ---
 
-
 {% block main_content %}
+  {% if image %}
+    <div class="cartridge-header">
+      <div class="cartridge">
+        <img src="{{ image }}" alt="{{ posttitle }} cartridge">
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="post-meta">
+    <p><b>[date:]</b> {{ page.date | readableDate }}</p>
+    {% if categories %}
+    <p><b>[tagged:]</b>
+      {% set _cats = [categories] if categories is string else categories %}
+      {% for cat in _cats %}
+        <a href="/categories/{{ cat | slug }}/">{{ cat }}</a>{% if not loop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+    {% endif %}
+    {% if vibe %}<p><b>[vibe:]</b> {{ vibe }}</p>{% endif %}
+  </div>
+  <hr>
+
   {{ content | safe }}
 
+  {% include 'screenshot-gallery.njk' %}
+
+  <form action="https://api.oh.dddddddddzzzz.org/unartur{{ page.url }}?redirect" method="POST" enctype="text/plain" class="reaction-form">
+    <button class="like-snail" name="🐌">🐌</button>
+  </form>
+
+  <div class="post-pager">
+    {% if '/posts/games/' in page.inputPath %}
+      {% set previousPost = collections.games | getPreviousCollectionItem %}
+      {% set nextPost = collections.games | getNextCollectionItem %}
+    {% else %}
+      {% set previousPost = collections.post | getPreviousCollectionItem %}
+      {% set nextPost = collections.post | getNextCollectionItem %}
+    {% endif %}
+
+    {% if previousPost %}
+      <a href="{{ previousPost.url }}"><-- previous</a>
+    {% endif %}
+
+    {% if previousPost and nextPost %} | {% endif %}
+
+    {% if nextPost %}
+      <a href="{{ nextPost.url }}">next --></a>
+    {% endif %}
+
+    <div style="margin-top: 1rem;">
+      {% if '/posts/games/' in page.inputPath %}
+        <a href="/games/">[ back to games ]</a>
+      {% else %}
+        <a href="/archive/">[ back to archive ]</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <style>
+    .reaction-form {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .cartridge-header {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    /* Post page: cartridge taken off the shelf, held up for examination */
+    .cartridge {
+      width: 220px;
+      height: 252px;
+      display: block;
+      overflow: visible;
+      background: transparent;
+      position: relative;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+      transition: transform .2s ease;
+    }
+    .cartridge:hover {
+      transform: translateY(-6px);
+    }
+    .cartridge img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      image-rendering: auto;
+    }
+  </style>
 {% endblock %}

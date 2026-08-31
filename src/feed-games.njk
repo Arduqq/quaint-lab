@@ -1,0 +1,24 @@
+---
+permalink: "feed-games.xml"
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/xml-style.xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Quaint Lab - Game Reviews</title>
+    <description>Recent video game reviews and impressions from the Game Exploration Kit.</description>
+    <link>https://unartur.neocities.org/archive/</link>
+    <atom:link href="https://unartur.neocities.org/feed-games.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>{{ collections.games | first | dateToRfc822 if collections.games | length > 0 else "" }}</lastBuildDate>
+    {% for post in collections.games %}
+    <item>
+      <title>{{ post.data.posttitle or post.data.title }}</title>
+      <link>https://unartur.neocities.org{{ post.url }}</link>
+      <description>{{ post.data.excerpt }}</description>
+      <pubDate>{{ post.date | dateToRfc822 }}</pubDate>
+      <guid>https://unartur.neocities.org{{ post.url }}</guid>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>
